@@ -1,0 +1,31 @@
+{
+	"name": "file-uploader",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jameschen215/file-uploader.git"
+	},
+	"keywords": [],
+	"author": "James Chen",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/jameschen215/file-uploader/issues"
+	},
+	"homepage": "https://github.com/jameschen215/file-uploader#readme",
+	"description": "An assignment project from The Odin Project to build a stripped down version of Google Drive.",
+	"dependencies": {
+		"@prisma/client": "^6.16.2",
+		"@prisma/extension-accelerate": "^2.0.2",
+		"@types/node": "^24.5.2",
+		"dotenv": "^17.2.2"
+	},
+	"devDependencies": {
+		"prisma": "^6.16.2",
+		"tsx": "^4.20.5",
+		"typescript": "^5.9.2"
+	}
+}
