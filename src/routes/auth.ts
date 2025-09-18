@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { signInSchema, signUpSchema } from '../validators/user';
 import { isAuthenticated, isNotAuthenticated } from '../auth';
 import {
 	signInUser,
@@ -10,9 +11,9 @@ import {
 
 const router = Router();
 
-router.post('/sign-up', isNotAuthenticated, signUpNewUser);
+router.post('/sign-up', isNotAuthenticated, signUpSchema, signUpNewUser);
 
-router.post('/sign-in', isNotAuthenticated, signInUser);
+router.post('/sign-in', isNotAuthenticated, signInSchema, signInUser);
 
 router.post('/upgrade', isAuthenticated, upgradeUser);
 

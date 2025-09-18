@@ -5,8 +5,19 @@ import { SALT_ROUND } from '../lib/constants';
 import prisma from '../lib/prisma';
 import { CreateUserType, PublicUserType } from '../types';
 import passport from 'passport';
+import { validationResult } from 'express-validator';
 
 export const signUpNewUser: RequestHandler = async (req, res, next) => {
+	// THIS IS CRUCIAL - check for validation errors
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({
+			error: 'Validation failed',
+			details: errors.mapped(),
+		});
+	}
+
 	const { email, password }: CreateUserType = req.body;
 
 	try {
@@ -25,6 +36,15 @@ export const signUpNewUser: RequestHandler = async (req, res, next) => {
 };
 
 export const signInUser: RequestHandler = async (req, res, next) => {
+	const errors = validationResult(req);
+
+	if (!errors.isEmpty()) {
+		return res.status(400).json({
+			error: 'Validation failed',
+			details: errors.mapped(),
+		});
+	}
+
 	passport.authenticate(
 		'local',
 		(error: Error, user: PublicUserType, info: { message?: string }) => {
