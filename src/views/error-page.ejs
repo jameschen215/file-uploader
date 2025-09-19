@@ -1,0 +1,12 @@
+<div
+	class="relative min-h-screen flex flex-col items-center justify-center gap-10 px-4">
+	<span
+		class="absolute top-1/2 left-1/2 -translate-1/2 block aspect-square text-stone-100 -z-10"
+		style="width: min(90vw, 90vh)">
+		<%- include('icons/frown') %>
+	</span>
+
+	<h1 class="text-6xl md:text-9xl font-extrabold"><%= statusCode %></h1>
+
+	<p class="md:text-2xl font-bold"><%= message %></p>
+</div>

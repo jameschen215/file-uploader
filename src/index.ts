@@ -1,16 +1,62 @@
 import 'dotenv/config';
+import cors from 'cors';
+import path from 'path';
+import multer from 'multer';
+import morgan from 'morgan';
+import helmet from 'helmet';
 import express from 'express';
+import { fileURLToPath } from 'url';
 import session from 'express-session';
-import { PrismaClient } from '@prisma/client';
+import methodOverride from 'method-override';
+import { PrismaClient } from '@prisma/client/index.js';
+import expressEjsLayouts from 'express-ejs-layouts';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
-import { configurePassport, isAuthenticated } from './auth';
-import authRoutes from './routes/auth';
+import authRoutes from './routes/auth.js';
+import indexRoutes from './routes/index.js';
+import { CustomNotFoundError } from './errors/index.js';
+import { errorsHandler } from './errors/error-handler.js';
+import { configurePassport, isAuthenticated } from './auth/index.js';
 
 const app = express();
+const upload = multer();
 
+// get __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// configure ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(expressEjsLayouts);
+app.set('layout', 'layout');
+app.set('view options', {
+	rmWhitespace: true, // remove white spaces
+	cache: process.env.NODE_ENV === 'production',
+});
+
+// Enable view caching in production to improve performance
+if (process.env.NODE_ENV === 'production') {
+	app.set('view cache', true);
+}
+
+// middlewares
+app.use(cors());
+app.use(helmet());
+app.use(morgan('dev'));
 app.use(express.json());
+app.use(methodOverride('_method'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
+// custom middlewares
+// app.use(formatDate);
+// app.use(setCurrentPath);
+
+// Trust Railway's proxy
+// app.set('trust proxy', 1);
+
+// configure session with PrismaSessionStore
 app.use(
 	session({
 		secret: process.env.SESSION_SECRET!,
@@ -34,25 +80,23 @@ const passport = configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => {
-	res.json({ message: 'Hello world!' });
-});
+// set currentUser middleware (after Passport, before routes)
+// app.use(setCurrentUser);
 
-app.get('/protected', isAuthenticated, (req, res) => {
-	res.json({ message: 'This is a protected route!' });
-});
-
+// routes
+app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
 
 // handle other routes with not found
-// app.use((_req, _res, _next) => {
-// 	throw new CustomNotFoundError('Page Not Found');
-// });
+app.use((_req, _res, _next) => {
+	throw new CustomNotFoundError('Page Not Found');
+});
 
-// Error handling
-// app.use(errorsHandler);
+// global error handling
+app.use(errorsHandler);
 
+// Run server
 const port = process.env.PORT || '8000';
 app.listen(port, () => {
-	console.log('App is running on '.concat(port));
+	console.log('Server is running on '.concat(port));
 });
