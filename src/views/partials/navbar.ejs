@@ -1,0 +1,102 @@
+<nav
+  class="h-16 shadow-xs bg-gray-50 text-gray-950 dark:bg-gray-900 dark:text-gray-50 z-20"
+>
+  <!-- 1280px container -->
+  <div
+    class="relative w-full max-w-7xl mx-auto h-16 px-5 flex items-center justify-between border-b border-gray-100 dark:border-gray-800"
+  >
+    <!-- logo -->
+    <a
+      href="/"
+      class="size-8 flex items-center justify-center bg-fuchsia-600 uppercase font-extrabold text-xl rounded-full"
+    >
+      <span class="text-white text-2xl font-medium">U</span>
+    </a>
+
+    <!-- for desktop -->
+    <div class="items-center gap-2 hidden sm:flex">
+      <button
+        id="theme-btn-desktop"
+        type="button"
+        class="mr-2 size-8 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
+      >
+        <span class="inline-block w-full">
+          <%- include('../icons/sun-moon') %>
+        </span>
+      </button>
+
+      <a
+        href="/auth/sign-in"
+        class="border-2 border-gray-900 dark:border-gray-100 py-1.5 px-5 rounded-md font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+        >Sign in</a
+      >
+      <a
+        href="/auth/sign-up"
+        class="border-2 bg-gray-900 text-white dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:hover:border-gray-200 hover:bg-gray-700 hover:border-gray-700 border-gray-950 dark:border-gray-50 py-1.5 px-5 rounded-md font-medium transition-colors duration-200 cursor-pointer"
+      >
+        Sign up
+      </a>
+    </div>
+
+    <!-- bread menu trigger -->
+    <button
+      id="menu-btn"
+      class="sm:hidden size-6 cursor-pointer text-zinc-700"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="sidebar"
+      type="button"
+    >
+      <span class="text-gray-700 dark:text-gray-50">
+        <%- include('../icons/menu') %>
+      </span>
+    </button>
+  </div>
+
+  <!-- menu content -->
+  <div
+    id="menu-content"
+    class="absolute bottom-0 left-0 -translate-x-full w-full h-[calc(100%-64px)] bg-white text-gray-950 dark:bg-gray-900 dark:text-gray-50 transition-transform duration-200 z-10"
+  >
+    <ul class="w-full flex flex-col font-medium p-5">
+      <li>
+        <a
+          href="/"
+          class="block py-5 border-b border-gray-200 dark:border-gray-800"
+        >
+          <span>Sign in</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/"
+          class="block py-5 border-b border-gray-200 dark:border-gray-800"
+        >
+          <span>Sign up</span>
+        </a>
+      </li>
+      <li>
+        <button
+          id="theme-btn"
+          type="button"
+          class="w-full text-start py-5 border-b border-gray-200 dark:border-gray-800"
+        >
+          <span id="theme-text">Switch to dark mode</span>
+        </button>
+      </li>
+    </ul>
+
+    <!-- bottom -->
+    <div
+      class="absolute bottom-0 left-0 w-full h-16 border-t border-gray-200 dark:border-gray-800"
+    >
+      <span
+        class="block text-center leading-[64px] text-gray-300 dark:text-gray-700 font-semibold"
+      >
+        Menu
+      </span>
+    </div>
+  </div>
+</nav>
+
+<script type="module" src="/scripts/navbar.js"></script>

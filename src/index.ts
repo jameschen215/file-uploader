@@ -31,13 +31,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(expressEjsLayouts);
 app.set('layout', 'layout');
 app.set('view options', {
-	rmWhitespace: true, // remove white spaces
-	cache: process.env.NODE_ENV === 'production',
+  rmWhitespace: true, // remove white spaces
+  cache: process.env.NODE_ENV === 'production',
 });
 
 // Enable view caching in production to improve performance
 if (process.env.NODE_ENV === 'production') {
-	app.set('view cache', true);
+  app.set('view cache', true);
 }
 
 // middlewares
@@ -58,21 +58,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // configure session with PrismaSessionStore
 app.use(
-	session({
-		secret: process.env.SESSION_SECRET!,
-		resave: false,
-		saveUninitialized: false,
-		cookie: {
-			secure: process.env.NODE_ENV === 'production',
-			httpOnly: true,
-			maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-		},
-		store: new PrismaSessionStore(new PrismaClient(), {
-			checkPeriod: 1000 * 60 * 2, // Clean expired sessions every 2 minutes
-			dbRecordIdIsSessionId: true,
-			dbRecordIdFunction: undefined,
-		}),
-	})
+  session({
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
+    store: new PrismaSessionStore(new PrismaClient(), {
+      checkPeriod: 1000 * 60 * 2, // Clean expired sessions every 2 minutes
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
+  }),
 );
 
 // configure and initialize passport
@@ -89,7 +89,7 @@ app.use('/auth', authRoutes);
 
 // handle other routes with not found
 app.use((_req, _res, _next) => {
-	throw new CustomNotFoundError('Page Not Found');
+  throw new CustomNotFoundError('Page Not Found');
 });
 
 // global error handling
@@ -98,5 +98,5 @@ app.use(errorsHandler);
 // Run server
 const port = process.env.PORT || '8000';
 app.listen(port, () => {
-	console.log('Server is running on '.concat(port));
+  console.log('Server is running on '.concat(port));
 });

@@ -1,12 +1,20 @@
-<div
-	class="relative min-h-screen flex flex-col items-center justify-center gap-10 px-4">
-	<span
-		class="absolute top-1/2 left-1/2 -translate-1/2 block aspect-square text-stone-100 -z-10"
-		style="width: min(90vw, 90vh)">
-		<%- include('icons/frown') %>
-	</span>
+<main class="relative w-full max-w-7xl mx-auto">
+  <!-- background -->
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square text-gray-100 dark:text-gray-800/25 -z-10"
+    style="width: min(90vw, 90vh)"
+  >
+    <%- include('icons/frown') %>
+  </div>
 
-	<h1 class="text-6xl md:text-9xl font-extrabold"><%= statusCode %></h1>
+  <!-- 1280px container -->
+  <div
+    class="min-h-[calc(100vh-64px)] w-full flex flex-col items-center justify-center gap-10 px-4 text-gray-950 dark:text-gray-50"
+  >
+    <h1 class="-mt-20 text-6xl md:text-9xl font-extrabold">
+      <%= statusCode %>
+    </h1>
 
-	<p class="md:text-2xl font-bold"><%= message %></p>
-</div>
+    <p class="md:text-2xl font-bold"><%= message %></p>
+  </div>
+</main>

@@ -1,8 +1,8 @@
 import passport from 'passport';
 
-import prisma from '../lib/prisma';
-import { UserType } from '../types';
-import { localStrategy } from './strategies/local';
+import prisma from '../lib/prisma.js';
+import { UserType } from '../types/user.js';
+import { localStrategy } from './strategies/local.js';
 
 export function configurePassport() {
 	// configure strategy
