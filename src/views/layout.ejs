@@ -18,13 +18,27 @@
     <!-- scripts -->
     <script type="module" src="/scripts/main.js"></script>
   </head>
-  <body class="bg-gray-50 dark:bg-gray-900">
-    <div>
+  <body
+    class="bg-gray-50 dark:bg-gray-900 text-gray-950 dark:text-gray-50 relative"
+  >
+    <!-- Skip to main content link for keyboard navigation -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-500 focus:text-white focus:rounded"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Site wrapper -->
+    <div class="min-h-screen flex flex-col">
       <!-- navbar -->
-      <%- include('partials/navbar') %>
+      <!-- <header class="flex-shrink-0"></header> -->
+      <header><%- include('partials/navbar') %></header>
 
       <!-- page content -->
-      <%- body %>
+      <main id="main-content" class="w-full max-w-7xl mx-auto flex-grow">
+        <%- body %>
+      </main>
     </div>
   </body>
 </html>
