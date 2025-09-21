@@ -5,6 +5,6 @@ export type UserType = User;
 export type PublicUserType = Omit<User, 'password'>;
 
 export type CreateUserType = Omit<
-	User,
-	'id' | 'name' | 'role' | 'createdAt' | 'updatedAt'
+  User,
+  'id' | 'role' | 'createdAt' | 'updatedAt'
 >;

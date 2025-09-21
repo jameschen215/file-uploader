@@ -12,24 +12,21 @@ export const signUpNewUser: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: 'Validation failed',
-      details: errors.mapped(),
-    });
+    return res
+      .status(400)
+      .render('sign-up', { errors: errors.mapped(), oldInput: req.body });
   }
 
-  const { email, password }: CreateUserType = req.body;
+  const { name, email, password }: CreateUserType = req.body;
 
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
 
-    const newUser = await prisma.user.create({
-      data: { email, password: hashedPassword },
+    await prisma.user.create({
+      data: { name: name || null, email, password: hashedPassword },
     });
 
-    res
-      .status(201)
-      .json({ message: `User ${newUser.email} is created successfully` });
+    res.status(201).redirect('/auth/sign-in');
   } catch (error) {
     next(error);
   }
@@ -83,4 +80,14 @@ export const signOutUser: RequestHandler = async (req, res, next) => {
 
 export const getLandingPage: RequestHandler = (req, res) => {
   res.render('landing-page');
+};
+
+// sign up page
+export const getSignUpPage: RequestHandler = (req, res) => {
+  res.render('sign-up', { oldInput: null, errors: null });
+};
+
+// sign up page
+export const getSignIpPage: RequestHandler = (req, res) => {
+  res.render('sign-in', { oldInput: null, errors: null });
 };
