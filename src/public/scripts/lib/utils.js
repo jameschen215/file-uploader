@@ -105,11 +105,14 @@ export function removeErrorStylesAndMessages(field) {
     'dark:focus:ring-lime-950',
   );
 
-  // 2. Remove error message about field
-  const existingErrorMessage = field.parentNode.querySelector('[id$=error]');
-  if (existingErrorMessage) {
-    existingErrorMessage.remove();
-  }
+  // 2. set aria-invalid on field
+  field.setAttribute('aria-invalid', 'false');
+
+  // 3. Hide error message about field
+  const errorId = field.getAttribute('aria-describedby');
+  const errorEl = document.getElementById(errorId);
+  errorEl.textContent = '';
+  errorEl.classList.add('hidden');
 }
 
 function showErrorStylesAndMessages(field, message) {
@@ -135,16 +138,15 @@ function showErrorStylesAndMessages(field, message) {
     'dark:focus:ring-red-950',
   );
 
-  // 3. set aria-describedby
-  field.setAttribute('aria-describedby', `${field.name}-error`);
+  // 3. set aria-invalid on field
+  field.setAttribute('aria-invalid', 'true');
 
-  // 4. Add new error message
+  // 4. show new error message
   if (message) {
-    const errorElement = document.createElement('p');
-    errorElement.id = `${field.name}-error`;
-    errorElement.className = 'text-sm text-red-600 mt-2';
-    errorElement.innerHTML = message;
+    const errorId = field.getAttribute('aria-describedby');
+    const errorEl = document.getElementById(errorId);
 
-    field.parentNode.appendChild(errorElement);
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
   }
 }

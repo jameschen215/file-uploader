@@ -1,3 +1,4 @@
+import { EYE, EYE_CLOSED } from './lib/icons.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
@@ -13,15 +14,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = form.querySelector('button[type="submit"]');
   const firstInput = form.querySelector('input');
   const signInLink = form.querySelector('p a');
+  const passwordToggles = form.querySelectorAll('.toggle-psw');
+
   let isSubmitting = false;
 
-  // 1. Focus on the first input
+  // 1. Show toggle password icons
+  passwordToggles.forEach((btn) => {
+    btn.innerHTML = EYE;
+  });
+
+  // 3. Focus on the first input
   firstInput.focus();
 
-  // 2. Server side validation
+  // 3. Server side validation
   validateAuthFromServer(form);
 
-  // 3. Client side validation
+  // 4. Client side validation
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
 
@@ -62,8 +70,36 @@ document.addEventListener('DOMContentLoaded', () => {
     isSubmitting = false;
   });
 
-  // 4. Remove error info when user is typing
+  // 5. Remove error info when user is typing
   form.querySelectorAll('input').forEach((field) => {
     field.addEventListener('input', () => removeErrorStylesAndMessages(field));
+  });
+
+  // 6. handle password buttons clicked
+  passwordToggles.forEach((btn) => {
+    btn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+
+      // Get password input
+      const pswInput = btn.closest('div.relative').querySelector('input');
+
+      if (pswInput) {
+        // Get the current type of the input
+        const type =
+          pswInput.getAttribute('type') === 'password' ? 'text' : 'password';
+
+        // Toggle the type attribute
+        pswInput.setAttribute('type', type);
+
+        // Update the button's icon
+        if (type === 'password') {
+          btn.innerHTML = EYE;
+          btn.setAttribute('aria-label', 'Show password.');
+        } else {
+          btn.innerHTML = EYE_CLOSED;
+          btn.setAttribute('aria-label', 'Hide password.');
+        }
+      }
+    });
   });
 });

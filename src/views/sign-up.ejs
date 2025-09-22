@@ -24,8 +24,16 @@
         name="name"
         value="<%= locals.oldInput?.name || '' %>"
         autocomplete="name"
+        aria-describedby="name-error"
+        aria-invalid="false"
         class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
       />
+
+      <div
+        id="name-error"
+        aria-live="polite"
+        class="hidden text-sm text-red-600"
+      ></div>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -42,8 +50,16 @@
         value="<%= locals.oldInput?.email || '' %>"
         autocomplete="email"
         required
+        aria-describedby="email-error"
+        aria-invalid="false"
         class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
       />
+
+      <div
+        id="email-error"
+        aria-live="polite"
+        class="hidden text-sm text-red-600"
+      ></div>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -53,15 +69,33 @@
       >
         Password
       </label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        value="<%= locals.oldInput?.password || '' %>"
-        autocomplete="new-password"
-        required
-        class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
-      />
+
+      <div class="relative">
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value="<%= locals.oldInput?.password || '' %>"
+          autocomplete="new-password"
+          required
+          aria-describedby="password-error"
+          aria-invalid="false"
+          class="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
+        />
+
+        <!-- toggle password show/hide -->
+        <button
+          type="button"
+          aria-label="Show password."
+          class="toggle-psw absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200"
+        ></button>
+      </div>
+
+      <div
+        id="password-error"
+        class="hidden text-sm text-red-600"
+        aria-live="polite"
+      ></div>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -71,15 +105,32 @@
       >
         Confirm Password
       </label>
-      <input
-        type="password"
-        id="confirm_password"
-        name="confirm_password"
-        value="<%= locals.oldInput?.confirm_password || '' %>"
-        autocomplete="new-password"
-        required
-        class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
-      />
+
+      <div class="relative">
+        <input
+          type="password"
+          id="confirm_password"
+          name="confirm_password"
+          value="<%= locals.oldInput?.confirm_password || '' %>"
+          autocomplete="new-password"
+          required
+          aria-describedby="confirm-password-error"
+          aria-invalid="false"
+          class="w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
+        />
+
+        <button
+          type="button"
+          aria-label="Show password."
+          class="toggle-psw absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 hover:text-gray-600 dark:hover:text-gray-400 transition-colors duration-200"
+        ></button>
+      </div>
+
+      <div
+        id="confirm-password-error"
+        aria-live="polite"
+        class="hidden text-sm text-red-600"
+      ></div>
     </div>
 
     <div class="flex flex-col mt-3">

@@ -18,12 +18,12 @@
         Email
       </label>
       <input
-        type="text"
+        type="email"
         id="email"
         name="email"
         value="<%= locals.oldInput?.email || '' %>"
-        aria-required="true"
         required
+        autocomplete="username"
         class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
       />
     </div>
@@ -36,12 +36,12 @@
         Password
       </label>
       <input
-        type="text"
+        type="password"
         id="password"
         name="password"
         value="<%= locals.oldInput?.password || '' %>"
-        aria-required="true"
         required
+        autocomplete="current-password"
         class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
       />
     </div>
@@ -59,11 +59,12 @@
       <p class="text-center text-sm">
         Don't have an account?
         <a
-          href="/auth/login"
+          href="/auth/sign-up"
           class="underline font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
-          Sign up for one now
+          Sign up
         </a>
+        for one now
       </p>
     </div>
   </form>
