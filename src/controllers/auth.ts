@@ -36,10 +36,9 @@ export const signInUser: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      error: 'Validation failed',
-      details: errors.mapped(),
-    });
+    return res
+      .status(400)
+      .render('sign-in', { oldInput: req.body, errors: errors.mapped() });
   }
 
   passport.authenticate(
@@ -49,20 +48,24 @@ export const signInUser: RequestHandler = async (req, res, next) => {
 
       // login failed
       if (!user) {
-        return res
-          .status(401)
-          .json({ message: info.message || 'Invalid email or password' });
+        return res.status(401).render('sign-in', {
+          oldInput: req.body,
+          errors: { auth: { msg: info?.message || 'Invalid credentials' } },
+        });
       }
 
       // login user manually
       req.logIn(user, (error) => {
         if (error) {
-          return res
-            .status(500)
-            .json({ message: 'Login failed. Please try again' });
+          return res.status(500).render('sign-in', {
+            oldInput: req.body,
+            errors: [{ msg: 'Sign in failed. Please try again.' }],
+          });
+          // .json({ message: 'Login failed. Please try again' });
         }
 
-        res.json({ message: 'You are signed in successfully' });
+        // res.json({ message: 'You are signed in successfully' });
+        res.redirect('/');
       });
     },
   )(req, res, next);

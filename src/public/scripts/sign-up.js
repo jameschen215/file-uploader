@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.innerHTML = EYE;
   });
 
-  // 3. Focus on the first input
+  // 2. Focus on the first input
   firstInput.focus();
 
   // 3. Server side validation

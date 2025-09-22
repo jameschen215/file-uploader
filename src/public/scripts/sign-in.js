@@ -1,0 +1,85 @@
+import { EYE, EYE_CLOSED } from './lib/icons.js';
+import {
+  focusOnFirstErrorField,
+  removeErrorStylesAndMessages,
+  validateAuthField,
+  validateAuthFromServer,
+} from './lib/utils.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('#sign-in-form');
+
+  if (!form) return;
+
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const firstInput = form.querySelector('input');
+  const signUpLink = form.querySelector('p a');
+  const pswInput = form.querySelector('#password');
+  const pswToggle = form.querySelector('.toggle-psw');
+  let isSubmitting = false;
+
+  // 1. show show/hide password toggle icon
+  pswToggle.innerHTML = EYE;
+
+  // 2. focus on the first input
+  firstInput.focus();
+
+  // 3. server-side validation
+  validateAuthFromServer(form);
+
+  // 4. client-side validation
+  form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+
+    if (isSubmitting) return; // prevent duplicate submissions
+
+    let isValid = true;
+
+    form.querySelectorAll('input').forEach((field) => {
+      if (!validateAuthField(field)) {
+        isValid = false;
+      }
+    });
+
+    if (isValid) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing in...';
+      signUpLink.classList.add(
+        'pointer-events-none',
+        'text-gray-400',
+        'cursor-default',
+      );
+
+      // manually submit only if valid
+      form.submit();
+    } else {
+      focusOnFirstErrorField(form);
+    }
+
+    // set submit state to false after submission
+    isSubmitting = false;
+  });
+
+  // 5. remove error info while user typing
+  form.querySelectorAll('input').forEach((field) => {
+    field.addEventListener('input', () => removeErrorStylesAndMessages(field));
+  });
+
+  // 6. handle show/hide password toggle click
+  pswToggle.addEventListener('click', (ev) => {
+    ev.preventDefault();
+
+    const type =
+      pswInput.getAttribute('type') === 'password' ? 'text' : 'password';
+
+    pswInput.setAttribute('type', type);
+
+    if (type === 'password') {
+      pswToggle.innerHTML = EYE;
+      pswToggle.setAttribute('aria-label', 'Show password.');
+    } else {
+      pswToggle.innerHTML = EYE_CLOSED;
+      pswToggle.setAttribute('aria-label', 'Hide password.');
+    }
+  });
+});

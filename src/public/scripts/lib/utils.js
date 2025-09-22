@@ -8,7 +8,13 @@ export function validateAuthFromServer(form) {
   if (!errors || Object.keys(errors).length === 0) return;
 
   // show error styles and messages
-  for (const [name, error] of Object.entries(errors)) {
+  for (let [name, error] of Object.entries(errors)) {
+    // If the error is a generic "auth" error from the server,
+    // determine which input it belongs to based on the message.
+    if (name === 'auth') {
+      name = error.msg.includes('email') ? 'email' : 'password';
+    }
+
     const field = document.querySelector('#'.concat(name));
 
     showErrorStylesAndMessages(field, error.msg);
