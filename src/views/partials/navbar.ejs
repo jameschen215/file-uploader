@@ -1,4 +1,5 @@
 <nav
+  aria-label="Main navigation"
   class="relative h-16 shadow-xs border-b border-gray-100 dark:border-gray-800 z-20"
 >
   <!-- 1280px container -->
@@ -8,61 +9,137 @@
     <!-- logo -->
     <a
       href="/"
-      class="size-8 flex items-center justify-center bg-fuchsia-600 uppercase font-extrabold text-xl rounded-full"
+      class="size-8 flex items-center justify-center bg-fuchsia-600 uppercase font-semibold text-xl rounded-full"
     >
-      <span class="text-white text-2xl font-medium">U</span>
+      <span class="text-white text-xl font-medium">U</span>
     </a>
 
     <!-- for desktop -->
-    <div class="items-center gap-2 hidden sm:flex">
+    <ul class="items-center gap-2 hidden sm:flex">
+      <li>
+        <button
+          id="theme-btn-desktop"
+          type="button"
+          class="flex items-center justify-center mr-2 size-8 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
+        >
+          <span aria-hidden="true" id="theme-icon-desktop"></span>
+          <span class="sr-only" id="theme-text-desktop"></span>
+        </button>
+      </li>
+
+      <% if (currentUser) { %>
       <button
-        id="theme-btn-desktop"
+        id="dropdown-btn"
+        class="hidden sm:block size-8 cursor-pointer text-zinc-700"
+        aria-label="Toggle dropdown menu"
+        aria-expanded="false"
+        aria-controls="dropdown-content"
         type="button"
-        class="mr-2 size-8 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
       >
-        <span class="inline-block w-full">
-          <%- include('../icons/sun-moon') %>
+        <span
+          class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+        >
+          <%= formatAvatar(currentUser) %>
         </span>
       </button>
 
-      <a
-        href="/auth/sign-in"
-        class="border-2 border-gray-900 dark:border-gray-100 py-1.5 px-5 rounded-md font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
-        >Sign in</a
-      >
-      <a
-        href="/auth/sign-up"
-        class="border-2 bg-gray-900 text-white dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:hover:border-gray-200 hover:bg-gray-700 hover:border-gray-700 border-gray-950 dark:border-gray-50 py-1.5 px-5 rounded-md font-medium transition-colors duration-200 cursor-pointer"
-      >
-        Sign up
-      </a>
-    </div>
+      <% } else { %>
+      <li>
+        <a
+          href="/auth/sign-in"
+          class="border-2 border-gray-900 dark:border-gray-100 py-1.5 px-5 rounded-md font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer"
+          >Sign in</a
+        >
+      </li>
 
-    <!-- bread menu trigger -->
+      <li>
+        <a
+          href="/auth/sign-up"
+          class="border-2 bg-gray-900 text-white dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200 dark:hover:border-gray-200 hover:bg-gray-700 hover:border-gray-700 border-gray-950 dark:border-gray-50 py-1.5 px-5 rounded-md font-medium transition-colors duration-200 cursor-pointer"
+        >
+          Sign up
+        </a>
+      </li>
+      <% } %>
+    </ul>
+
+    <!-- hamburger menu button -->
     <button
       id="menu-btn"
-      class="sm:hidden size-6 cursor-pointer text-zinc-700"
+      class="sm:hidden size-8 cursor-pointer text-zinc-700"
       aria-label="Toggle navigation menu"
       aria-expanded="false"
-      aria-controls="sidebar"
+      aria-controls="menu-content"
       type="button"
     >
-      <span class="text-gray-700 dark:text-gray-50">
+      <% if (locals.currentUser) { %>
+      <span
+        class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+      >
+        <%= formatAvatar(currentUser) %>
+      </span>
+      <% } else { %>
+      <span class="text-gray-700 dark:text-gray-50 block size-6">
         <%- include('../icons/menu') %>
       </span>
+      <% } %>
     </button>
   </div>
 
   <!-- menu content -->
   <div
     id="menu-content"
+    aria-hidden="true"
     class="absolute top-full left-0 -translate-x-full w-full h-[calc(100vh-64px)] bg-white text-gray-950 dark:bg-gray-900 dark:text-gray-50 transition-transform duration-200 z-30"
   >
+    <% if (locals.currentUser) { %>
+    <div class="flex items-center gap-3 p-5">
+      <span
+        class="flex-shrink-0 flex items-center justify-center size-10 text-2xl text-gray-50 bg-teal-400 rounded-full"
+      >
+        <%= formatAvatar(currentUser) %>
+      </span>
+
+      <div class="flex flex-col flex-grow">
+        <span class="text-lg font-semibold -mb-1 capitalize line-clamp-1">
+          <%= currentUser.name || currentUser.email.split('@')[0] %>
+        </span>
+        <span class="text-gray-400 dark:text-gray-600 line-clamp-1">
+          <%= currentUser.email %>
+        </span>
+      </div>
+    </div>
+
+    <ul class="w-full flex flex-col font-medium p-5">
+      <li>
+        <form action="/auth/sign-out" method="post">
+          <button
+            type="submit"
+            role="menuitem"
+            class="w-full flex items-center gap-3 text-start py-5 border-y border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            <span aria-hidden="true"><%- include('../icons/log-out') %></span>
+            <span>Sign out</span>
+          </button>
+        </form>
+      </li>
+      <li>
+        <button
+          id="theme-btn"
+          type="button"
+          class="w-full flex items-center gap-3 text-start py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          <span aria-hidden="true" id="theme-icon"></span>
+          <span id="theme-text"></span>
+        </button>
+      </li>
+    </ul>
+    <% } else { %>
     <ul class="w-full flex flex-col font-medium p-5">
       <li>
         <a
           href="/auth/sign-in"
-          class="block py-5 border-b border-gray-200 dark:border-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400"
+          class="block py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <span>Sign in</span>
         </a>
@@ -70,7 +147,7 @@
       <li>
         <a
           href="/auth/sign-up"
-          class="block py-5 border-b border-gray-200 dark:border-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400"
+          class="block py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <span>Sign up</span>
         </a>
@@ -79,12 +156,13 @@
         <button
           id="theme-btn"
           type="button"
-          class="w-full text-start py-5 border-b border-gray-200 dark:border-gray-800 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400"
+          class="w-full text-start py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
           <span id="theme-text">Switch to dark mode</span>
         </button>
       </li>
     </ul>
+    <% } %>
 
     <!-- bottom -->
     <div
@@ -96,6 +174,54 @@
         Menu
       </span>
     </div>
+  </div>
+
+  <!-- dropdown content -->
+  <div
+    id="dropdown-content"
+    aria-hidden="true"
+    class="hidden absolute top-full right-5 w-72 translate-y-1 px-6 pt-8 dark:bg-gray-900 dark:border-gray-700 border rounded-lg z-30"
+  >
+    <div class="flex items-center gap-3">
+      <span
+        class="flex-shrink-0 flex items-center justify-center size-10 text-2xl text-gray-50 bg-teal-400 rounded-full"
+      >
+        <%= formatAvatar(currentUser) %>
+      </span>
+
+      <div class="flex flex-col flex-grow">
+        <span class="text-lg font-semibold -mb-1 capitalize line-clamp-1">
+          <%= currentUser.name || currentUser.email.split('@')[0] %>
+        </span>
+        <span class="text-gray-400 dark:text-gray-600 line-clamp-1">
+          <%= currentUser.email %>
+        </span>
+      </div>
+    </div>
+
+    <ul class="w-full flex flex-col font-medium mt-8">
+      <li>
+        <a
+          href="/"
+          class="flex items-center gap-3 w-full text-start py-5 border-t border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          <span aria-hidden="true"><%- include('../icons/settings') %></span>
+          <span> Settings </span>
+        </a>
+      </li>
+      <li>
+        <form action="/auth/sign-out" method="post">
+          <button
+            type="submit"
+            role="menuitem"
+            class="w-full flex items-center gap-3 text-start py-5 border-t border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+          >
+            <span aria-hidden="true"><%- include('../icons/log-out') %></span>
+            <span>Sign out</span>
+          </button>
+        </form>
+      </li>
+    </ul>
   </div>
 </nav>
 

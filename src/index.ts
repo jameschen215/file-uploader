@@ -17,6 +17,8 @@ import indexRoutes from './routes/index.js';
 import { CustomNotFoundError } from './errors/index.js';
 import { errorsHandler } from './errors/error-handler.js';
 import { configurePassport, isAuthenticated } from './auth/index.js';
+import { setCurrentUser } from './middlewares/set-current-user.js';
+import { formatAvatar } from './middlewares/format-avatar.js';
 
 const app = express();
 const upload = multer();
@@ -50,6 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // custom middlewares
+app.use(formatAvatar);
 // app.use(formatDate);
 // app.use(setCurrentPath);
 
@@ -81,7 +84,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // set currentUser middleware (after Passport, before routes)
-// app.use(setCurrentUser);
+app.use(setCurrentUser);
 
 // routes
 app.use('/', indexRoutes);

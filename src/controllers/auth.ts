@@ -77,7 +77,7 @@ export const signOutUser: RequestHandler = async (req, res, next) => {
   req.logOut((error) => {
     if (error) return next(error);
 
-    res.json({ message: 'You are signed out' });
+    res.redirect('/');
   });
 };
 
