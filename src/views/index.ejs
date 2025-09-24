@@ -1,3 +1,41 @@
-<h1 class="text-3xl sm:text-5xl">
-  Hey there! Welcome to File Uploader Service!
-</h1>
+<div class="w-full">
+  <!-- 1280px container -->
+  <div class="flex flex-col gap-4 px-4 pb-8">
+    <!-- header -->
+    <div class="flex items-center justify-between h-12">
+      <!-- breadcrumbs -->
+      <span class="font-medium text-lg">Cloud drive</span>
+
+      <!-- buttons -->
+      <div class="flex items-center gap-5">
+        <button id="search-btn" type="button">
+          <%- include('icons/search') %>
+        </button>
+
+        <button
+          id="layout-toggle"
+          type="button"
+          aria-label="Toggle layout between grid and list"
+        >
+          <%- include('icons/layout-list') %>
+        </button>
+
+        <button id="sort-btn" type="button">
+          <%- include('icons/ellipsis-vertical') %>
+        </button>
+      </div>
+    </div>
+
+    <!-- Layout container -->
+    <div
+      id="layout-container"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-5"
+    >
+      <% items.map(item => { %>
+      <%- include('partials/layout-item', { category: item.category, name: item.name }) %>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/scripts/homepage.js"></script>

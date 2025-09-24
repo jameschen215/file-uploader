@@ -1,0 +1,40 @@
+<div
+  role="button"
+  tabindex="0"
+  class="item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer"
+>
+  <!-- file/folder Icon -->
+  <div
+    class="item-icon-wrapper group-focus:bg-sky-100 group-focus:dark:bg-sky-950 w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800"
+  >
+    <% if (category === 'folder') { %>
+    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+      <%- include('../icons/folder') %>
+    </span>
+
+    <% } else if (category === 'image') { %>
+    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+      <%- include('../icons/image') %>
+    </span>
+
+    <% } else if (category === 'video') { %>
+    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+      <%- include('../icons/film') %>
+    </span>
+
+    <% } else { %>
+    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+      <%- include('../icons/file') %>
+    </span>
+    <% } %>
+  </div>
+
+  <!-- file/folder name -->
+  <div class="item-info relative w-full text-center">
+    <span class="text-sm"><%= name %></span>
+    <button
+      type="button"
+      class="item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200"
+    ></button>
+  </div>
+</div>

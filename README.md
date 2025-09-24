@@ -261,3 +261,75 @@ project/
 ## Takeaway
 
 **Always match your Tailwind CSS version with the appropriate configuration syntax and build tools. When in doubt, use the stable version (v3) for production applications.**
+
+### AJAX layout change
+
+1. Detect if it’s an AJAX request (e.g. req.xhr or a custom header).
+
+2. Render only the partial (like grid-layout.ejs or list-layout.ejs) if it’s AJAX.
+
+3. Render the full page (index.ejs) if it’s a normal request.
+
+**Server-side code:**
+
+```TypeScript
+import { RequestHandler } from 'express';
+
+export const getHomepage: RequestHandler = (req, res, next) => {
+  const { view } = req.query;
+
+  const items = [
+    { category: 'folder', name: 'Books' },
+    { category: 'folder', name: 'Code' },
+    { category: 'image', name: 'Flowers' },
+    { category: 'video', name: 'Highlight' },
+    { category: 'file', name: 'Notes' },
+  ];
+
+  // If request is AJAX -> return only the partial
+  if (req.xhr) {
+    if (view === 'list') {
+      return res.render('partials/list-layout', { items });
+    } else {
+      return res.render('partials/grid-layout', { items });
+    }
+  }
+
+  res.render('index', { items });
+};
+
+```
+
+**Client-side code:**
+
+```JavaScript
+async function changeLayout(view) {
+  try {
+    // update toggle button state
+    layoutToggle.setAttribute('data-layout', view);
+    layoutToggle.innerHTML = view === 'list' ? LAYOUT_GRID : LAYOUT_LIST;
+
+    // fetch and check response
+    const res = await fetch(`/?view=${view}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status} ${res.statusText}`);
+    }
+
+    const html = await res.text();
+    layoutContainer.innerHTML = html;
+
+  } catch (error) {
+    console.error("Failed to change layout:", error);
+
+    // optional: show user feedback
+    layoutContainer.innerHTML = `
+      <div class="p-4 text-red-600 bg-red-100 rounded">
+        Failed to load layout. Please try again.
+      </div>
+    `;
+  }
+}
+```
