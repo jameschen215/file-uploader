@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="/styles/build.css" />
 
     <title>File Uploader</title>
-
-    <!-- scripts -->
-    <script type="module" src="/scripts/main.js"></script>
   </head>
   <body
     class="bg-gray-50 dark:bg-gray-900 text-gray-950 dark:text-gray-50 relative"
@@ -32,8 +29,8 @@
     <!-- Site wrapper -->
     <div id="site-container" class="min-h-screen flex flex-col">
       <!-- navbar -->
-      <!-- <header class="flex-shrink-0"></header> -->
-      <header><%- include('partials/navbar') %></header>
+
+      <%- include('partials/navbar') %>
 
       <!-- page content -->
       <main
@@ -44,7 +41,13 @@
       </main>
     </div>
 
-    <!-- Sort menu modal -->
+    <!-- Search modal -->
+    <%- include('partials/search-modal') %>
+
+    <!-- Sort modal -->
     <%- include('partials/sort-modal') %>
+
+    <!-- scripts -->
+    <script type="module" src="/scripts/main.js"></script>
   </body>
 </html>

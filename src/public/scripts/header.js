@@ -1,28 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const sortBtn = document.querySelector('#sort-btn');
-  const modal = document.querySelector('#sort-menu-modal');
+  // handle search modal show/hide/search
+  (function handleSearchModal() {
+    const searchBtn = document.querySelector('#search-btn');
+    const searchModal = document.querySelector('#search-modal');
 
-  let isHidden = true;
+    if (!searchBtn || !searchModal) return;
 
-  if (sortBtn && modal) {
-    sortBtn.addEventListener('click', () => {
+    let isHidden = true;
+
+    // Toggle search modal when users clicking on sort button
+    searchBtn.addEventListener('click', () => {
       if (isHidden) {
-        showModal();
+        isHidden = showModal('search');
       } else {
-        hideModal();
+        isHidden = hideModal('search');
       }
     });
 
-    // Close modal when user clicking on X
-    modal.querySelector('#close-modal').addEventListener('click', hideModal);
+    // Close search modal when user clicking on `<-`
+    searchModal.querySelector('#close-search').addEventListener('click', () => {
+      isHidden = hideModal('search');
+    });
+  })();
 
-    // Close modal when user clicking outside it
+  // handle sort modal show/hide/sort
+  (function handleSortModal() {
+    const sortBtn = document.querySelector('#sort-btn');
+    const sortModal = document.querySelector('#sort-modal');
+
+    if (!sortBtn && !sortModal) return;
+
+    let isHidden = true;
+
+    // Toggle sort modal when users clicking on sort button
+    sortBtn.addEventListener('click', () => {
+      if (isHidden) {
+        isHidden = showModal('sort');
+      } else {
+        isHidden = hideModal('sort');
+      }
+    });
+
+    // Close sortModal when user clicking on X
+    sortModal.querySelector('#close-sort').addEventListener('click', () => {
+      isHidden = hideModal('sort');
+    });
+
+    // Close sortModal when user clicking outside it
     document.addEventListener('click', (ev) => {
       if (
-        !ev.target.closest('#sort-menu-modal > div') &&
+        !ev.target.closest('#sort-modal > div') &&
         !ev.target.closest('#sort-btn')
       ) {
-        hideModal();
+        isHidden = hideModal('sort');
       }
     });
 
@@ -30,36 +60,65 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (ev) => {
       if (ev.key === 'Escape') {
         ev.preventDefault();
-        hideModal();
+
+        isHidden = hideModal('sort');
       }
     });
-  }
+  })();
 
-  function showModal() {
-    // Modify the trigger attribute
-    sortBtn.setAttribute('aria-expanded', 'true');
+  /**
+   * ------------------- helpers -------------------
+   */
 
-    // Modify the modal classList
+  function showModal(name) {
+    const modal = document.querySelector(`#${name}-modal`);
+
+    // 1. Modify the trigger attribute
+    document
+      .querySelector(`#${name}-btn`)
+      .setAttribute('aria-expanded', 'true');
+
+    // 2. Modify the sortModal classList
     modal.classList.remove('translate-y-full');
+
+    // 3. Prevent scrolling on pages below
     document.body.classList.add('overflow-hidden');
 
-    // Prevent events on pages below
+    // 4. Prevent events on pages below
     document.querySelector('#site-container').setAttribute('inert', '');
 
-    isHidden = !isHidden;
+    // 5. dispatch modal open event after transition end
+    modal.addEventListener(
+      'transitionend',
+      () => {
+        document.dispatchEvent(new Event(name + '-modal-open'));
+      },
+      { once: true },
+    );
+
+    // 6. return hidden state
+    return false;
   }
 
-  function hideModal() {
-    // Modify the trigger
-    sortBtn.setAttribute('aria-expanded', 'false');
+  function hideModal(name) {
+    // 1. Modify the trigger
+    document
+      .querySelector(`#${name}-btn`)
+      .setAttribute('aria-expanded', 'false');
 
-    // Modify the modal classList
-    modal.classList.add('translate-y-full');
+    // 2. Modify the sortModal classList
+    document.querySelector(`#${name}-modal`).classList.add('translate-y-full');
+
+    // 3. Enable scroll on pages below
     document.body.classList.remove('overflow-hidden');
 
-    // Enable events
+    // 4. Enable events on pages below
     document.querySelector('#site-container').removeAttribute('inert');
 
-    isHidden = !isHidden;
+    // 5. dispatch modal open event
+    document.dispatchEvent(new Event(name + '-modal-hide'));
+
+    // 5. return hidden state
+    return true;
   }
 });

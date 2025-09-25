@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function changeLayoutToGrid() {
     // 1. Modify toggle button
-    layoutToggle.setAttribute('data-layout', 'grid');
+    // layoutToggle.setAttribute('data-layout', 'grid');
     layoutToggle.innerHTML = LAYOUT_LIST;
 
     // 2. Modify layout container
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function changeLayoutToList() {
     // 1. Modify toggle button
-    layoutToggle.setAttribute('data-layout', 'list');
+    // layoutToggle.setAttribute('data-layout', 'list');
     layoutToggle.innerHTML = LAYOUT_GRID;
 
     // 2. Modify layout container

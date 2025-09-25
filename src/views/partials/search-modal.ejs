@@ -1,0 +1,59 @@
+<div
+  id="search-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="search-modal-title"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full z-30 transition-transform duration-200"
+>
+  <div
+    class="absolute bottom-0 left-0 min-h-screen w-full flex flex-col p-5 bg-gray-50 dark:bg-gray-900"
+  >
+    <div class="flex flex-col flex-grow">
+      <!-- Back button -->
+      <div class="flex mb-5">
+        <button type="button" id="close-search" class="text-xl px-1 rounded-md">
+          &#x2190;
+        </button>
+      </div>
+
+      <!-- Search form -->
+      <form id="search-form" action="/" class="relative w-full" novalidate>
+        <div
+          class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
+          aria-hidden="true"
+        >
+          <%- include('../icons/search') %>
+        </div>
+        <label for="search" class="sr-only">Search for folders or files</label>
+        <input
+          id="search"
+          type="text"
+          name="q"
+          value="<%= typeof q !== 'undefined' ? q : '' %>"
+          aria-label="Search input"
+          autocomplete="off"
+          spellcheck="false"
+          class="w-full pl-12 h-12 pr-8 outline-none rounded-md placeholder:text-gray-500 placeholder:font-light border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+          placeholder="Search..."
+        />
+
+        <button
+          type="button"
+          aria-label="Clear search"
+          class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
+        >
+          <%- include('../icons/x') %>
+        </button>
+      </form>
+
+      <!-- Search results -->
+      <div
+        class="flex-grow mt-5 border-gray-200 dark:border-gray-800 flex items-center justify-center text-[80px] sm:text-[108px]"
+      >
+        🧐
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/scripts/search-modal.js"></script>
