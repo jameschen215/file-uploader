@@ -1,0 +1,28 @@
+<!-- breadcrumbs -->
+<span class="font-medium text-lg">Cloud drive</span>
+
+<!-- buttons -->
+<div class="flex items-center gap-5">
+  <button id="search-btn" type="button">
+    <%- include('../icons/search') %>
+  </button>
+
+  <button
+    id="layout-toggle"
+    type="button"
+    aria-label="Toggle layout between grid and list"
+  >
+    <%- include('../icons/layout-list') %>
+  </button>
+
+  <button
+    id="sort-btn"
+    type="button"
+    aria-controls="sort-menu-modal"
+    aria-expanded="false"
+  >
+    <%- include('../icons/arrow-down-up') %>
+  </button>
+</div>
+
+<script type="module" src="/scripts/header.js"></script>

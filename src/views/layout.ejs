@@ -30,7 +30,7 @@
     </a>
 
     <!-- Site wrapper -->
-    <div class="min-h-screen flex flex-col">
+    <div id="site-container" class="min-h-screen flex flex-col">
       <!-- navbar -->
       <!-- <header class="flex-shrink-0"></header> -->
       <header><%- include('partials/navbar') %></header>
@@ -43,5 +43,8 @@
         <%- body %>
       </main>
     </div>
+
+    <!-- Sort menu modal -->
+    <%- include('partials/sort-modal') %>
   </body>
 </html>
