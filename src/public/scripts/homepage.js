@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'sm:grid-cols-3',
       'md:grid-cols-4',
       'lg:grid-cols-6',
+      'gap-5',
     );
 
     // 3. Modify item className
@@ -82,13 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
       'sm:grid-cols-3',
       'md:grid-cols-4',
       'lg:grid-cols-6',
+      'gap-5',
     );
     layoutContainer.classList.add('grid-cols-1');
 
     // 3. Modify item className
     layoutContainer.querySelectorAll('.item').forEach((item) => {
       item.className =
-        'item flex items-center gap-5 border-b border-gray-100 py-5 dark:border-gray-800';
+        'item flex items-center gap-5 border-b border-gray-200 py-4 dark:border-gray-800';
     });
 
     // 4. Modify icon size of items

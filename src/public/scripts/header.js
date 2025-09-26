@@ -64,6 +64,11 @@ document.addEventListener('DOMContentLoaded', () => {
         isHidden = hideModal('sort');
       }
     });
+
+    // Close modal when users submit
+    // sortModal.querySelector('form').addEventListener('submit', () => {
+    //   isHidden = hideModal('sort');
+    // });
   })();
 
   /**

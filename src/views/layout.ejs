@@ -28,14 +28,17 @@
 
     <!-- Site wrapper -->
     <div id="site-container" class="min-h-screen flex flex-col">
-      <!-- navbar -->
-
-      <%- include('partials/navbar') %>
+      <!-- Header -->
+      <header
+        class="fixed top-0 left-0 h-[120px] w-full bg-white dark:bg-gray-900 z-40"
+      >
+        <%- include('partials/header') %>
+      </header>
 
       <!-- page content -->
       <main
         id="main-content"
-        class="w-full max-w-7xl mx-auto flex-grow flex flex-col"
+        class="w-full max-w-7xl mx-auto flex-grow flex flex-col mt-[120px]"
       >
         <%- body %>
       </main>

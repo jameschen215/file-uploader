@@ -4,8 +4,6 @@ document.addEventListener('search-modal-open', () => {
   const searchInput = document.querySelector('input#search');
   const clearButton = document.querySelector('#search-form > button');
 
-  console.log('Modal opened, trying to focus input');
-
   if (!modal || !form || !searchInput || !clearButton) return;
 
   hideClearButton();
