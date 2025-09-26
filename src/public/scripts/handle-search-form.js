@@ -1,3 +1,5 @@
+import { showClearButton, hideClearButton } from './lib/search-helpers.js';
+
 document.addEventListener('search-modal-open', () => {
   const modal = document.querySelector('#search-modal');
   const form = document.querySelector('#search-form');
@@ -6,7 +8,7 @@ document.addEventListener('search-modal-open', () => {
 
   if (!modal || !form || !searchInput || !clearButton) return;
 
-  hideClearButton();
+  hideClearButton(clearButton);
 
   // 1. Focus in search input
   searchInput.focus();
@@ -24,24 +26,27 @@ document.addEventListener('search-modal-open', () => {
   // 2.1 Show the clear button on mousedown if the input has a value
   searchInput.addEventListener('mousedown', () => {
     if (searchInput.value.trim() !== '') {
-      showClearButton();
+      showClearButton(clearButton);
     }
   });
 
   // 2.2 Show the clear button while the user is typing (hide when input is empty)
   searchInput.addEventListener('input', function () {
     if (this.value.trim() === '') {
-      hideClearButton();
+      hideClearButton(clearButton);
     } else {
-      showClearButton();
+      showClearButton(clearButton);
     }
   });
 
   // 2.3 Hide clear button when input loses focus
-  searchInput.addEventListener('blur', hideClearButton);
+  searchInput.addEventListener('blur', () => {
+    if (searchInput.value.trim() === '') {
+      hideClearButton(clearButton);
+    }
+  });
 
   // 3. Clear the input when clear button is clicked
-
   // 3.1 Prevent the input from blurring when the clear button is clicked.
   // This allows the clear button's click event to fire.
   clearButton.addEventListener('mousedown', (ev) => {
@@ -51,7 +56,7 @@ document.addEventListener('search-modal-open', () => {
   clearButton.addEventListener('click', (ev) => {
     searchInput.value = '';
     searchInput.focus();
-    hideClearButton();
+    hideClearButton(clearButton);
   });
 
   // 3.2 Clear the input when the modal is hidden
@@ -64,24 +69,7 @@ document.addEventListener('search-modal-open', () => {
     if (ev.key === 'Escape') {
       ev.preventDefault();
 
-      searchInput.value = '';
-      searchInput.focus();
+      searchInput.blur();
     }
   });
-
-  /**
-   * --------------- helpers
-   */
-
-  function showClearButton() {
-    clearButton.classList.remove('opacity-0');
-    clearButton.classList.remove('pointer-events-none');
-    clearButton.classList.add('opacity-100');
-  }
-
-  function hideClearButton() {
-    clearButton.classList.remove('opacity-100');
-    clearButton.classList.add('opacity-0');
-    clearButton.classList.add('pointer-events-none');
-  }
 });

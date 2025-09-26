@@ -27,10 +27,10 @@
     </a>
 
     <!-- Site wrapper -->
-    <div id="site-container" class="min-h-screen flex flex-col">
+    <div id="site-container" class="relative min-h-screen flex flex-col">
       <!-- Header -->
       <header
-        class="fixed top-0 left-0 h-[120px] w-full bg-white dark:bg-gray-900 z-40"
+        class="fixed top-0 left-0 h-[120px] w-full bg-gray-50 dark:bg-gray-900 z-40"
       >
         <%- include('partials/header') %>
       </header>
@@ -42,6 +42,17 @@
       >
         <%- body %>
       </main>
+
+      <!-- Add button -->
+      <% if (locals.currentUser) { %>
+      <button
+        id="add-btn"
+        type="button"
+        class="fixed bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
+      >
+        <%- include('icons/plus') %>
+      </button>
+      <% } %>
     </div>
 
     <!-- Search modal -->
@@ -49,6 +60,9 @@
 
     <!-- Sort modal -->
     <%- include('partials/sort-modal') %>
+
+    <!-- Add modal -->
+    <%- include('partials/add-modal') %>
 
     <!-- scripts -->
     <script type="module" src="/scripts/main.js"></script>

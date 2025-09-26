@@ -1,6 +1,9 @@
+import { showModal, hideModal } from './lib/modal-helpers.js';
+import { showClearButton, hideClearButton } from './lib/search-helpers.js';
+
 document.addEventListener('DOMContentLoaded', () => {
-  // handle search modal show/hide/search
-  (function handleSearchModal() {
+  // handle mobile search modal show/hide/search
+  (function handleSearchModalOnMobile() {
     const searchBtn = document.querySelector('#search-btn');
     const searchModal = document.querySelector('#search-modal');
 
@@ -23,12 +26,70 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
+  // Handle desktop search
+  (function handleSearchModalOnDesktop() {
+    const searchForm = document.querySelector('#search-form-desktop');
+    const searchInput = document.querySelector('#search-form-desktop input');
+    const clearButton = document.querySelector('#search-form-desktop > button');
+
+    if (!searchForm || !searchInput || !clearButton) return;
+
+    // 1. hide clear button on load
+    hideClearButton(clearButton);
+
+    // 2. Handle clear button show/hide when user typing
+    // 2.1 Show the clear button on mousedown if the input has a value
+    searchInput.addEventListener('mousedown', () => {
+      if (searchInput.value.trim() !== '') {
+        showClearButton(clearButton);
+      }
+    });
+
+    // 2.2 Show the clear button while the user is typing (hide when input is empty)
+    searchInput.addEventListener('input', function () {
+      if (this.value.trim() === '') {
+        hideClearButton(clearButton);
+      } else {
+        showClearButton(clearButton);
+      }
+    });
+
+    // 2.3 Hide clear button when input loses focus and input is empty
+    searchInput.addEventListener('blur', () => {
+      if (searchInput.value.trim() === '') {
+        hideClearButton(clearButton);
+      }
+    });
+
+    // 3. Clear the input when clear button is clicked
+    // 3.1 Prevent the input from blurring when the clear button is clicked.
+    // This allows the clear button's click event to fire.
+    clearButton.addEventListener('mousedown', (ev) => {
+      ev.preventDefault();
+    });
+
+    clearButton.addEventListener('click', () => {
+      searchInput.value = '';
+      searchInput.focus();
+      hideClearButton(clearButton);
+    });
+
+    // 4. Make the input blur when 'Escape' is pressed
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+
+        searchInput.blur();
+      }
+    });
+  })();
+
   // handle sort modal show/hide/sort
-  (function handleSortModal() {
+  (function handleSortModalOnMobile() {
     const sortBtn = document.querySelector('#sort-btn');
     const sortModal = document.querySelector('#sort-modal');
 
-    if (!sortBtn && !sortModal) return;
+    if (!sortBtn || !sortModal) return;
 
     let isHidden = true;
 
@@ -71,59 +132,90 @@ document.addEventListener('DOMContentLoaded', () => {
     // });
   })();
 
-  /**
-   * ------------------- helpers -------------------
-   */
+  /** ----------------- HANDLE SORT ON DESKTOP ----------------- */
+  (function handleSortOnDesktop() {
+    const trigger = document.querySelector('#select-trigger');
+    const select = document.querySelector('#sort-select');
 
-  function showModal(name) {
-    const modal = document.querySelector(`#${name}-modal`);
+    if (!trigger || !select) return;
 
-    // 1. Modify the trigger attribute
-    document
-      .querySelector(`#${name}-btn`)
-      .setAttribute('aria-expanded', 'true');
+    let isHidden = true;
 
-    // 2. Modify the sortModal classList
-    modal.classList.remove('translate-y-full');
+    // Toggle select hide/show
+    trigger.addEventListener('click', () => {
+      if (isHidden) {
+        isHidden = showSelect();
+      } else {
+        isHidden = hideSelect();
+      }
+    });
 
-    // 3. Prevent scrolling on pages below
-    document.body.classList.add('overflow-hidden');
+    // Close select when clicking outside of it
+    document.addEventListener('click', (ev) => {
+      if (
+        !ev.target.closest('#sort-select') &&
+        !ev.target.closest('#select-trigger')
+      ) {
+        isHidden = hideSelect();
+      }
+    });
 
-    // 4. Prevent events on pages below
-    document.querySelector('#site-container').setAttribute('inert', '');
+    // close select when pressing 'Esc' key
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
 
-    // 5. dispatch modal open event after transition end
-    modal.addEventListener(
-      'transitionend',
-      () => {
-        document.dispatchEvent(new Event(name + '-modal-open'));
-      },
-      { once: true },
-    );
+        isHidden = hideSelect();
+      }
+    });
 
-    // 6. return hidden state
-    return false;
-  }
+    // Handel selecting on sort-by options
+    document.querySelectorAll('#sort-select li button').forEach((item) => {
+      item.addEventListener('click', () => {
+        const sortBy = item.textContent.trim().split('\n')[0];
 
-  function hideModal(name) {
-    // 1. Modify the trigger
-    document
-      .querySelector(`#${name}-btn`)
-      .setAttribute('aria-expanded', 'false');
+        // update ui
+        document.querySelectorAll('#sort-select  li button').forEach((btn) => {
+          btn.lastElementChild.textContent = '';
+        });
+        item.lastElementChild.innerHTML = '&#x2713;';
 
-    // 2. Modify the sortModal classList
-    document.querySelector(`#${name}-modal`).classList.add('translate-y-full');
+        document.querySelector('#sort-by-name').textContent = sortBy;
 
-    // 3. Enable scroll on pages below
-    document.body.classList.remove('overflow-hidden');
+        // TODO: sort with sortBy
 
-    // 4. Enable events on pages below
-    document.querySelector('#site-container').removeAttribute('inert');
+        isHidden = hideSelect();
+      });
 
-    // 5. dispatch modal open event
-    document.dispatchEvent(new Event(name + '-modal-hide'));
+      // toggle sort order between ascending and descending
+      document.querySelector('#sort-info').addEventListener('click', (ev) => {
+        ev.stopImmediatePropagation();
 
-    // 5. return hidden state
-    return true;
-  }
+        const direction = document.querySelector('#sort-direction');
+
+        if (direction.dataset.order === 'asc') {
+          direction.dataset.order = 'desc';
+          direction.innerHTML = '&#x2193;';
+        } else {
+          direction.dataset.order = 'asc';
+          direction.innerHTML = '&#x2191;';
+        }
+
+        // TODO: sort with new order
+      });
+    });
+
+    /* --- helpers --- */
+    function showSelect() {
+      select.classList.remove('hidden');
+
+      return false;
+    }
+
+    function hideSelect() {
+      select.classList.add('hidden');
+
+      return true;
+    }
+  })();
 });

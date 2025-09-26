@@ -4,19 +4,60 @@
 >
   <!-- 1280px container -->
   <div
-    class="w-full max-w-7xl mx-auto h-16 px-5 flex items-center justify-between"
+    class="w-full max-w-7xl mx-auto h-16 px-5 flex items-center justify-between gap-5"
   >
     <!-- logo -->
-    <a
-      href="/"
-      class="size-8 flex items-center justify-center bg-fuchsia-600 uppercase font-semibold text-xl rounded-full"
-    >
-      <span class="text-white text-xl font-medium">U</span>
-    </a>
+    <div class="min-w-20">
+      <a
+        href="/"
+        class="size-8 flex items-center justify-center bg-fuchsia-600 uppercase font-semibold text-xl rounded-full"
+      >
+        <span class="text-white text-xl font-medium">U</span>
+      </a>
+    </div>
 
-    <!-- for desktop -->
+    <!-- desktop search -->
+    <% if (locals.currentUser) { %>
+    <form
+      id="search-form-desktop"
+      action="/search"
+      class="hidden sm:block relative w-full max-w-xl"
+      novalidate
+    >
+      <div
+        class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
+        aria-hidden="true"
+      >
+        <%- include('../icons/search') %>
+      </div>
+      <label for="search-desktop" class="sr-only">
+        Search for folders or files
+      </label>
+      <input
+        id="search-desktop"
+        type="text"
+        name="q"
+        value="<%= typeof q !== 'undefined' ? q : '' %>"
+        aria-label="Search input"
+        autocomplete="off"
+        spellcheck="false"
+        class="w-full pl-12 h-11 pr-8 outline-none rounded-xl placeholder:text-gray-500 placeholder:font-light border border-gray-200 dark:border-gray-700 bg-gray-50 focus:border-gray-300 focus:ring-2 focus:ring-gray-50 dark:bg-gray-800 dark:focus:border-gray-600 dark:focus:ring-gray-900"
+        placeholder="Search..."
+      />
+
+      <button
+        type="button"
+        aria-label="Clear search"
+        class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
+      >
+        <%- include('../icons/x') %>
+      </button>
+    </form>
+    <% } %>
+
+    <!-- desktop theme toggle -->
     <ul class="items-center gap-2 hidden sm:flex">
-      <li>
+      <li class="">
         <button
           id="theme-btn-desktop"
           type="button"
@@ -27,21 +68,24 @@
         </button>
       </li>
 
-      <% if (currentUser) { %>
-      <button
-        id="dropdown-btn"
-        class="hidden sm:block size-8 cursor-pointer text-zinc-700"
-        aria-label="Toggle dropdown menu"
-        aria-expanded="false"
-        aria-controls="dropdown-content"
-        type="button"
-      >
-        <span
-          class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+      <% if (locals.currentUser) { %>
+      <!-- dropdown -->
+      <li class="">
+        <button
+          id="dropdown-btn"
+          class="hidden sm:block size-8 cursor-pointer text-zinc-700"
+          aria-label="Toggle dropdown menu"
+          aria-expanded="false"
+          aria-controls="dropdown-content"
+          type="button"
         >
-          <%= formatAvatar(currentUser) %>
-        </span>
-      </button>
+          <span
+            class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+          >
+            <%= formatAvatar(currentUser) %>
+          </span>
+        </button>
+      </li>
 
       <% } else { %>
       <li>
@@ -177,10 +221,11 @@
   </div>
 
   <!-- dropdown content -->
+  <% if (locals.currentUser) { %>
   <div
     id="dropdown-content"
     aria-hidden="true"
-    class="hidden absolute top-full right-5 w-72 translate-y-1 px-6 pt-8 bg-white dark:bg-gray-900 dark:border-gray-700 border rounded-lg z-[100]"
+    class="hidden absolute top-full right-5 w-72 translate-y-1 px-6 pt-8 bg-white dark:bg-gray-900 dark:border-gray-700 border rounded-lg z-[100] shadow-lg"
   >
     <div class="flex items-center gap-3">
       <span
@@ -223,10 +268,11 @@
       </li>
     </ul>
   </div>
+  <% } %>
 </nav>
 
 <!-- sub-header -->
-
+<% if (locals.currentUser) { %>
 <div
   class="flex items-center justify-between h-14 w-full max-w-7xl mx-auto px-5"
 >
@@ -235,11 +281,84 @@
 
   <!-- buttons -->
   <div class="flex items-center gap-5">
+    <!-- desktop -->
+    <div class="hidden relative sm:flex items-center gap-4 w-24 shrink-0">
+      <button
+        id="sort-info"
+        type="button"
+        class="text-sm flex items-center gap-1"
+      >
+        <span id="sort-direction" data-order="asc">&#x2191;</span>
+        <span id="sort-by-name" class="">Name</span>
+      </button>
+
+      <!-- sort-by select -->
+      <!-- 1. trigger -->
+      <button id="select-trigger" type="button" class="hidden sm:block">
+        <%- include('../icons/chevrons-up-down') %>
+      </button>
+
+      <!-- 2. select -->
+      <div
+        id="sort-select"
+        class="hidden absolute top-full translate-y-5 p-5 right-0 w-60 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg"
+      >
+        <h3 class="text-lg font-medium mb-2">Sort by</h3>
+
+        <ul class="flex flex-col">
+          <li>
+            <button
+              type="button"
+              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+            >
+              <span>Name</span>
+              <span>&#x2713;</span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+            >
+              <span>Size</span>
+              <span></span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+            >
+              <span>Type</span>
+              <span></span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+            >
+              <span>Date</span>
+              <span></span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- <select name="sort-by" id="sort-by-select">
+          <option value="name">Name</option>
+          <option value="size">Size</option>
+          <option value="type">Type</option>
+          <option value="Date">Date</option>
+        </select> -->
+      </div>
+    </div>
+
     <button
       id="search-btn"
       type="button"
       aria-controls="search-modal"
       aria-expanded="false"
+      class="sm:hidden"
     >
       <%- include('../icons/search') %>
     </button>
@@ -257,11 +376,13 @@
       type="button"
       aria-controls="sort-menu-modal"
       aria-expanded="false"
+      class="sm:hidden"
     >
       <%- include('../icons/arrow-down-up') %>
     </button>
   </div>
 </div>
+<% } %>
 
 <script type="module" src="/scripts/navbar.js"></script>
 <script type="module" src="/scripts/header.js"></script>

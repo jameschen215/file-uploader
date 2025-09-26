@@ -60,14 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 3.3 close dropdown when click outside it
-  document.addEventListener('click', (ev) => {
-    if (
-      !ev.target.closest('#dropdown-content') &&
-      !ev.target.closest('#dropdown-btn')
-    ) {
-      closeDropdown();
-    }
-  });
+  if (dropdownToggle && dropdownContent) {
+    document.addEventListener('click', (ev) => {
+      if (
+        !ev.target.closest('#dropdown-content') &&
+        !ev.target.closest('#dropdown-btn')
+      ) {
+        closeDropdown();
+      }
+    });
+  }
 
   // 4.1 Handle theme toggle for mobile
   if (themeBtnMobile) {
