@@ -9,22 +9,24 @@
   >
     <% if (category === 'folder') { %>
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <%- include('../icons/folder') %>
+      <!-- prettier-ignore-start -->
+      <%- icon({ name: 'Folder', fill: 'currentColor', className: 'w-full h-auto'}) %>
+      <!-- prettier-ignore-end -->
     </span>
 
     <% } else if (category === 'image') { %>
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <%- include('../icons/image') %>
+      <%- icon({name: 'Image', strokeWidth: 1, className: 'w-full h-auto'}) %>
     </span>
 
     <% } else if (category === 'video') { %>
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <%- include('../icons/film') %>
+      <%- icon({name: 'Film', strokeWidth: 1, className: 'w-full h-auto'}) %>
     </span>
 
     <% } else { %>
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <%- include('../icons/file') %>
+      <%- icon({name: 'File', strokeWidth: 1, className: 'w-full h-auto'}) %>
     </span>
     <% } %>
   </div>

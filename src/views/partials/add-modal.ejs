@@ -9,13 +9,13 @@
     class="absolute bottom-0 left-0 min-h-[33vh] w-full flex flex-col bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl p-5"
   >
     <div class="flex justify-end mb-8">
-      <button type="button" id="close-add"><%- include('../icons/x') %></button>
+      <button type="button" id="close-add"><%- icon({name: 'X'}) %></button>
     </div>
 
     <ul class="flex-grow flex flex-col gap-8">
       <!-- <button id="upload-btn" type="button" class="flex items-center gap-4">
         <span>
-          <%- include('../icons/image-up') %>
+
         </span>
         <span>Upload file</span>
       </button> -->
@@ -23,7 +23,7 @@
       <li>
         <a href="/upload" class="flex items-center gap-4">
           <span>
-            <%- include('../icons/image-up') %>
+            <%- icon({name: 'ImageUp'}) %>
           </span>
           <span>Upload file</span>
         </a>
@@ -36,7 +36,7 @@
           class="flex items-center gap-4"
         >
           <span>
-            <%- include('../icons/folder-plus') %>
+            <%- icon({name: 'FolderPlus'}) %>
           </span>
           <span>New folder</span>
         </button>

@@ -16,9 +16,10 @@ import authRoutes from './routes/auth.js';
 import indexRoutes from './routes/index.js';
 import { CustomNotFoundError } from './errors/index.js';
 import { errorsHandler } from './errors/error-handler.js';
-import { configurePassport, isAuthenticated } from './auth/index.js';
+import { configurePassport } from './auth/index.js';
 import { setCurrentUser } from './middlewares/set-current-user.js';
 import { formatAvatar } from './middlewares/format-avatar.js';
+import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 
 const app = express();
 const upload = multer();
@@ -52,6 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // custom middlewares
+app.use(getLucideIcons);
 app.use(formatAvatar);
 // app.use(formatDate);
 // app.use(setCurrentPath);

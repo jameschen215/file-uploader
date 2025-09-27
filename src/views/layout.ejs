@@ -48,9 +48,9 @@
       <button
         id="add-btn"
         type="button"
-        class="fixed bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
+        class="fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
       >
-        <%- include('icons/plus') %>
+        <%- icon({ name: 'Plus' }) %>
       </button>
       <% } %>
     </div>
@@ -65,6 +65,7 @@
     <%- include('partials/add-modal') %>
 
     <!-- scripts -->
+
     <script type="module" src="/scripts/main.js"></script>
   </body>
 </html>

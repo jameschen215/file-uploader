@@ -28,7 +28,7 @@
         class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
         aria-hidden="true"
       >
-        <%- include('../icons/search') %>
+        <%- icon({ name: 'Search' }) %>
       </div>
       <label for="search-desktop" class="sr-only">
         Search for folders or files
@@ -50,7 +50,7 @@
         aria-label="Clear search"
         class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
       >
-        <%- include('../icons/x') %>
+        <%- icon({name: 'X'}) %>
       </button>
     </form>
     <% } %>
@@ -63,7 +63,7 @@
           type="button"
           class="flex items-center justify-center mr-2 size-8 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
         >
-          <span aria-hidden="true" id="theme-icon-desktop"></span>
+          <span aria-hidden="true" id="theme- icon-desktop"></span>
           <span class="sr-only" id="theme-text-desktop"></span>
         </button>
       </li>
@@ -124,7 +124,7 @@
       </span>
       <% } else { %>
       <span class="text-gray-700 dark:text-gray-50 block size-6">
-        <%- include('../icons/menu') %>
+        <%- icon({name: 'Menu'}) %>
       </span>
       <% } %>
     </button>
@@ -162,7 +162,7 @@
             role="menuitem"
             class="w-full flex items-center gap-3 text-start py-5 border-y border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
-            <span aria-hidden="true"><%- include('../icons/log-out') %></span>
+            <span aria-hidden="true"><%- icon({name: 'LogOut'}) %></span>
             <span>Sign out</span>
           </button>
         </form>
@@ -173,7 +173,7 @@
           type="button"
           class="w-full flex items-center gap-3 text-start py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
-          <span aria-hidden="true" id="theme-icon"></span>
+          <span aria-hidden="true" id="theme- icon"></span>
           <span id="theme-text"></span>
         </button>
       </li>
@@ -250,7 +250,7 @@
           href="/"
           class="flex items-center gap-3 w-full text-start py-5 border-t border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
-          <span aria-hidden="true"><%- include('../icons/settings') %></span>
+          <span aria-hidden="true"><%- icon({name: 'Settings'}) %></span>
           <span> Settings </span>
         </a>
       </li>
@@ -261,7 +261,7 @@
             role="menuitem"
             class="w-full flex items-center gap-3 text-start py-5 border-t border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
-            <span aria-hidden="true"><%- include('../icons/log-out') %></span>
+            <span aria-hidden="true"><%- icon({ name: 'LogOut' }) %></span>
             <span>Sign out</span>
           </button>
         </form>
@@ -280,7 +280,7 @@
   <span class="font-medium text-lg">Cloud drive</span>
 
   <!-- buttons -->
-  <div class="flex items-center gap-5">
+  <div class="flex items-center gap-3">
     <!-- desktop -->
     <div class="hidden relative sm:flex items-center gap-4 w-24 shrink-0">
       <button
@@ -295,7 +295,7 @@
       <!-- sort-by select -->
       <!-- 1. trigger -->
       <button id="select-trigger" type="button" class="hidden sm:block">
-        <%- include('../icons/chevrons-up-down') %>
+        <%- icon({ name: 'ChevronsUpDown', size: 20 }) %>
       </button>
 
       <!-- 2. select -->
@@ -343,13 +343,6 @@
             </button>
           </li>
         </ul>
-
-        <!-- <select name="sort-by" id="sort-by-select">
-          <option value="name">Name</option>
-          <option value="size">Size</option>
-          <option value="type">Type</option>
-          <option value="Date">Date</option>
-        </select> -->
       </div>
     </div>
 
@@ -360,7 +353,7 @@
       aria-expanded="false"
       class="sm:hidden"
     >
-      <%- include('../icons/search') %>
+      <%- icon({ name: 'Search' }) %>
     </button>
 
     <button
@@ -368,7 +361,7 @@
       type="button"
       aria-label="Toggle layout between grid and list"
     >
-      <%- include('../icons/layout-list') %>
+      <%- icon({ name: 'LayoutList' }) %>
     </button>
 
     <button
@@ -378,7 +371,25 @@
       aria-expanded="false"
       class="sm:hidden"
     >
-      <%- include('../icons/arrow-down-up') %>
+      <%- icon('ArrowDownUp', 20) %>
+    </button>
+
+    <!-- upload button for desktop -->
+    <a href="/upload" class="items-center gap-4 hidden sm:flex">
+      <span>
+        <%- icon('ImageUp', 20, 1.5) %>
+      </span>
+      <span class="sr-only">Upload file</span>
+    </a>
+
+    <!-- new folder button for desktop -->
+    <button
+      id="new-folder-btn"
+      type="button"
+      class="hidden sm:flex items-center gap-4"
+    >
+      <%- icon('FolderPlus', 20, 1.5) %>
+      <span class="sr-only">New folder</span>
     </button>
   </div>
 </div>
