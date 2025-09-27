@@ -1,0 +1,148 @@
+<div class="px-5">
+  <!-- up -->
+  <div class="hidden sm:flex items-center gap-4 h-16">
+    <button
+      type="button"
+      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
+    >
+      <span><%- icon({name: 'ArrowUp'}) %></span>
+      <span>Upload</span>
+    </button>
+    <button
+      type="button"
+      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
+    >
+      <span><%- icon({name: 'FolderPlus'}) %></span>
+      <span>New folder</span>
+    </button>
+  </div>
+
+  <!-- down -->
+  <% if (locals.currentUser) { %>
+  <div class="h-12 flex items-center justify-between w-full max-w-7xl mx-auto">
+    <!-- breadcrumbs -->
+    <span class="font-medium text-lg">Cloud drive</span>
+
+    <!-- buttons -->
+    <div class="flex items-center gap-3">
+      <!-- desktop -->
+      <div
+        class="hidden relative sm:flex items-center justify-between gap-2 shrink-0"
+      >
+        <button
+          id="sort-info"
+          type="button"
+          class="flex items-center gap-1 p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+        >
+          <span id="sort-direction" data-order="asc">&#x2191;</span>
+          <span id="sort-by-name" class="font-mono font-light">Name</span>
+        </button>
+
+        <!-- sort-by select -->
+        <!-- 1. trigger -->
+        <button
+          id="select-trigger"
+          type="button"
+          class="hidden sm:block p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+        >
+          <%- icon({ name: 'ChevronsUpDown', size: 24 }) %>
+        </button>
+
+        <!-- 2. select -->
+        <div
+          id="sort-select"
+          class="hidden absolute top-full translate-y-5 p-5 right-0 w-60 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg"
+        >
+          <h3 class="text-lg font-medium mb-2 font-mono">Sort by</h3>
+
+          <ul class="flex flex-col">
+            <li>
+              <button
+                type="button"
+                class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+              >
+                <span class="font-mono font-light">Name</span>
+                <span>&#x2713;</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+              >
+                <span class="font-mono font-light">Size</span>
+                <span></span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+              >
+                <span class="font-mono font-light">Type</span>
+                <span></span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+              >
+                <span class="font-mono font-light">Date</span>
+                <span></span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <button
+        id="search-btn"
+        type="button"
+        aria-controls="search-modal"
+        aria-expanded="false"
+        class="sm:hidden"
+      >
+        <%- icon({ name: 'Search' }) %>
+      </button>
+
+      <button
+        id="layout-toggle"
+        type="button"
+        aria-label="Toggle layout between grid and list"
+        class="p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+      >
+        <%- icon({ name: 'LayoutList', size: 24 }) %>
+      </button>
+
+      <button
+        id="sort-btn"
+        type="button"
+        aria-controls="sort-menu-modal"
+        aria-expanded="false"
+        class="sm:hidden"
+      >
+        <%- icon('ArrowDownUp', 20) %>
+      </button>
+
+      <!-- upload button for desktop -->
+      <a href="/upload" class="items-center gap-4 hidden sm:flex">
+        <span>
+          <%- icon('ImageUp', 20, 1.5) %>
+        </span>
+        <span class="sr-only">Upload file</span>
+      </a>
+
+      <!-- new folder button for desktop -->
+      <button
+        id="new-folder-btn"
+        type="button"
+        class="hidden sm:flex items-center gap-4"
+      >
+        <%- icon('FolderPlus', 20, 1.5) %>
+        <span class="sr-only">New folder</span>
+      </button>
+    </div>
+  </div>
+  <% } %>
+</div>

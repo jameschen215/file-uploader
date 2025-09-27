@@ -16,6 +16,7 @@ import {
   Image,
   LayoutList,
   Plus,
+  ArrowUp,
 } from 'lucide-static';
 
 interface IconParams {
@@ -25,14 +26,6 @@ interface IconParams {
   fill?: string;
   className?: string;
 }
-
-function createIconWithParams({
-  name,
-  size = 20,
-  strokeWidth = 2,
-  fill = 'none',
-  className = '',
-}: IconParams) {}
 
 export const getLucideIcons: RequestHandler = (_req, res, next) => {
   const imageMap: { [key: string]: string } = {
@@ -52,12 +45,13 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     Image,
     LayoutList,
     Plus,
+    ArrowUp,
   };
 
   // Helper function to modify svg string
   function createIcon(
     svgString: string,
-    size = 24,
+    size = 20,
     strokeWidth = 2,
     fill = 'none',
     className = '',

@@ -61,9 +61,9 @@
         <button
           id="theme-btn-desktop"
           type="button"
-          class="flex items-center justify-center mr-2 size-8 p-0.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
+          class="flex items-center justify-center mr-2 size-9 p-1 hover:bg-gray-200/60 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer"
         >
-          <span aria-hidden="true" id="theme- icon-desktop"></span>
+          <span aria-hidden="true" id="theme-icon-desktop"></span>
           <span class="sr-only" id="theme-text-desktop"></span>
         </button>
       </li>
@@ -73,14 +73,14 @@
       <li class="">
         <button
           id="dropdown-btn"
-          class="hidden sm:block size-8 cursor-pointer text-zinc-700"
+          class="hidden sm:block size-8 cursor-pointer group"
           aria-label="Toggle dropdown menu"
           aria-expanded="false"
           aria-controls="dropdown-content"
           type="button"
         >
           <span
-            class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+            class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full group-hover:bg-teal-400/75 transition-colors duration-200"
           >
             <%= formatAvatar(currentUser) %>
           </span>
@@ -110,7 +110,7 @@
     <!-- hamburger menu button -->
     <button
       id="menu-btn"
-      class="sm:hidden size-8 cursor-pointer text-zinc-700"
+      class="sm:hidden size-8 cursor-pointer"
       aria-label="Toggle navigation menu"
       aria-expanded="false"
       aria-controls="menu-content"
@@ -173,7 +173,7 @@
           type="button"
           class="w-full flex items-center gap-3 text-start py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
         >
-          <span aria-hidden="true" id="theme- icon"></span>
+          <span aria-hidden="true" id="theme-icon"></span>
           <span id="theme-text"></span>
         </button>
       </li>
@@ -271,129 +271,4 @@
   <% } %>
 </nav>
 
-<!-- sub-header -->
-<% if (locals.currentUser) { %>
-<div
-  class="flex items-center justify-between h-14 w-full max-w-7xl mx-auto px-5"
->
-  <!-- breadcrumbs -->
-  <span class="font-medium text-lg">Cloud drive</span>
-
-  <!-- buttons -->
-  <div class="flex items-center gap-3">
-    <!-- desktop -->
-    <div class="hidden relative sm:flex items-center gap-4 w-24 shrink-0">
-      <button
-        id="sort-info"
-        type="button"
-        class="text-sm flex items-center gap-1"
-      >
-        <span id="sort-direction" data-order="asc">&#x2191;</span>
-        <span id="sort-by-name" class="">Name</span>
-      </button>
-
-      <!-- sort-by select -->
-      <!-- 1. trigger -->
-      <button id="select-trigger" type="button" class="hidden sm:block">
-        <%- icon({ name: 'ChevronsUpDown', size: 20 }) %>
-      </button>
-
-      <!-- 2. select -->
-      <div
-        id="sort-select"
-        class="hidden absolute top-full translate-y-5 p-5 right-0 w-60 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg"
-      >
-        <h3 class="text-lg font-medium mb-2">Sort by</h3>
-
-        <ul class="flex flex-col">
-          <li>
-            <button
-              type="button"
-              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
-            >
-              <span>Name</span>
-              <span>&#x2713;</span>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
-            >
-              <span>Size</span>
-              <span></span>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
-            >
-              <span>Type</span>
-              <span></span>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
-            >
-              <span>Date</span>
-              <span></span>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <button
-      id="search-btn"
-      type="button"
-      aria-controls="search-modal"
-      aria-expanded="false"
-      class="sm:hidden"
-    >
-      <%- icon({ name: 'Search' }) %>
-    </button>
-
-    <button
-      id="layout-toggle"
-      type="button"
-      aria-label="Toggle layout between grid and list"
-    >
-      <%- icon({ name: 'LayoutList' }) %>
-    </button>
-
-    <button
-      id="sort-btn"
-      type="button"
-      aria-controls="sort-menu-modal"
-      aria-expanded="false"
-      class="sm:hidden"
-    >
-      <%- icon('ArrowDownUp', 20) %>
-    </button>
-
-    <!-- upload button for desktop -->
-    <a href="/upload" class="items-center gap-4 hidden sm:flex">
-      <span>
-        <%- icon('ImageUp', 20, 1.5) %>
-      </span>
-      <span class="sr-only">Upload file</span>
-    </a>
-
-    <!-- new folder button for desktop -->
-    <button
-      id="new-folder-btn"
-      type="button"
-      class="hidden sm:flex items-center gap-4"
-    >
-      <%- icon('FolderPlus', 20, 1.5) %>
-      <span class="sr-only">New folder</span>
-    </button>
-  </div>
-</div>
-<% } %>
-
 <script type="module" src="/scripts/navbar.js"></script>
-<script type="module" src="/scripts/header.js"></script>
