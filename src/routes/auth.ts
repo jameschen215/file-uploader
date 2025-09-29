@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, urlencoded } from 'express';
 
 import { signInSchema, signUpSchema } from '../validators/user.js';
 import { isAuthenticated, isNotAuthenticated } from '../auth/index.js';
@@ -14,11 +14,28 @@ import {
 
 const router = Router();
 
-router.post('/sign-up', isNotAuthenticated, signUpSchema, signUpNewUser);
+router.post(
+  '/sign-up',
+  isNotAuthenticated,
+  urlencoded({ extended: true }),
+  signUpSchema,
+  signUpNewUser,
+);
 
-router.post('/sign-in', isNotAuthenticated, signInSchema, signInUser);
+router.post(
+  '/sign-in',
+  isNotAuthenticated,
+  urlencoded({ extended: true }),
+  signInSchema,
+  signInUser,
+);
 
-router.post('/upgrade', isAuthenticated, upgradeUser);
+router.post(
+  '/upgrade',
+  isAuthenticated,
+  urlencoded({ extended: true }),
+  upgradeUser,
+);
 
 router.post('/sign-out', isAuthenticated, signOutUser);
 

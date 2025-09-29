@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import cors from 'cors';
 import path from 'path';
-import multer from 'multer';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import express from 'express';
@@ -22,7 +21,6 @@ import { formatAvatar } from './middlewares/format-avatar.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 
 const app = express();
-const upload = multer();
 
 // get __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -49,8 +47,15 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(methodOverride('_method'));
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * express.urlencoded() tries to parse the request body before Multer gets to it,
+ * which interferes with multipart/form-data parsing. So, Don't use it globally.
+ * Just apply only to specific routes that need it. Like:
+ * app.post('/login', express.urlencoded({ extended: true }), loginHandler);
+ */
+// app.use(express.urlencoded({ extended: true }));
 
 // custom middlewares
 app.use(getLucideIcons);

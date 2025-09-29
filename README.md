@@ -336,6 +336,4 @@ async function changeLayout(view) {
 
 ## TODO:
 
-- Upload file and new folder button for desktop
-
 - Improve list item - add details
