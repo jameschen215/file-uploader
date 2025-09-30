@@ -121,7 +121,7 @@ export function removeErrorStylesAndMessages(field) {
   errorEl.classList.add('hidden');
 }
 
-function showErrorStylesAndMessages(field, message) {
+export function showErrorStylesAndMessages(field, message) {
   // 1. Remove existing error style and message
   removeErrorStylesAndMessages(field);
 

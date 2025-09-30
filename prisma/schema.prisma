@@ -7,14 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum Role {
+  USER
+  ADMIN
 }
 
 model Session {
@@ -24,7 +19,66 @@ model Session {
   expiresAt DateTime
 }
 
-enum Role {
-  USER
-  ADMIN
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  folders Folder[]
+  files   File[]
+
+  @@map("users")
+}
+
+model Folder {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Self-referencing relationship for nested folders
+  parentFolderId String?  @map("parent_folder_id")
+  parentFolder   Folder?  @relation("FolderHierarchy", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  subFolders     Folder[] @relation("FolderHierarchy")
+
+  // User relationship
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Files in this folder
+  files File[]
+
+  // Unique constraint: folder name must be unique within the same parent for each user
+  @@unique([name, parentFolderId, userId])
+  @@index([userId, parentFolderId])
+  @@map("folders")
+}
+
+model File {
+  id           String   @id @default(uuid())
+  originalName String   @map("original_name")
+  fileName     String   @map("file_name") // Unique filename in storage
+  filePath     String   @map("file_path") // Path in Supabase storage
+  fileSize     Int      @map("file_size")
+  mimeType     String   @map("mime_type")
+  publicUrl    String   @map("public_url")
+  uploadedAt   DateTime @default(now()) @map("uploaded_at")
+
+  // Folder relationship (nullable for root-level files)
+  folderId String? @map("folder_id")
+  folder   Folder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  // User relationship
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  //  Unique constraint: file name must be unique within the same folder for each user
+  @@unique([originalName, userId, folderId])
+  @@index([userId, folderId])
+  @@map("files")
 }

@@ -3,14 +3,14 @@
   <div
     aria-hidden="true"
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-square text-gray-100 dark:text-gray-800/25 -z-10"
-    style="width: min(90vw, 90vh)"
+    style="width: min(75vw, 75vh)"
   >
-    <%- icon({ name: 'Frown' }) %>
+    <%- icon({ name: 'Frown', strokeWidth: 3, className: 'w-full h-auto' }) %>
   </div>
 
   <!-- 1280px container -->
   <div
-    class="min-h-[calc(100vh-64px)] w-full flex flex-col items-center justify-center gap-10 px-4 text-gray-950 dark:text-gray-50"
+    class="min-h-[calc(100vh-112px)] sm:min-h-[calc(100vh-176px)] w-full flex flex-col items-center justify-center gap-10 px-4 text-gray-950 dark:text-gray-50"
   >
     <h1 id="page-title" class="-mt-20 text-6xl md:text-9xl font-extrabold">
       <%= statusCode %>

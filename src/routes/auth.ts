@@ -14,26 +14,14 @@ import {
 
 const router = Router();
 
-router.post(
-  '/sign-up',
-  isNotAuthenticated,
-  urlencoded({ extended: true }),
-  signUpSchema,
-  signUpNewUser,
-);
+router.post('/sign-up', isNotAuthenticated, signUpSchema, signUpNewUser);
 
-router.post(
-  '/sign-in',
-  isNotAuthenticated,
-  urlencoded({ extended: true }),
-  signInSchema,
-  signInUser,
-);
+router.post('/sign-in', isNotAuthenticated, signInSchema, signInUser);
 
 router.post(
   '/upgrade',
   isAuthenticated,
-  urlencoded({ extended: true }),
+  // urlencoded({ extended: true }),
   upgradeUser,
 );
 

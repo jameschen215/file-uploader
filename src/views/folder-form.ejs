@@ -1,0 +1,57 @@
+<div class="flex-grow flex flex-col items-center sm:mt-5 gap-5 p-5">
+  <form
+    id="folder-form"
+    data-errors="<%= JSON.stringify(locals.errors) || {} %>"
+    action="/folders"
+    method="post"
+    class="w-full max-w-md flex flex-col gap-5 sm:px-12 sm:py-14 sm:shadow-md sm:border sm:border-gray-200 dark:sm:border-gray-800 sm:rounded-3xl"
+    novalidate
+  >
+    <div class="mb-4">
+      <h1 class="text-center text-3xl">Create new Folder</h1>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <input
+        type="hidden"
+        name="parentFolderId"
+        value="<%= locals.currentFolder ? currentFolder.id : '' %>"
+      />
+
+      <input
+        type="text"
+        name="name"
+        value="<%= locals.oldInput?.name || '' %>"
+        aria-describedby="name-error"
+        aria-invalid="false"
+        class="border border-gray-300 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200"
+      />
+
+      <div
+        id="name-error"
+        aria-live="polite"
+        class="hidden text-sm text-red-600"
+      ></div>
+    </div>
+
+    <div class="flex flex-col mt-3">
+      <button
+        type="submit"
+        class="w-full bg-lime-600 hover:bg-lime-500 py-2 outline-none text-gray-50 font-medium rounded-sm cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Create Folder
+      </button>
+    </div>
+
+    <div id="name-help" class="mt-3">
+      <p class="text-sm text-gray-500">
+        Folder names can only have letters, numbers, underscores (_), and
+        hyphens (-).
+      </p>
+    </div>
+  </form>
+
+  <div><%= locals.currentFolder ? currentFolder.id : 'no folder' %></div>
+</div>
+
+<script type="module" src="/scripts/folder-form.js"></script>

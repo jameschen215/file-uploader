@@ -19,6 +19,7 @@ import { configurePassport } from './auth/index.js';
 import { setCurrentUser } from './middlewares/set-current-user.js';
 import { formatAvatar } from './middlewares/format-avatar.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
+import { setCurrentFolder } from './middlewares/set-current-folder.js';
 
 const app = express();
 
@@ -47,15 +48,15 @@ app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(methodOverride('_method'));
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static assets (CSS, JS, images)
 app.use(express.static(path.join(__dirname, 'public')));
 
-/**
- * express.urlencoded() tries to parse the request body before Multer gets to it,
- * which interferes with multipart/form-data parsing. So, Don't use it globally.
- * Just apply only to specific routes that need it. Like:
- * app.post('/login', express.urlencoded({ extended: true }), loginHandler);
- */
-// app.use(express.urlencoded({ extended: true }));
+// Serve uploaded files in development only
+if (process.env.NODE_ENV === 'development') {
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+}
 
 // custom middlewares
 app.use(getLucideIcons);
@@ -92,6 +93,9 @@ app.use(passport.session());
 
 // set currentUser middleware (after Passport, before routes)
 app.use(setCurrentUser);
+
+// after currentUser has been set for it's used in this middleware
+app.use(setCurrentFolder);
 
 // routes
 app.use('/', indexRoutes);
