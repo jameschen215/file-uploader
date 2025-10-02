@@ -3,10 +3,12 @@
  */
 
 export function showModal(name) {
-  const modal = document.querySelector(`#${name}-modal`);
+  const modal = document.getElementById(name);
 
   // 1. Modify the trigger attribute
-  document.querySelector(`#${name}-btn`).setAttribute('aria-expanded', 'true');
+  document
+    .getElementById(name.concat('-btn'))
+    .setAttribute('aria-expanded', 'true');
 
   // 2. Modify the sortModal classList
   modal.classList.remove('translate-y-full');
@@ -21,7 +23,7 @@ export function showModal(name) {
   modal.addEventListener(
     'transitionend',
     () => {
-      document.dispatchEvent(new Event(name + '-modal-open'));
+      document.dispatchEvent(new Event(name.concat('-open')));
     },
     { once: true },
   );
@@ -31,11 +33,14 @@ export function showModal(name) {
 }
 
 export function hideModal(name) {
+  console.log('Hide ', name);
   // 1. Modify the trigger
-  document.querySelector(`#${name}-btn`).setAttribute('aria-expanded', 'false');
+  document
+    .getElementById(name.concat('-btn'))
+    .setAttribute('aria-expanded', 'false');
 
   // 2. Modify the sortModal classList
-  document.querySelector(`#${name}-modal`).classList.add('translate-y-full');
+  document.getElementById(name).classList.add('translate-y-full');
 
   // 3. Enable scroll on pages below
   document.body.classList.remove('overflow-hidden');
@@ -44,8 +49,8 @@ export function hideModal(name) {
   document.querySelector('#site-container').removeAttribute('inert');
 
   // 5. dispatch modal open event
-  document.dispatchEvent(new Event(name + '-modal-hide'));
+  document.dispatchEvent(new Event(name.concat('-hide')));
 
-  // 5. return hidden state
+  // 6. return hidden state
   return true;
 }

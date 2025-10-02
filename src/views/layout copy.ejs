@@ -47,16 +47,26 @@
       <!-- Add button -->
       <% if (locals.currentUser) { %>
       <button
-        id="add-btn-for-mobile"
+        id="add-modal-btn"
         type="button"
-        aria-controls="modal"
-        aria-expanded="false"
-        class="modal-trigger fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
+        class="fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
       >
         <%- icon({ name: 'Plus' }) %>
       </button>
       <% } %>
     </div>
+
+    <!-- Search modal -->
+    <%- include('partials/search-modal') %>
+
+    <!-- Sort modal -->
+    <%- include('partials/sort-modal') %>
+
+    <!-- Add modal -->
+    <%- include('partials/add-modal') %>
+
+    <!-- Folder modal -->
+    <%- include('partials/folder-modal') %>
 
     <!-- GENERAL MODAL -->
     <div
@@ -65,19 +75,7 @@
       aria-modal="true"
       aria-label="Upload files or create folders"
       class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
-    >
-      <!-- Search modal -->
-      <%- include('partials/search-modal') %>
-
-      <!-- Sort modal -->
-      <%- include('partials/sort-modal') %>
-
-      <!-- Add modal -->
-      <%- include('partials/add-modal') %>
-
-      <!-- folder modal -->
-      <%- include('partials/folder-modal') %>
-    </div>
+    ></div>
 
     <!-- scripts -->
     <script type="module" src="/scripts/main.js"></script>

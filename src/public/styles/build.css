@@ -742,14 +742,14 @@ video {
 .min-h-\[90vh\] {
   min-height: 90vh;
 }
+.min-h-\[calc\(100vh-112px\)\] {
+  min-height: calc(100vh - 112px);
+}
 .min-h-\[calc\(100vh-64px\)\] {
   min-height: calc(100vh - 64px);
 }
 .min-h-screen {
   min-height: 100vh;
-}
-.min-h-\[calc\(100vh-112px\)\] {
-  min-height: calc(100vh - 112px);
 }
 .w-2\.5 {
   width: 0.625rem;
@@ -780,12 +780,6 @@ video {
 }
 .max-w-xl {
   max-width: 36rem;
-}
-.max-w-40 {
-  max-width: 10rem;
-}
-.max-w-80 {
-  max-width: 20rem;
 }
 .flex-shrink-0 {
   flex-shrink: 0;
@@ -986,17 +980,6 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
-.bg-amber-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(217 119 6 / var(--tw-bg-opacity, 1));
-}
-.bg-lime-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(132 204 22 / var(--tw-bg-opacity, 1));
-}
-.bg-lime-500\/20 {
-  background-color: rgb(132 204 22 / 0.2);
-}
 .p-0\.5 {
   padding: 0.125rem;
 }
@@ -1057,10 +1040,6 @@ video {
 .py-5 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
-}
-.py-10 {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
 }
 .pl-12 {
   padding-left: 3rem;
@@ -1568,16 +1547,12 @@ video {
 }
 @media (min-width: 640px) {
 
-  .sm\:mt-\[176px\] {
-    margin-top: 176px;
-  }
-
-  .sm\:mt-10 {
-    margin-top: 2.5rem;
-  }
-
   .sm\:mt-5 {
     margin-top: 1.25rem;
+  }
+
+  .sm\:mt-\[176px\] {
+    margin-top: 176px;
   }
 
   .sm\:block {

@@ -97,13 +97,13 @@
       </div>
 
       <button
-        id="search-btn"
+        id="search-btn-for-mobile"
         type="button"
-        aria-controls="search-modal"
+        aria-controls="modal"
         aria-expanded="false"
-        class="sm:hidden"
+        class="modal-trigger sm:hidden"
       >
-        <%- icon({ name: 'Search' }) %>
+        <%- icon({ name: 'Search', size: 24 }) %>
       </button>
 
       <button
@@ -116,13 +116,13 @@
       </button>
 
       <button
-        id="sort-btn"
+        id="sort-btn-for-mobile"
         type="button"
-        aria-controls="sort-menu-modal"
+        aria-controls="modal"
         aria-expanded="false"
-        class="sm:hidden"
+        class="modal-trigger sm:hidden"
       >
-        <%- icon('ArrowDownUp', 20) %>
+        <%- icon({ name: 'ArrowDownUp', size: 24 }) %>
       </button>
 
       <!-- upload button for desktop -->

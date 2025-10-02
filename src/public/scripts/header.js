@@ -14,15 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle search modal when users clicking on sort button
     searchBtn.addEventListener('click', () => {
       if (isHidden) {
-        isHidden = showModal('search');
+        isHidden = showModal('search-modal');
       } else {
-        isHidden = hideModal('search');
+        isHidden = hideModal('search-modal');
       }
     });
 
     // Close search modal when user clicking on `<-`
     searchModal.querySelector('#close-search').addEventListener('click', () => {
-      isHidden = hideModal('search');
+      isHidden = hideModal('search-modal');
     });
   })();
 
@@ -96,15 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Toggle sort modal when users clicking on sort button
     sortBtn.addEventListener('click', () => {
       if (isHidden) {
-        isHidden = showModal('sort');
+        isHidden = showModal('sort-modal');
       } else {
-        isHidden = hideModal('sort');
+        isHidden = hideModal('sort-modal');
       }
     });
 
     // Close sortModal when user clicking on X
     sortModal.querySelector('#close-sort').addEventListener('click', () => {
-      isHidden = hideModal('sort');
+      isHidden = hideModal('sort-modal');
     });
 
     // Close sortModal when user clicking outside it
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         !ev.target.closest('#sort-modal > div') &&
         !ev.target.closest('#sort-btn')
       ) {
-        isHidden = hideModal('sort');
+        isHidden = hideModal('sort-modal');
       }
     });
 
@@ -122,13 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ev.key === 'Escape') {
         ev.preventDefault();
 
-        isHidden = hideModal('sort');
+        isHidden = hideModal('sort-modal');
       }
     });
 
     // Close modal when users submit
     // sortModal.querySelector('form').addEventListener('submit', () => {
-    //   isHidden = hideModal('sort');
+    //   isHidden = hideModal('sort-modal');
     // });
   })();
 
