@@ -10,7 +10,7 @@
 
   <ul class="flex-grow flex flex-col gap-8">
     <li>
-      <a href="/upload" class="flex items-center gap-4">
+      <a href="/upload" class="w-full flex items-center gap-4">
         <span>
           <%- icon({name: 'ImageUp', size: 24}) %>
         </span>
@@ -19,7 +19,11 @@
     </li>
 
     <li>
-      <button id="folder-btn" type="button" class="flex items-center gap-4">
+      <button
+        id="folder-btn"
+        type="button"
+        class="w-full flex items-center gap-4"
+      >
         <span>
           <%- icon({name: 'FolderPlus', size: 24}) %>
         </span>
@@ -28,5 +32,3 @@
     </li>
   </ul>
 </div>
-
-<!-- <script type="module" src="scripts/add-modal.js"></script> -->

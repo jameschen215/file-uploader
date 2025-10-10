@@ -3,7 +3,7 @@ import { BreadcrumbFolderType } from '../types/path.js';
 
 export async function buildPath(
   userId: string,
-  folderId: string | null,
+  folderId: string | null | undefined,
   path: BreadcrumbFolderType[] = [],
 ) {
   if (!folderId) return path;

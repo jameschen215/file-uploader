@@ -1,3 +1,6 @@
+import { showModal, hideModal } from './lib/modal-helpers.js';
+
+// Load theme
 (function loadTheme() {
   const savedTheme = localStorage.getItem('theme') || 'light';
 
@@ -6,7 +9,8 @@
   }
 })();
 
-(function handleModal() {
+// Handle modal show/hide
+(function handleModalVisibility() {
   const modal = document.getElementById('modal');
 
   let isHidden = true;
@@ -47,7 +51,7 @@
     });
   });
 
-  // 2. Handle actions in modal
+  // 2. Hide modal
   document.addEventListener('modal-open', () => {
     // 2.1 hide when clicking on close button
     modal.querySelectorAll('.close-modal-btn').forEach((btn) => {
@@ -66,79 +70,40 @@
       }
     });
 
-    // 2.3 open folder modal when clicking on 'new folder' button
+    // 2.3 On add modal
+    // 2.3.1 Hide modal when clicking on upload link
+    modal.querySelector('a[href="/upload"]').addEventListener('click', () => {
+      isHidden = hideModal(modal);
+    });
+
+    // 2.3.2 open folder modal when clicking on 'new folder' button
     const newFolderBtn = modal.querySelector('#folder-btn');
     if (newFolderBtn) {
       newFolderBtn.addEventListener('click', () => {
-        isHidden = showModal(
-          modal,
-          newFolderBtn,
-          newFolderBtn.id.split('-')[0],
-          'Create new folder',
-        );
+        // Hide the add modal first
+        isHidden = hideModal(modal);
+
+        // then after add modal hidden, re-open the modal with folder form
+        setTimeout(() => {
+          isHidden = showModal(
+            modal,
+            newFolderBtn,
+            newFolderBtn.id.split('-')[0],
+            'Create new folder',
+          );
+        }, 50);
       });
     }
+
+    // 2.4 hide on form submit
+    modal.querySelector('form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+
+      console.log('in form');
+
+      isHidden = hideModal(modal);
+
+      this.submit();
+    });
   });
 })();
-
-function showModal(modal, trigger, modalName, ariaLabel) {
-  const content = document.getElementById(modalName + '-in-modal');
-
-  // 1. Modify the trigger attribute
-  trigger.setAttribute('aria-expanded', 'true');
-
-  // 2. show modal content
-  content.classList.remove('hidden');
-  content.classList.add('flex');
-
-  // 3. Modify aria-label attribute on modal
-  modal.setAttribute('aria-label', ariaLabel);
-
-  // 4. Modify classList on modal to show it
-  modal.classList.remove('translate-y-full');
-
-  // 5. Prevent scrolling on pages below
-  document.body.classList.add('overflow-hidden');
-
-  // 6. Prevent events on pages below
-  document.querySelector('#site-container').setAttribute('inert', '');
-
-  // 7. dispatch modal open event after transition end
-  modal.addEventListener(
-    'transitionend',
-    () => {
-      document.dispatchEvent(new Event(`modal-open`));
-    },
-    { once: true },
-  );
-
-  // 8. return hidden state
-  return false;
-}
-
-function hideModal(modal) {
-  // 1. Set aria-expanded to false on all triggers
-  document.querySelectorAll('.modal-trigger').forEach((trigger) => {
-    trigger.setAttribute('aria-expanded', 'false');
-  });
-
-  // 2. Hide modal content
-  modal.querySelectorAll('[id$="in-modal"]').forEach((content) => {
-    content.classList.remove('flex');
-    content.classList.add('hidden');
-  });
-
-  // 3. Modify aria-label attribute on modal
-  modal.setAttribute('aria-label', '');
-
-  // 4. Modify classList on modal to hide it
-  modal.classList.add('translate-y-full');
-
-  // 5. Enable scrolling on pages
-  document.body.classList.remove('overflow-hidden');
-
-  // 6. Enable events on pages below
-  document.querySelector('#site-container').removeAttribute('inert');
-
-  return true;
-}

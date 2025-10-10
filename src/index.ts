@@ -20,6 +20,7 @@ import { setCurrentUser } from './middlewares/set-current-user.js';
 import { formatAvatar } from './middlewares/format-avatar.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 import { setCurrentFolder } from './middlewares/set-current-folder.js';
+import { setCurrentPath } from './middlewares/set-current-path.js';
 
 const app = express();
 
@@ -62,7 +63,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(getLucideIcons);
 app.use(formatAvatar);
 // app.use(formatDate);
-// app.use(setCurrentPath);
+app.use(setCurrentPath);
 
 // Trust Railway's proxy
 // app.set('trust proxy', 1);

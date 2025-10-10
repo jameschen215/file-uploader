@@ -14,6 +14,7 @@ import { Prisma } from '@prisma/client';
 import { CustomNotFoundError } from '../errors/index.js';
 import { buildPath } from '../lib/build-path.js';
 import { validationResult } from 'express-validator';
+import { getHomepageData } from '../lib/index-data.js';
 
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 const isDev = process.env.NODE_ENV === 'development';
@@ -37,52 +38,18 @@ const isDev = process.env.NODE_ENV === 'development';
 // Get saved files
 export const getFolderContent: RequestHandler = async (req, res) => {
   try {
-    const folderId = req.params.folderId;
-    const userId = res.locals.currentUser!.id;
-
-    // Verify folder access if specified
-    let currentFolder = null;
-
-    if (folderId) {
-      currentFolder = await prisma.folder.findFirst({
-        where: { id: folderId, userId },
-        include: { parentFolder: { select: { id: true, name: true } } },
-      });
-
-      console.log({ folderId, currentFolder });
-
-      if (!currentFolder) {
-        throw new CustomNotFoundError('Folder not found');
-      }
-    }
-
-    // Build breadcrumbs
-    const breadcrumbs = await buildPath(userId, folderId);
-
-    // Get subfolders in current folder
-    const folders = await prisma.folder.findMany({
-      where: { parentFolderId: folderId, userId },
-      include: {
-        _count: { select: { files: true, subFolders: true } },
-      },
-      orderBy: { name: 'asc' },
-    });
-
-    // Get files in current folder
-    const files = await prisma.file.findMany({
-      where: { folderId, userId },
-      orderBy: { originalName: 'asc' },
-    });
+    const data = await getHomepageData(
+      res.locals.currentUser!.id,
+      req.params.folderId,
+    );
 
     res.render('index', {
-      currentFolder,
-      breadcrumbs,
-      folders,
-      files,
+      ...data,
+      errors: null,
+      oldInput: null,
     });
   } catch (error) {
     console.error('Get folder contents error: ', error);
-
     throw error;
   }
 };
@@ -223,17 +190,20 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
 
 // --- Handle new folder creation ---
 export const handleFolderCreate: RequestHandler = async (req, res) => {
+  const userId = res.locals.currentUser!.id;
   const errors = validationResult(req);
+  const data = await getHomepageData(userId, req.params.folderId);
 
   if (!errors.isEmpty()) {
-    return res
-      .status(400)
-      .render('folder-form', { errors: errors.mapped(), oldInput: req.body });
+    return res.status(400).render('index', {
+      ...data,
+      errors: errors.mapped(),
+      oldInput: req.body,
+    });
   }
 
   try {
     const { name, parentFolderId } = req.body;
-    const userId = res.locals.currentUser!.id;
 
     // Validate parent folder exists and belongs to user (if specified)
     if (parentFolderId) {

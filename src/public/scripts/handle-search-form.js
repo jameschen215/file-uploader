@@ -10,7 +10,7 @@ document.addEventListener('search-modal-open', () => {
 
   hideClearButton(clearButton);
 
-  // 1. Focus in search input
+  // 1. Focus on search input
   searchInput.focus();
 
   // Force repaint - multiple methods to ensure it works

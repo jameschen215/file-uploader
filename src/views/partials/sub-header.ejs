@@ -21,7 +21,37 @@
   <% if (locals.currentUser) { %>
   <div class="h-12 flex items-center justify-between w-full max-w-7xl mx-auto">
     <!-- breadcrumbs -->
-    <span class="font-medium text-lg">Cloud drive</span>
+    <nav aria-label="breadcrumb" class="flex items-center gap-2">
+      <button
+        id="breadcrumb-back-btn"
+        type="button"
+        class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %>"
+      >
+        <span><%- icon({name: 'ArrowLeft', size: 20 }) %></span>
+      </button>
+
+      <a
+        href="/"
+        class="font-medium text-lg <%= locals.currentPath !== '/' ? 'hidden' : '' %> sm:block"
+      >
+        Cloud drive
+      </a>
+
+      <% if (locals.breadcrumbs && breadcrumbs.length > 0) { %>
+      <!-- loop breadcrumbs -->
+      <% breadcrumbs.forEach((bc, i) => { %>
+      <span class="text-xl font-thin hidden sm:block">&#x203A;</span>
+
+      <% if (i === breadcrumbs.length - 1) { %>
+      <span aria-current="page" class="text-lg font-semibold">
+        <%= bc.name %>
+      </span>
+      <% } else { %>
+      <a href="/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
+      <% } %>
+      <% }) %>
+      <% } %>
+    </nav>
 
     <!-- buttons -->
     <div class="flex items-center gap-3">

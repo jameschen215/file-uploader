@@ -117,6 +117,7 @@ export function removeErrorStylesAndMessages(field) {
   // 3. Hide error message about field
   const errorId = field.getAttribute('aria-describedby');
   const errorEl = document.getElementById(errorId);
+
   errorEl.textContent = '';
   errorEl.classList.add('hidden');
 }

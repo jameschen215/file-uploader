@@ -1,13 +1,29 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const addModal = document.getElementById('add-modal');
-  const sortModal = document.getElementById('sort-modal');
-  const searchModal = document.getElementById('search-modal');
-  const folderModal = document.getElementById('folder-modal');
+import { handleSortInput } from './lib/sort-helpers.js';
+import { handleSearchInput } from './lib/search-helpers.js';
+import { handleAddInput } from './lib/add-helpers.js';
+import { handleFolderInput } from './lib/folder-helpers.js';
 
-  const addButton = document.getElementById('add-btn');
-  const sortButton = document.getElementById('sort-btn');
-  const searchButton = document.getElementById('search-btn');
-  const folderButton = document.getElementById('folder-btn');
+document.addEventListener('modal-open', () => {
+  const modal = document.querySelector('#modal');
 
-  if (!searchModal || !sortModal || !addModal || !folderModal) return;
+  if (!modal) return;
+
+  const content = modal.querySelector(':scope > div.flex');
+
+  const contentName = content.id.split('-')[0];
+
+  switch (contentName) {
+    case 'add':
+      handleAddInput();
+      break;
+    case 'sort':
+      handleSortInput();
+      break;
+    case 'search':
+      handleSearchInput();
+      break;
+    case 'folder':
+      handleFolderInput();
+      break;
+  }
 });

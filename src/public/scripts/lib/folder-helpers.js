@@ -1,16 +1,16 @@
-import { MAX_FOLDER_NAME } from './lib/constants.js';
+import { MAX_FOLDER_NAME } from './constants.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   showErrorStylesAndMessages,
-} from './lib/utils.js';
+} from './utils.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+export function handleFolderInput() {
   const form = document.querySelector('#folder-form');
 
   if (!form) return;
 
-  const input = form.querySelector('input[type="text"]');
+  const input = form.querySelector('input[name="name"]');
   const button = form.querySelector('button[type="submit"]');
 
   let isSubmitting = false;
@@ -76,8 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function validateFromServer(form) {
     const errors = JSON.parse(form.dataset.errors);
 
-    console.log({ errors });
-
     // return if no errors
     if (!errors || Object.keys(errors).length === 0) return;
 
@@ -90,4 +88,4 @@ document.addEventListener('DOMContentLoaded', () => {
       focusOnFirstErrorField(form);
     }
   }
-});
+}

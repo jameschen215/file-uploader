@@ -17,6 +17,8 @@ import {
   LayoutList,
   Plus,
   ArrowUp,
+  ArrowLeft,
+  FolderOpen,
 } from 'lucide-static';
 
 interface IconParams {
@@ -46,6 +48,8 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     LayoutList,
     Plus,
     ArrowUp,
+    ArrowLeft,
+    FolderOpen,
   };
 
   // Helper function to modify svg string
