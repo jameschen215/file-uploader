@@ -1,16 +1,18 @@
 <div class="px-5">
   <!-- up -->
   <div class="hidden sm:flex items-center gap-4 h-16">
-    <a
-      href="/new-folder?"
-      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
+    <button
+      id="upload-btn-for-desktop"
+      href="/"
+      class="modal-trigger flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
     >
       <span><%- icon({name: 'ArrowUp'}) %></span>
       <span>Upload</span>
-    </a>
+    </button>
     <button
+      id="folder-btn-for-desktop"
       type="button"
-      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
+      class="modal-trigger flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
     >
       <span><%- icon({name: 'FolderPlus'}) %></span>
       <span>New folder</span>
@@ -18,7 +20,7 @@
   </div>
 
   <!-- down -->
-  <% if (locals.currentUser) { %>
+
   <div class="h-12 flex items-center justify-between w-full max-w-7xl mx-auto">
     <!-- breadcrumbs -->
     <nav aria-label="breadcrumb" class="flex items-center gap-2">
@@ -43,9 +45,7 @@
       <span class="text-xl font-thin hidden sm:block">&#x203A;</span>
 
       <% if (i === breadcrumbs.length - 1) { %>
-      <span aria-current="page" class="text-lg font-semibold">
-        <%= bc.name %>
-      </span>
+      <span aria-current="page" class="font-semibold"> <%= bc.name %> </span>
       <% } else { %>
       <a href="/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
       <% } %>
@@ -154,25 +154,6 @@
       >
         <%- icon({ name: 'ArrowDownUp', size: 24 }) %>
       </button>
-
-      <!-- upload button for desktop -->
-      <a href="/upload" class="items-center gap-4 hidden sm:flex">
-        <span>
-          <%- icon('ImageUp', 20, 1.5) %>
-        </span>
-        <span class="sr-only">Upload file</span>
-      </a>
-
-      <!-- new folder button for desktop -->
-      <button
-        id="new-folder-btn"
-        type="button"
-        class="hidden sm:flex items-center gap-4"
-      >
-        <%- icon('FolderPlus', 20, 1.5) %>
-        <span class="sr-only">New folder</span>
-      </button>
     </div>
   </div>
-  <% } %>
 </div>

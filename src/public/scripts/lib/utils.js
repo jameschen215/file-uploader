@@ -128,7 +128,7 @@ export function showErrorStylesAndMessages(field, message) {
 
   // 2. Add new error style
   field.classList.remove(
-    'border-gray-300',
+    'border-gray-200',
     'focus:border-lime-500',
     'focus:ring-lime-50',
     'dark:focus:border-lime-500',

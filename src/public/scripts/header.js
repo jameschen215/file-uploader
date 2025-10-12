@@ -228,3 +228,10 @@ import { showClearButton, hideClearButton } from './lib/search-helpers.js';
     window.history.back();
   });
 })();
+
+// handle folder modal on desktop
+(function handleFolderModalOnDesktop() {
+  const button = document.querySelector('#folder-btn-for-desktop');
+
+  if (!button) return;
+})();

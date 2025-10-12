@@ -19,6 +19,7 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
   document.querySelectorAll('.modal-trigger').forEach((trigger) => {
     trigger.addEventListener('click', () => {
       const modalName = trigger.id.split('-')[0];
+      console.log({ modalName });
 
       if (isHidden) {
         switch (modalName) {
@@ -46,6 +47,17 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
               'Search for folders and files',
             );
             break;
+          case 'folder':
+            isHidden = showModal(
+              modal,
+              trigger,
+              modalName,
+              'Create new folder',
+            );
+            break;
+          case 'upload':
+            isHidden = showModal(modal, trigger, modalName, 'Upload files');
+            break;
         }
       }
     });
@@ -71,29 +83,25 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
     });
 
     // 2.3 On add modal
-    // 2.3.1 Hide modal when clicking on upload link
-    modal.querySelector('a[href="/upload"]').addEventListener('click', () => {
-      isHidden = hideModal(modal);
+    document.querySelectorAll('[id$="btn-for-mobile"]').forEach((btn) => {
+      if (btn) {
+        btn.addEventListener('click', () => {
+          isHidden = hideModal(modal);
+
+          const modalName = btn.id.split('-')[0];
+
+          // then after add modal hidden, re-open the modal with folder form
+          setTimeout(() => {
+            isHidden = showModal(
+              modal,
+              btn,
+              modalName,
+              modalName === 'upload' ? 'Upload files' : 'Create new folder',
+            );
+          }, 50);
+        });
+      }
     });
-
-    // 2.3.2 open folder modal when clicking on 'new folder' button
-    const newFolderBtn = modal.querySelector('#folder-btn');
-    if (newFolderBtn) {
-      newFolderBtn.addEventListener('click', () => {
-        // Hide the add modal first
-        isHidden = hideModal(modal);
-
-        // then after add modal hidden, re-open the modal with folder form
-        setTimeout(() => {
-          isHidden = showModal(
-            modal,
-            newFolderBtn,
-            newFolderBtn.id.split('-')[0],
-            'Create new folder',
-          );
-        }, 50);
-      });
-    }
 
     // 2.4 hide on form submit
     modal.querySelector('form').addEventListener('submit', function (ev) {
@@ -104,6 +112,15 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
       isHidden = hideModal(modal);
 
       this.submit();
+    });
+
+    // 2.5 hide on pressing 'Escape'
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+
+        isHidden = hideModal(modal);
+      }
     });
   });
 })();

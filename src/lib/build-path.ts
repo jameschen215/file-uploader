@@ -21,7 +21,7 @@ export async function buildPath(
 
   // 3. If folder has a parent, do it again for the parent
   if (folder.parentFolderId) {
-    return buildPath(folder.parentFolderId, userId, path);
+    return buildPath(userId, folder.parentFolderId, path);
   }
 
   // 4. return the breadcrumb path

@@ -43,6 +43,8 @@ export const getFolderContent: RequestHandler = async (req, res) => {
       req.params.folderId,
     );
 
+    console.log('Breadcrumbs: ', data.breadcrumbs);
+
     res.render('index', {
       ...data,
       errors: null,

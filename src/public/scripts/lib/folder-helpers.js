@@ -47,6 +47,11 @@ export function handleFolderInput() {
   // Remove error info while user typing
   input.addEventListener('input', () => removeErrorStylesAndMessages(input));
 
+  // Clear the input value when the modal is about to close
+  document.addEventListener('modal-hide', () => {
+    input.value = '';
+  });
+
   function validateField(field) {
     const value = field.value.trim();
 
