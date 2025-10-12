@@ -1,32 +1,37 @@
-import { showModal, hideModal } from './lib/modal-helpers.js';
+import { X, MENU, MOON_STAR, SUN } from './lib/icons.js';
 import { showClearButton, hideClearButton } from './lib/search-helpers.js';
 
+const iconWrapper = document.querySelector('#menu-btn span');
+const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');
+const avatar = isLoggedIn ? iconWrapper.textContent : '';
+
 // handle mobile search modal show/hide/search
-(function handleSearchModalOnMobile() {
-  const searchBtn = document.querySelector('#search-btn');
-  const searchModal = document.querySelector('#search-modal');
+// (function handleSearchModalOnMobile() {
+//   const searchBtn = document.querySelector('#search-btn');
+//   const searchModal = document.querySelector('#search-modal');
 
-  if (!searchBtn || !searchModal) return;
+//   if (!searchBtn || !searchModal) return;
 
-  let isHidden = true;
+//   let isHidden = true;
 
-  // Toggle search modal when users clicking on sort button
-  searchBtn.addEventListener('click', () => {
-    if (isHidden) {
-      isHidden = showModal('search-modal');
-    } else {
-      isHidden = hideModal('search-modal');
-    }
-  });
+//   // Toggle search modal when users clicking on sort button
+//   searchBtn.addEventListener('click', () => {
+//     if (isHidden) {
+//       isHidden = showModal('search-modal');
+//     } else {
+//       isHidden = hideModal('search-modal');
+//     }
+//   });
 
-  // Close search modal when user clicking on `<-`
-  searchModal.querySelector('#close-search').addEventListener('click', () => {
-    isHidden = hideModal('search-modal');
-  });
-})();
+//   // Close search modal when user clicking on `<-`
+//   searchModal.querySelector('#close-search').addEventListener('click', () => {
+//     isHidden = hideModal('search-modal');
+//   });
+// })();
 
 // Handle desktop search
-(function handleSearchModalOnDesktop() {
+
+(function handleSearchOnDesktop() {
   const searchForm = document.querySelector('#search-form-desktop');
   const searchInput = document.querySelector('#search-form-desktop input');
   const clearButton = document.querySelector('#search-form-desktop > button');
@@ -84,52 +89,47 @@ import { showClearButton, hideClearButton } from './lib/search-helpers.js';
 })();
 
 // handle sort modal show/hide/sort
-(function handleSortModalOnMobile() {
-  const sortBtn = document.querySelector('#sort-btn');
-  const sortModal = document.querySelector('#sort-modal');
+// (function handleSortModalOnMobile() {
+//   const sortBtn = document.querySelector('#sort-btn');
+//   const sortModal = document.querySelector('#sort-modal');
 
-  if (!sortBtn || !sortModal) return;
+//   if (!sortBtn || !sortModal) return;
 
-  let isHidden = true;
+//   let isHidden = true;
 
-  // Toggle sort modal when users clicking on sort button
-  sortBtn.addEventListener('click', () => {
-    if (isHidden) {
-      isHidden = showModal('sort-modal');
-    } else {
-      isHidden = hideModal('sort-modal');
-    }
-  });
+//   // Toggle sort modal when users clicking on sort button
+//   sortBtn.addEventListener('click', () => {
+//     if (isHidden) {
+//       isHidden = showModal('sort-modal');
+//     } else {
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
 
-  // Close sortModal when user clicking on X
-  sortModal.querySelector('#close-sort').addEventListener('click', () => {
-    isHidden = hideModal('sort-modal');
-  });
+//   // Close sortModal when user clicking on X
+//   sortModal.querySelector('#close-sort').addEventListener('click', () => {
+//     isHidden = hideModal('sort-modal');
+//   });
 
-  // Close sortModal when user clicking outside it
-  document.addEventListener('click', (ev) => {
-    if (
-      !ev.target.closest('#sort-modal > div') &&
-      !ev.target.closest('#sort-btn')
-    ) {
-      isHidden = hideModal('sort-modal');
-    }
-  });
+//   // Close sortModal when user clicking outside it
+//   document.addEventListener('click', (ev) => {
+//     if (
+//       !ev.target.closest('#sort-modal > div') &&
+//       !ev.target.closest('#sort-btn')
+//     ) {
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
 
-  // Close modal when user pressing 'Esc' key
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape') {
-      ev.preventDefault();
+//   // Close modal when user pressing 'Esc' key
+//   document.addEventListener('keydown', (ev) => {
+//     if (ev.key === 'Escape') {
+//       ev.preventDefault();
 
-      isHidden = hideModal('sort-modal');
-    }
-  });
-
-  // Close modal when users submit
-  // sortModal.querySelector('form').addEventListener('submit', () => {
-  //   isHidden = hideModal('sort-modal');
-  // });
-})();
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
+// })();
 
 /** ----------------- HANDLE SORT ON DESKTOP ----------------- */
 (function handleSortOnDesktop() {
@@ -229,9 +229,148 @@ import { showClearButton, hideClearButton } from './lib/search-helpers.js';
   });
 })();
 
-// handle folder modal on desktop
-(function handleFolderModalOnDesktop() {
-  const button = document.querySelector('#folder-btn-for-desktop');
+// Handle theme actions
+(function handleThemeToggle() {
+  const html = document.documentElement;
+  const themeText = document.querySelector('#theme-text');
+  const themeIcon = document.querySelector('#theme-icon');
+  const themeIconDesktop = document.querySelector('#theme-icon-desktop');
+  const themeTextDesktop = document.querySelector('#theme-text-desktop');
 
-  if (!button) return;
+  // Load theme
+  loadTheme();
+
+  // Initialize theme text
+  updateThemeTextAndIcon();
+
+  document.querySelectorAll('[id^="theme-btn"]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+
+      const theme = html.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+
+      updateThemeTextAndIcon();
+    });
+  });
+
+  function loadTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  }
+
+  function updateThemeTextAndIcon() {
+    const isDark = html.classList.contains('dark');
+
+    if (themeText && themeIcon) {
+      themeIcon.innerHTML = isDark ? SUN : MOON_STAR;
+      themeText.textContent = isDark
+        ? 'Switch to light mode'
+        : 'Switch to dark mode';
+    }
+
+    if (themeIconDesktop && themeTextDesktop) {
+      themeIconDesktop.innerHTML = isDark ? SUN : MOON_STAR;
+      themeTextDesktop.textContent = isDark
+        ? 'Switch to light mode'
+        : 'Switch to dark mode';
+    }
+  }
+})();
+
+// Handle burger menu show/hide
+(function handleHamburgerMenu() {
+  const trigger = document.querySelector('#menu-btn');
+  const content = document.querySelector('#menu-content');
+
+  if (!trigger || !content || !iconWrapper) return;
+
+  // 1. Toggle content hide/show when clicking on trigger
+  trigger.addEventListener('click', () => {
+    const isOpen = !content.classList.contains('-translate-x-full');
+
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // 2. Close menu when clicking on menu items
+  document.querySelectorAll('#menu-content li').forEach((li) => {
+    li.addEventListener('click', closeMenu);
+  });
+
+  function openMenu() {
+    iconWrapper.innerHTML = X;
+    trigger.setAttribute('aria-expanded', 'true');
+
+    content.classList.remove('-translate-x-full');
+    content.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMenu() {
+    iconWrapper.innerHTML = isLoggedIn ? avatar : MENU;
+
+    trigger.setAttribute('aria-expanded', 'false');
+
+    content.classList.add('-translate-x-full');
+    content.setAttribute('aria-hidden', 'true');
+  }
+})();
+
+// Handle dropdown menu show/hide
+(function handleDropdownMenu() {
+  const trigger = document.querySelector('#dropdown-btn');
+  const content = document.querySelector('#dropdown-content');
+
+  const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');
+  const avatar = isLoggedIn ? iconWrapper.textContent : '';
+
+  if (!trigger || !content) return;
+
+  // 1. Toggle content hide/show when clicking on trigger
+  trigger.addEventListener('click', () => {
+    const isOpen = !content.classList.contains('hidden');
+
+    if (isOpen) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
+  });
+
+  // 2. Close dropdown when clicking on dropdown items
+  document.querySelectorAll('#dropdown-content li').forEach((li) => {
+    li.addEventListener('click', closeDropdown);
+  });
+
+  // 3. Close dropdown when clicking outside of it
+  document.addEventListener('click', (ev) => {
+    if (
+      !ev.target.closest('#dropdown-content') &&
+      !ev.target.closest('#dropdown-btn')
+    ) {
+      closeDropdown();
+    }
+  });
+
+  function openDropdown() {
+    trigger.querySelector('span').innerHTML = X;
+    trigger.setAttribute('aria-expanded', 'true');
+
+    content.classList.remove('hidden');
+    content.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDropdown() {
+    trigger.querySelector('span').innerHTML = avatar;
+    trigger.setAttribute('aria-expanded', 'false');
+
+    content.classList.add('hidden');
+    content.setAttribute('aria-hidden', 'true');
+  }
 })();

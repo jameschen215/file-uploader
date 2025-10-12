@@ -2,28 +2,148 @@ import { handleSortInput } from './lib/sort-helpers.js';
 import { handleSearchInput } from './lib/search-helpers.js';
 import { handleAddInput } from './lib/add-helpers.js';
 import { handleFolderInput } from './lib/folder-helpers.js';
+import { showModal, hideModal } from './lib/modal-helpers.js';
 
-document.addEventListener('modal-open', () => {
-  const modal = document.querySelector('#modal');
+// Handle modal show/hide
+(function handleModalVisibility() {
+  const modal = document.getElementById('modal');
 
-  if (!modal) return;
+  let isHidden = true;
 
-  const content = modal.querySelector(':scope > div.flex');
+  // 1. Show modal with correct content
+  document.querySelectorAll('.modal-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const modalName = trigger.id.split('-')[0];
+      console.log({ modalName });
 
-  const contentName = content.id.split('-')[0];
+      if (isHidden) {
+        switch (modalName) {
+          case 'add':
+            isHidden = showModal(
+              modal,
+              trigger,
+              modalName,
+              'Upload files or create folders',
+            );
+            break;
+          case 'sort':
+            isHidden = showModal(
+              modal,
+              trigger,
+              modalName,
+              'Select a way to sort the content',
+            );
+            break;
+          case 'search':
+            isHidden = showModal(
+              modal,
+              trigger,
+              modalName,
+              'Search for folders and files',
+            );
+            break;
+          case 'folder':
+            isHidden = showModal(
+              modal,
+              trigger,
+              modalName,
+              'Create new folder',
+            );
+            break;
+          case 'upload':
+            isHidden = showModal(modal, trigger, modalName, 'Upload files');
+            break;
+        }
+      }
+    });
+  });
 
-  switch (contentName) {
-    case 'add':
-      handleAddInput();
-      break;
-    case 'sort':
-      handleSortInput();
-      break;
-    case 'search':
-      handleSearchInput();
-      break;
-    case 'folder':
-      handleFolderInput();
-      break;
-  }
-});
+  // 2. Hide modal
+  document.addEventListener('modal-open', () => {
+    // 2.1 hide when clicking on close button
+    modal.querySelectorAll('.close-modal-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        isHidden = hideModal(modal);
+      });
+    });
+
+    // 2.2 hide when clicking outside modal content
+    document.addEventListener('click', (ev) => {
+      if (
+        !ev.target.closest('[id$="in-modal"]') &&
+        !ev.target.closest('.modal-trigger')
+      ) {
+        isHidden = hideModal(modal);
+      }
+    });
+
+    // 2.3 On add modal
+    document.querySelectorAll('[id$="btn-for-mobile"]').forEach((btn) => {
+      if (btn) {
+        btn.addEventListener('click', () => {
+          isHidden = hideModal(modal);
+
+          const modalName = btn.id.split('-')[0];
+
+          // then after add modal hidden, re-open the modal with folder form
+          setTimeout(() => {
+            isHidden = showModal(
+              modal,
+              btn,
+              modalName,
+              modalName === 'upload' ? 'Upload files' : 'Create new folder',
+            );
+          }, 50);
+        });
+      }
+    });
+
+    // 2.4 hide on form submit
+    modal.querySelector('form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+
+      console.log('in form');
+
+      isHidden = hideModal(modal);
+
+      this.submit();
+    });
+
+    // 2.5 hide on pressing 'Escape'
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+
+        isHidden = hideModal(modal);
+      }
+    });
+  });
+})();
+
+// Handle actions on modals
+(function handleModalActions() {
+  document.addEventListener('modal-open', () => {
+    const modal = document.querySelector('#modal');
+
+    if (!modal) return;
+
+    const content = modal.querySelector(':scope > div.flex');
+
+    const contentName = content.id.split('-')[0];
+
+    switch (contentName) {
+      case 'add':
+        handleAddInput();
+        break;
+      case 'sort':
+        handleSortInput();
+        break;
+      case 'search':
+        handleSearchInput();
+        break;
+      case 'folder':
+        handleFolderInput();
+        break;
+    }
+  });
+})();
