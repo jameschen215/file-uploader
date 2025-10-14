@@ -1,5 +1,4 @@
 import multer from 'multer';
-import { ALLOWED_FILE_TYPES } from '../lib/constants.js';
 
 export function configureMulter(
   filedName: string,
@@ -8,6 +7,6 @@ export function configureMulter(
 ) {
   return multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 1024 * 1024 * maxSize, files: maxCount },
+    limits: { fileSize: maxSize, files: maxCount },
   }).array(filedName, maxCount);
 }

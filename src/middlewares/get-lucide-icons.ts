@@ -19,6 +19,8 @@ import {
   ArrowUp,
   ArrowLeft,
   FolderOpen,
+  CloudUpload,
+  MessageCircleWarning,
 } from 'lucide-static';
 
 interface IconParams {
@@ -50,6 +52,8 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     ArrowUp,
     ArrowLeft,
     FolderOpen,
+    CloudUpload,
+    MessageCircleWarning,
   };
 
   // Helper function to modify svg string

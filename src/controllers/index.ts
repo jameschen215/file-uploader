@@ -12,35 +12,18 @@ import {
 import prisma from '../lib/prisma.js';
 import { Prisma } from '@prisma/client';
 import { CustomNotFoundError } from '../errors/index.js';
-import { buildPath } from '../lib/build-path.js';
 import { validationResult } from 'express-validator';
 import { getHomepageData } from '../lib/index-data.js';
 
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 const isDev = process.env.NODE_ENV === 'development';
 
-// export const getHomepage: RequestHandler = (req, res) => {
-//   const items = [
-//     { category: 'folder', name: 'Books' },
-//     { category: 'folder', name: 'Code' },
-//     { category: 'folder', name: 'Music' },
-//     { category: 'folder', name: 'Video' },
-//     { category: 'folder', name: 'Tool' },
-//     { category: 'folder', name: 'Map' },
-//     { category: 'image', name: 'Flowers' },
-//     { category: 'video', name: 'Highlight' },
-//     { category: 'file', name: 'Notes' },
-//   ];
-
-//   res.render('index', { items });
-// };
-
 // Get saved files
 export const getFolderContent: RequestHandler = async (req, res) => {
   try {
     const data = await getHomepageData(
       res.locals.currentUser!.id,
-      req.params.folderId,
+      req.params.folderId || null,
     );
 
     console.log('Breadcrumbs: ', data.breadcrumbs);
@@ -65,6 +48,7 @@ export const getFolderForm: RequestHandler = (req, res) => {
 };
 
 // --- --- --- --- --- Handle file upload --- --- --- --- ---  //
+
 export const handleFileUpload: RequestHandler = async (req, res) => {
   upload(req, res, async (error) => {
     // 1. handle Multer error
@@ -74,7 +58,7 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
       switch (error.code) {
         case 'LIMIT_FILE_SIZE':
           return res.status(400).json({
-            error: `Too large files! Maximum is ${MAX_FILE_SIZE}MB`,
+            error: `File too large! Maximum is ${MAX_FILE_SIZE}MB per file.`,
           });
 
         case 'LIMIT_FIELD_COUNT':
@@ -89,103 +73,112 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
       return res.status(500).json({ error: 'Unknown error' });
     }
 
-    if (req.files && Array.isArray(req.files)) {
-      // Handle custom type limit error
-      const invalidTypes = req.files
-        .filter(
-          (file) =>
-            !ALLOWED_FILE_TYPES.some((type) => file.mimetype.startsWith(type)),
-        )
-        .map((file) => path.extname(file.originalname));
+    // 2. Check if files exist
+    if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
+      return res.status(400).json({ error: 'No files uploaded.' });
+    }
 
-      if (invalidTypes.length > 0) {
-        return res.status(400).json({
-          message:
-            'Invalid file type. Allowed formats: images, videos, PDFs, Word documents, and Excel spreadsheets.',
-        });
+    // 3. Validate file types
+    const invalidTypes = req.files
+      .filter(
+        (file) =>
+          !ALLOWED_FILE_TYPES.some((type) => file.mimetype.startsWith(type)),
+      )
+      .map((file) => path.extname(file.originalname));
+
+    if (invalidTypes.length > 0) {
+      return res.status(400).json({
+        message:
+          'Invalid file type. Allowed formats: images, videos, PDFs, Word documents, and Excel spreadsheets.',
+      });
+    }
+
+    // 4. Get user and folder info
+    const userId = res.locals.currentUser!.id;
+    const folderId = req.params.folderId || null;
+
+    // 5. Verify folder ownership if specified
+    if (folderId) {
+      const folder = await prisma.folder.findFirst({
+        where: { id: folderId, userId },
+      });
+
+      if (!folder) {
+        return res.status(404).json({ error: 'Folder not found' });
       }
+    }
 
-      // All validations passed - process files
-      const userId = res.locals.currentUser!.id;
-      const folderId = req.params.folderId || null;
+    try {
+      const uploadedFiles = [];
 
-      // Verify folder ownership if specified
-      if (folderId) {
-        const folder = await prisma.folder.findFirst({
-          where: { id: folderId, userId },
-        });
+      // 6. Process each file
+      for (const file of req.files) {
+        const fileName =
+          Date.now() +
+          '-' +
+          Math.round(Math.random() * 1e9) +
+          '-' +
+          file.originalname;
 
-        if (!folder) {
-          return res.status(404).json({ error: 'Folder not found' });
-        }
-      }
+        let filePath = '';
+        let publicUrl = '';
 
-      try {
-        const uploadedFiles = [];
+        if (isDev) {
+          // LOCAL STORAGE FOR DEVELOPMENT
+          console.log({ folderId });
+          const folderPath = folderId
+            ? path.join(
+                process.cwd(),
+                'uploads',
+                `user-${userId}`,
+                `folder-${folderId}`,
+              )
+            : path.join(process.cwd(), 'uploads', `user-${userId}`, 'root');
 
-        for (const file of req.files) {
-          const fileName =
-            Date.now() +
-            '-' +
-            Math.round(Math.random() * 1e9) +
-            '-' +
-            file.originalname;
-
-          let filePath = '';
-          let publicUrl = '';
-
-          if (isDev) {
-            // LOCAL STORAGE FOR DEVELOPMENT
-            const folderPath = folderId
-              ? path.join(
-                  process.cwd(),
-                  'uploads',
-                  `user-${userId}`,
-                  `folder-${folderId}`,
-                )
-              : path.join(process.cwd(), 'uploads', `user-${userId}`, 'root');
-
-            // Create directory if it doesn't exist
-            if (!fs.existsSync(folderPath)) {
-              fs.mkdirSync(folderPath, { recursive: true });
-            }
-
-            filePath = path.join(folderPath, fileName);
-            fs.writeFileSync(filePath, file.buffer);
-
-            // For local, use relative path as "public URL"
-            publicUrl = `uploads/user-${userId}/${folderId ? `folder-${folderId}` : 'root'}/${fileName}`;
-          } else {
-            // SUPABASE STORAGE FOR PRODUCTION
-            // TODO:
+          // Create directory if it doesn't exist
+          if (!fs.existsSync(folderPath)) {
+            fs.mkdirSync(folderPath, { recursive: true });
           }
 
-          // Save file to database
-          const savedFile = await prisma.file.create({
-            data: {
-              originalName: file.originalname,
-              fileName,
-              filePath,
-              fileSize: file.size,
-              mimeType: file.mimetype,
-              publicUrl,
-              userId,
-              folderId,
-            },
-          });
+          filePath = path.join(folderPath, fileName);
+          fs.writeFileSync(filePath, file.buffer);
 
-          uploadedFiles.push(savedFile);
-
-          res.json({ success: true, files: uploadedFiles });
+          // For local, use relative path as "public URL"
+          publicUrl = `uploads/user-${userId}/${folderId ? `folder-${folderId}` : 'root'}/${fileName}`;
+        } else {
+          // SUPABASE STORAGE FOR PRODUCTION
+          // TODO:
         }
-      } catch (error) {
-        console.error('Upload error: ', error);
-        res.status(500).json({ error: 'Failed to save files' });
+
+        // 7. Save file metadata to database
+        const savedFile = await prisma.file.create({
+          data: {
+            originalName: file.originalname,
+            fileName,
+            filePath,
+            fileSize: file.size,
+            mimeType: file.mimetype,
+            publicUrl,
+            userId,
+            folderId,
+          },
+        });
+
+        uploadedFiles.push(savedFile);
+
+        // 8. Send success response and redirect AFTER all files processed
+        res.json({
+          success: true,
+          message: `${uploadedFiles.length} file(s) uploaded successfully.`,
+          files: uploadedFiles,
+        });
+
+        // Optional: Redirect after response is sent
+        // (Better to let frontend handle redirect)
       }
-    } else {
-      res
-        .status(400)
-        .json({ error: 'No file uploaded or file buffer missing.' });
+    } catch (error) {
+      console.error('Upload error: ', error);
+      res.status(500).json({ error: 'Failed to save files' });
     }
   });
 };

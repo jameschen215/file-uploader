@@ -3,7 +3,7 @@ import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   showErrorStylesAndMessages,
-} from './utils.js';
+} from './validation-helpers.js';
 
 export function handleFolderInput() {
   const form = document.querySelector('#folder-form');

@@ -2,7 +2,7 @@ import { CustomNotFoundError } from '../errors/index.js';
 import { buildPath } from './build-path.js';
 import prisma from './prisma.js';
 
-export async function getHomepageData(userId: string, folderId?: string) {
+export async function getHomepageData(userId: string, folderId: string | null) {
   let currentFolder = null;
 
   if (folderId) {
@@ -21,7 +21,7 @@ export async function getHomepageData(userId: string, folderId?: string) {
 
   // Get subfolders in current folder
   const folders = await prisma.folder.findMany({
-    where: { parentFolderId: folderId, userId },
+    where: { parentFolderId: folderId || null, userId },
     include: {
       _count: { select: { files: true, subFolders: true } },
     },
@@ -30,7 +30,7 @@ export async function getHomepageData(userId: string, folderId?: string) {
 
   // Get files in current folder
   const files = await prisma.file.findMany({
-    where: { folderId, userId },
+    where: { folderId: folderId || null, userId },
     orderBy: { originalName: 'asc' },
   });
 

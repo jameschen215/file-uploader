@@ -3,6 +3,7 @@ import { handleSearchInput } from './lib/search-helpers.js';
 import { handleAddInput } from './lib/add-helpers.js';
 import { handleFolderInput } from './lib/folder-helpers.js';
 import { showModal, hideModal } from './lib/modal-helpers.js';
+import { handleUploadInput } from './lib/upload-helpers.js';
 
 // Handle modal show/hide
 (function handleModalVisibility() {
@@ -102,8 +103,6 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
     modal.querySelector('form').addEventListener('submit', function (ev) {
       ev.preventDefault();
 
-      console.log('in form');
-
       isHidden = hideModal(modal);
 
       this.submit();
@@ -120,7 +119,7 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
   });
 })();
 
-// Handle actions on modals
+// Handle actions in modals
 (function handleModalActions() {
   document.addEventListener('modal-open', () => {
     const modal = document.querySelector('#modal');
@@ -143,6 +142,9 @@ import { showModal, hideModal } from './lib/modal-helpers.js';
         break;
       case 'folder':
         handleFolderInput();
+        break;
+      case 'upload':
+        handleUploadInput();
         break;
     }
   });

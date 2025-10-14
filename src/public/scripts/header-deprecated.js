@@ -1,11 +1,36 @@
-import { icon } from './lib/icons.js';
+import { X, MENU, MOON_STAR, SUN } from './lib/icons.js';
 import { showClearButton, hideClearButton } from './lib/search-helpers.js';
 
 const iconWrapper = document.querySelector('#menu-btn span');
 const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');
 const avatar = isLoggedIn ? iconWrapper.textContent : '';
 
-/** ----------------- 1. HANDLE SEARCH ON DESKTOP ----------------- */
+// handle mobile search modal show/hide/search
+// (function handleSearchModalOnMobile() {
+//   const searchBtn = document.querySelector('#search-btn');
+//   const searchModal = document.querySelector('#search-modal');
+
+//   if (!searchBtn || !searchModal) return;
+
+//   let isHidden = true;
+
+//   // Toggle search modal when users clicking on sort button
+//   searchBtn.addEventListener('click', () => {
+//     if (isHidden) {
+//       isHidden = showModal('search-modal');
+//     } else {
+//       isHidden = hideModal('search-modal');
+//     }
+//   });
+
+//   // Close search modal when user clicking on `<-`
+//   searchModal.querySelector('#close-search').addEventListener('click', () => {
+//     isHidden = hideModal('search-modal');
+//   });
+// })();
+
+// Handle desktop search
+
 (function handleSearchOnDesktop() {
   const searchForm = document.querySelector('#search-form-desktop');
   const searchInput = document.querySelector('#search-form-desktop input');
@@ -63,7 +88,50 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   });
 })();
 
-/** ----------------- 2. HANDLE SORT ON DESKTOP ----------------- */
+// handle sort modal show/hide/sort
+// (function handleSortModalOnMobile() {
+//   const sortBtn = document.querySelector('#sort-btn');
+//   const sortModal = document.querySelector('#sort-modal');
+
+//   if (!sortBtn || !sortModal) return;
+
+//   let isHidden = true;
+
+//   // Toggle sort modal when users clicking on sort button
+//   sortBtn.addEventListener('click', () => {
+//     if (isHidden) {
+//       isHidden = showModal('sort-modal');
+//     } else {
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
+
+//   // Close sortModal when user clicking on X
+//   sortModal.querySelector('#close-sort').addEventListener('click', () => {
+//     isHidden = hideModal('sort-modal');
+//   });
+
+//   // Close sortModal when user clicking outside it
+//   document.addEventListener('click', (ev) => {
+//     if (
+//       !ev.target.closest('#sort-modal > div') &&
+//       !ev.target.closest('#sort-btn')
+//     ) {
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
+
+//   // Close modal when user pressing 'Esc' key
+//   document.addEventListener('keydown', (ev) => {
+//     if (ev.key === 'Escape') {
+//       ev.preventDefault();
+
+//       isHidden = hideModal('sort-modal');
+//     }
+//   });
+// })();
+
+/** ----------------- HANDLE SORT ON DESKTOP ----------------- */
 (function handleSortOnDesktop() {
   const trigger = document.querySelector('#select-trigger');
   const select = document.querySelector('#sort-select');
@@ -150,7 +218,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   }
 })();
 
-/** ----------------- 3. HANDLE BREADCRUMBS GO BACK ----------------- */
+// Handle breadcrumb back button
 (function handleBackOnBreadcrumb() {
   const button = document.querySelector('#breadcrumb-back-btn');
 
@@ -161,7 +229,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   });
 })();
 
-/** ----------------- 4 HANDLE THEME LOADING AND TOGGLING ----------------- */
+// Handle theme actions
 (function handleThemeToggle() {
   const html = document.documentElement;
   const themeText = document.querySelector('#theme-text');
@@ -198,18 +266,14 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
     const isDark = html.classList.contains('dark');
 
     if (themeText && themeIcon) {
-      themeIcon.innerHTML = isDark
-        ? icon({ name: 'Sun', size: 20 })
-        : icon({ name: 'MoonStar', size: 20 });
+      themeIcon.innerHTML = isDark ? SUN : MOON_STAR;
       themeText.textContent = isDark
         ? 'Switch to light mode'
         : 'Switch to dark mode';
     }
 
     if (themeIconDesktop && themeTextDesktop) {
-      themeIconDesktop.innerHTML = isDark
-        ? icon({ name: 'Sun', size: 20 })
-        : icon({ name: 'MoonStar', size: 20 });
+      themeIconDesktop.innerHTML = isDark ? SUN : MOON_STAR;
       themeTextDesktop.textContent = isDark
         ? 'Switch to light mode'
         : 'Switch to dark mode';
@@ -217,7 +281,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   }
 })();
 
-/** ----------------- 5. HANDLE HAMBURGER MENU SHOW/HIDE ----------------- */
+// Handle burger menu show/hide
 (function handleHamburgerMenu() {
   const trigger = document.querySelector('#menu-btn');
   const content = document.querySelector('#menu-content');
@@ -241,7 +305,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   });
 
   function openMenu() {
-    iconWrapper.innerHTML = icon({ name: 'X', size: 20 });
+    iconWrapper.innerHTML = X;
     trigger.setAttribute('aria-expanded', 'true');
 
     content.classList.remove('-translate-x-full');
@@ -249,9 +313,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   }
 
   function closeMenu() {
-    iconWrapper.innerHTML = isLoggedIn
-      ? avatar
-      : icon({ name: 'Menu', size: 20 });
+    iconWrapper.innerHTML = isLoggedIn ? avatar : MENU;
 
     trigger.setAttribute('aria-expanded', 'false');
 
@@ -260,7 +322,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   }
 })();
 
-/** ----------------- 6. HANDLE DROPDOWN MENU SHOW/HIDE ----------------- */
+// Handle dropdown menu show/hide
 (function handleDropdownMenu() {
   const trigger = document.querySelector('#dropdown-btn');
   const content = document.querySelector('#dropdown-content');
@@ -297,7 +359,7 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   });
 
   function openDropdown() {
-    trigger.querySelector('span').innerHTML = icon({ name: 'X', size: 20 });
+    trigger.querySelector('span').innerHTML = X;
     trigger.setAttribute('aria-expanded', 'true');
 
     content.classList.remove('hidden');
