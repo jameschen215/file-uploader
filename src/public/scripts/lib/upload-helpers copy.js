@@ -160,82 +160,7 @@ export function handleUploadInput() {
   });
 
   // Form submission with progress
-  uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
-
-  // Submit handlers
-  async function handleSubmitWithRealProgressBar(ev) {
-    ev.preventDefault();
-
-    if (selectedFiles.length === 0) return;
-
-    // Create formData with selected files
-    const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append('files', file);
-    });
-
-    submitBtn.disabled = true;
-    uploadProgress.classList.remove('hidden');
-    errorDiv.classList.add('hidden');
-
-    // Fetch with XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-
-    // Track upload progress
-    xhr.upload.addEventListener('progress', (ev) => {
-      if (ev.lengthComputable) {
-        const percentComplete = (ev.loaded / ev.total) * 100;
-        progressBar.style.width = percentComplete + '%';
-        progressPercent.textContent = Math.round(percentComplete) + '%';
-      }
-    });
-
-    // Handle successful upload
-    xhr.addEventListener('load', () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        // Show 100% briefly before reload
-        progressBar.style.width = '100%';
-        progressPercent.textContent = '100%';
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 10);
-      } else {
-        // Handle error response
-        try {
-          const data = JSON.parse(xhr.responseText);
-          showError(data.error || 'Upload failed');
-        } catch (error) {
-          showError(error.message || 'Upload failed');
-        }
-
-        uploadProgress.classList.add('hidden');
-        submitBtn.disabled = false;
-      }
-    });
-
-    // Handle network errors
-    xhr.addEventListener('error', () => {
-      showError('Network error during upload');
-
-      uploadProgress.classList.add('hidden');
-      submitBtn.disabled = false;
-    });
-
-    // Handle abort
-    xhr.addEventListener('abort', () => {
-      showError('Upload cancelled');
-
-      uploadProgress.classList.add('hidden');
-      submitBtn.disabled = false;
-    });
-
-    // Send the request
-    xhr.open('POST', uploadForm.action);
-    xhr.send(formData);
-  }
-
-  async function handleSubmitWithFakeProgressBar(ev) {
+  uploadForm.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
     if (selectedFiles.length === 0) return;
@@ -274,5 +199,5 @@ export function handleUploadInput() {
       uploadProgress.classList.add('hidden');
       submitBtn.disabled = false;
     }
-  }
+  });
 }

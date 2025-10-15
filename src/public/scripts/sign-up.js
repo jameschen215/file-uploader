@@ -1,10 +1,10 @@
-import { EYE, EYE_CLOSED } from './lib/icons.js';
+import { icon } from './lib/icons.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   validateAuthField,
   validateAuthFromServer,
-} from './lib/utils.js';
+} from './lib/validation-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#sign-up-form');
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 1. Show toggle password icons
   passwordToggles.forEach((btn) => {
-    btn.innerHTML = EYE;
+    btn.innerHTML = icon({ name: 'Eye', size: 20 });
   });
 
   // 2. Focus on the first input
@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update the button's icon
         if (type === 'password') {
-          btn.innerHTML = EYE;
+          btn.innerHTML = icon({ name: 'Eye', size: 20 });
           btn.setAttribute('aria-label', 'Show password.');
         } else {
-          btn.innerHTML = EYE_CLOSED;
+          btn.innerHTML = icon({ name: 'EyeClosed', size: 20 });
           btn.setAttribute('aria-label', 'Hide password.');
         }
       }

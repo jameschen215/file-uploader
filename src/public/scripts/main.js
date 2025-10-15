@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let isGrid = true;
 
-  changeLayoutToGrid();
-
   if (layoutToggle && layoutContainer) {
+    changeLayoutToGrid();
+
     layoutToggle.addEventListener('click', () => {
       isGrid = !isGrid;
 

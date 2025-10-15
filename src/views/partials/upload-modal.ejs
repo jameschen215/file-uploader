@@ -19,18 +19,12 @@
     <!-- Form -->
     <form
       id="upload-form"
-      action="/upload"
+      action="/upload<%= locals.currentFolder ? '/' + currentFolder.id : '' %>"
       method="post"
       enctype="multipart/form-data"
       class="w-full flex flex-col gap-5"
       novalidate
     >
-      <input
-        type="hidden"
-        name="parentFolderId"
-        value="<%= locals.currentFolder ? currentFolder.id : '' %>"
-      />
-
       <!-- Drag and drop area -->
       <div
         id="drop-zone"

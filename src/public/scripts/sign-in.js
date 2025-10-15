@@ -1,10 +1,10 @@
-import { EYE, EYE_CLOSED } from './lib/icons.js';
+import { icon } from './lib/icons.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   validateAuthField,
   validateAuthFromServer,
-} from './lib/utils.js';
+} from './lib/validation-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#sign-in-form');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let isSubmitting = false;
 
   // 1. show show/hide password toggle icon
-  pswToggle.innerHTML = EYE;
+  pswToggle.innerHTML = icon({ name: 'Eye', size: 20 });
 
   // 2. focus on the first input
   firstInput.focus();
@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
     pswInput.setAttribute('type', type);
 
     if (type === 'password') {
-      pswToggle.innerHTML = EYE;
+      pswToggle.innerHTML = icon({ name: 'Eye', size: 20 });
       pswToggle.setAttribute('aria-label', 'Show password.');
     } else {
-      pswToggle.innerHTML = EYE_CLOSED;
+      pswToggle.innerHTML = icon({ name: 'EyeClosed', size: 20 });
       pswToggle.setAttribute('aria-label', 'Hide password.');
     }
   });

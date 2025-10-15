@@ -42,7 +42,7 @@
       <!-- page content -->
       <main
         id="main-content"
-        class="w-full max-w-7xl mx-auto flex-grow flex flex-col mt-[112px] sm:mt-[176px]"
+        class="w-full max-w-7xl mx-auto flex-grow flex flex-col <%= locals.currentUser ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
       >
         <%- body %>
       </main>

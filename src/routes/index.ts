@@ -20,7 +20,9 @@ router.get('/new-folder', isAuthenticated, getFolderForm);
 
 router.get('/:folderId', isAuthenticated, getFolderContent);
 
-router.post('/upload', isAuthenticated, handleFileUpload);
+router.post('/upload/', isAuthenticated, handleFileUpload);
+
+router.post('/upload/:folderId', isAuthenticated, handleFileUpload);
 
 router.post('/folders', isAuthenticated, folderSchema, handleFolderCreate);
 

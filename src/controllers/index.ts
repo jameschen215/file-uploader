@@ -165,17 +165,16 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
         });
 
         uploadedFiles.push(savedFile);
-
-        // 8. Send success response and redirect AFTER all files processed
-        res.json({
-          success: true,
-          message: `${uploadedFiles.length} file(s) uploaded successfully.`,
-          files: uploadedFiles,
-        });
-
-        // Optional: Redirect after response is sent
-        // (Better to let frontend handle redirect)
       }
+
+      // 8. Send success response and redirect AFTER all files processed
+      res.json({
+        success: true,
+        message: `${uploadedFiles.length} file(s) uploaded successfully.`,
+        files: uploadedFiles,
+      });
+
+      // No redirect here, (Better to let frontend handle redirect)
     } catch (error) {
       console.error('Upload error: ', error);
       res.status(500).json({ error: 'Failed to save files' });
