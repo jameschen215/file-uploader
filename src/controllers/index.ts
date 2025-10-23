@@ -21,23 +21,29 @@ const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 const isDev = process.env.NODE_ENV === 'development';
 
 // Get saved files
-export const getFolderContent: RequestHandler = async (req, res) => {
-  const q = req.query['q'];
-  const sortBy = req.query['sort-by'];
-  const sortDirection = req.query['sort-direction'];
+export const getFiles: RequestHandler = async (req, res) => {
+  const query = req.query;
+  const q = typeof query.q === 'string' ? query.q : '';
+  const sortBy = typeof query.sortBy === 'string' ? query.sortBy : 'name';
+  const direction =
+    typeof query.sortDirection === 'string' ? query.sortDirection : 'asc';
 
-  console.log({ q, sortBy, sortDirection });
+  console.log({ q, sortBy, direction });
 
   try {
     const data = await getHomepageData(
       res.locals.currentUser!.id,
       req.params.folderId || null,
+      sortBy,
+      direction,
     );
 
     res.render('index', {
       ...data,
       errors: null,
       oldInput: null,
+      sortBy,
+      direction,
     });
   } catch (error) {
     console.error('Get folder contents error: ', error);
@@ -45,17 +51,8 @@ export const getFolderContent: RequestHandler = async (req, res) => {
   }
 };
 
-export const getUploadForm: RequestHandler = (req, res) => {
-  res.render('upload-form');
-};
-
-export const getFolderForm: RequestHandler = (req, res) => {
-  res.render('folder-form', { errors: null, oldInput: null });
-};
-
 // --- --- --- --- --- Handle file upload --- --- --- --- ---  //
-
-export const handleFileUpload: RequestHandler = async (req, res) => {
+export const uploadFiles: RequestHandler = async (req, res) => {
   upload(req, res, async (error) => {
     // 1. handle Multer error
     if (error instanceof MulterError) {
@@ -207,7 +204,7 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
 };
 
 // --- Handle new folder creation ---
-export const handleFolderCreate: RequestHandler = async (req, res) => {
+export const createFolder: RequestHandler = async (req, res) => {
   const userId = res.locals.currentUser!.id;
   const parentFolderId = req.params.parentFolderId;
 

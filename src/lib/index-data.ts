@@ -1,8 +1,19 @@
 import { CustomNotFoundError } from '../errors/index.js';
 import { buildPath } from './build-path.js';
+import { SORT_BY_METHODS, SORT_ORDERS } from './constants.js';
 import prisma from './prisma.js';
 
-export async function getHomepageData(userId: string, folderId: string | null) {
+export async function getHomepageData(
+  userId: string,
+  folderId: string | null,
+  sortBy: string,
+  direction: string,
+) {
+  const sortField = Object.keys(SORT_BY_METHODS).includes(sortBy)
+    ? SORT_BY_METHODS[sortBy as keyof typeof SORT_BY_METHODS]
+    : SORT_BY_METHODS['name'];
+  const sortOrder = SORT_ORDERS.includes(direction) ? direction : 'asc';
+
   let currentFolder = null;
 
   if (folderId) {
@@ -25,13 +36,13 @@ export async function getHomepageData(userId: string, folderId: string | null) {
     include: {
       _count: { select: { files: true, subFolders: true } },
     },
-    orderBy: { name: 'asc' },
+    orderBy: { [sortField.folder]: sortOrder },
   });
 
   // Get files in current folder
   const files = await prisma.file.findMany({
     where: { folderId: folderId || null, userId },
-    orderBy: { originalName: 'asc' },
+    orderBy: { [sortField.file]: sortOrder },
   });
 
   return { currentFolder, breadcrumbs, folders, files };

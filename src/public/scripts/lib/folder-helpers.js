@@ -23,8 +23,6 @@ export function handleFolderInput() {
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
 
-    console.log('Submitting...');
-
     if (isSubmitting) return;
 
     let isValid = true;
