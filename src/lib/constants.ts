@@ -14,7 +14,9 @@ export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export const SORT_BY_METHODS = {
   name: { folder: 'name', file: 'originalName' },
+  type: { folder: 'name', file: 'mimeType' },
   size: { folder: 'name', file: 'fileSize' },
   date: { folder: 'updatedAt', file: 'uploadedAt' },
 };
+
 export const SORT_ORDERS = ['asc', 'desc'];

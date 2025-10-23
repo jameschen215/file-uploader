@@ -64,8 +64,19 @@
           type="button"
           class="flex items-center gap-1 p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
         >
-          <span id="sort-direction" data-order="asc">&#x2191;</span>
-          <span id="sort-by-name" class="font-mono font-light">Name</span>
+          <span
+            id="sort-direction"
+            data-direction="<%= locals.direction || 'asc'  %>"
+          >
+            <%- locals.direction ? direction === 'asc' ? '&#x2191;' : '&#x2193;' : '&#x2191;' %>
+          </span>
+          <span
+            id="sort-by"
+            data-sort-by="<%= locals.sortBy || 'name' %>"
+            class="font-light capitalize"
+          >
+            <%- locals.sortBy ? sortBy : 'name' %>
+          </span>
         </button>
 
         <!-- sort-by select -->
@@ -75,7 +86,7 @@
           type="button"
           class="hidden sm:block p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
         >
-          <%- icon({ name: 'ChevronsUpDown', size: 24 }) %>
+          <%- icon({ name: 'ChevronsUpDown', size: 20 }) %>
         </button>
 
         <!-- 2. select -->
@@ -83,7 +94,7 @@
           id="sort-select"
           class="hidden absolute top-full translate-y-5 p-5 right-0 w-60 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg"
         >
-          <h3 class="text-lg font-medium mb-2 font-mono">Sort by</h3>
+          <h3 class="text-lg font-medium mb-2">Sort by</h3>
 
           <ul class="flex flex-col">
             <li>
@@ -92,7 +103,9 @@
                 class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
               >
                 <span class="font-mono font-light">Name</span>
-                <span>&#x2713;</span>
+                <span>
+                  <%- locals.sortBy === 'name' ? '&#x2713;' : '' %>
+                </span>
               </button>
             </li>
             <li>
@@ -101,7 +114,9 @@
                 class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
               >
                 <span class="font-mono font-light">Size</span>
-                <span></span>
+                <span>
+                  <%- locals.sortBy === 'size' ? '&#x2713;' : '' %>
+                </span>
               </button>
             </li>
             <li>
@@ -110,7 +125,9 @@
                 class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
               >
                 <span class="font-mono font-light">Type</span>
-                <span></span>
+                <span>
+                  <%- locals.sortBy === 'type' ? '&#x2713;' : '' %>
+                </span>
               </button>
             </li>
             <li>
@@ -119,7 +136,9 @@
                 class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
               >
                 <span class="font-mono font-light">Date</span>
-                <span></span>
+                <span>
+                  <%- locals.sortBy === 'date' ? '&#x2713;' : '' %>
+                </span>
               </button>
             </li>
           </ul>

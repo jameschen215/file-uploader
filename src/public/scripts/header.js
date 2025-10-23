@@ -103,19 +103,22 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
   // Handel selecting on sort-by options
   document.querySelectorAll('#sort-select li button').forEach((item) => {
     item.addEventListener('click', () => {
-      const sortBy = item.textContent.trim().split('\n')[0];
+      const sortBy = item.textContent.trim().split('\n')[0].toLowerCase();
 
       // update ui
       document.querySelectorAll('#sort-select  li button').forEach((btn) => {
         btn.lastElementChild.textContent = '';
       });
+
       item.lastElementChild.innerHTML = '&#x2713;';
 
-      document.querySelector('#sort-by-name').textContent = sortBy;
-
-      // TODO: sort with sortBy
+      const sortByEl = document.querySelector('#sort-by');
+      sortByEl.textContent = sortBy;
+      sortByEl.dataset.sortBy = sortBy;
 
       isHidden = hideSelect();
+
+      submitSort();
     });
 
     // toggle sort order between ascending and descending
@@ -124,15 +127,15 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
 
       const direction = document.querySelector('#sort-direction');
 
-      if (direction.dataset.order === 'asc') {
-        direction.dataset.order = 'desc';
+      if (direction.dataset.direction === 'asc') {
+        direction.dataset.direction = 'desc';
         direction.innerHTML = '&#x2193;';
       } else {
-        direction.dataset.order = 'asc';
+        direction.dataset.direction = 'asc';
         direction.innerHTML = '&#x2191;';
       }
 
-      // TODO: sort with new order
+      submitSort();
     });
   });
 
@@ -147,6 +150,14 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
     select.classList.add('hidden');
 
     return true;
+  }
+
+  function submitSort() {
+    const sortBy = document.querySelector('#sort-by').dataset.sortBy;
+    const direction =
+      document.querySelector('#sort-direction').dataset.direction;
+
+    window.location.href = `/?sortBy=${sortBy}&sortDirection=${direction}`;
   }
 })();
 
