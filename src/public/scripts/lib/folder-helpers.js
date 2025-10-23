@@ -1,4 +1,5 @@
 import { MAX_FOLDER_NAME } from './constants.js';
+import { hideModal } from './modal-helpers.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
@@ -6,9 +7,10 @@ import {
 } from './validation-helpers.js';
 
 export function handleFolderInput() {
+  const modal = document.getElementById('modal');
   const form = document.querySelector('#folder-form');
 
-  if (!form) return;
+  if (!modal || !form) return;
 
   const input = form.querySelector('input[name="name"]');
   const button = form.querySelector('button[type="submit"]');
@@ -17,12 +19,11 @@ export function handleFolderInput() {
 
   input.focus();
 
-  // Server-side validation
-  validateFromServer(form);
-
   // Client-side validation
-  form.addEventListener('submit', (ev) => {
+  form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
+
+    console.log('Submitting...');
 
     if (isSubmitting) return;
 
@@ -32,13 +33,52 @@ export function handleFolderInput() {
       isValid = false;
     }
 
-    if (isValid) {
+    if (!isValid) {
+      focusOnFirstErrorField(form);
+    } else {
+      const formData = new FormData(form);
+
+      // 1. Disable input and button
+      input.disabled = true;
       button.disabled = true;
       button.textContent = 'Creating folder...';
 
-      form.submit();
-    } else {
-      focusOnFirstErrorField(form);
+      isSubmitting = true;
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          // 2. Show validation errors
+          if (data.errors?.name) {
+            showErrorStylesAndMessages(input, data.errors.name.msg);
+            focusOnFirstErrorField(form);
+          }
+
+          // 3. Re-enable input and button
+          input.disabled = false;
+          button.disabled = false;
+          button.textContent = 'Create';
+          return;
+        }
+
+        // Success — reset form and hide modal
+        form.reset();
+        hideModal(modal);
+        window.location.reload();
+      } catch (error) {
+        console.error('Error submitting folder:', error);
+
+        // Re-enable input and button in case of network errors
+        input.disabled = false;
+        button.disabled = false;
+        button.textContent = 'Create';
+      }
     }
 
     isSubmitting = false;
@@ -76,21 +116,5 @@ export function handleFolderInput() {
     }
 
     return isValid;
-  }
-
-  function validateFromServer(form) {
-    const errors = JSON.parse(form.dataset.errors);
-
-    // return if no errors
-    if (!errors || Object.keys(errors).length === 0) return;
-
-    // show error style and messages
-    for (const [name, error] of Object.entries(errors)) {
-      const field = form.querySelector(`input[name=${name}]`);
-
-      showErrorStylesAndMessages(field, error.msg);
-
-      focusOnFirstErrorField(form);
-    }
   }
 }

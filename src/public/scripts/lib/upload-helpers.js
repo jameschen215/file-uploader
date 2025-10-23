@@ -59,6 +59,16 @@ export function handleUploadInput() {
     handleFiles(ev.target.files);
   });
 
+  clearFilesBtn.addEventListener('click', () => {
+    selectedFiles = [];
+    fileInput.value = '';
+
+    updateFileDisplay();
+  });
+
+  // Form submission with progress
+  uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
+
   function handleFiles(files) {
     errorDiv.classList.add('hidden');
     selectedFiles = [];
@@ -153,16 +163,7 @@ export function handleUploadInput() {
     errorDiv.classList.remove('hidden');
   }
 
-  clearFilesBtn.addEventListener('click', () => {
-    selectedFiles = [];
-    fileInput.value = '';
-    updateFileDisplay();
-  });
-
-  // Form submission with progress
-  uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
-
-  // Submit handlers
+  // Submit handler with real-time progress tracking
   async function handleSubmitWithRealProgressBar(ev) {
     ev.preventDefault();
 
@@ -230,11 +231,14 @@ export function handleUploadInput() {
       submitBtn.disabled = false;
     });
 
-    // Send the request
+    // Set request method and route
     xhr.open('POST', uploadForm.action);
+
+    // Send the request
     xhr.send(formData);
   }
 
+  // Deprecated submit handler
   async function handleSubmitWithFakeProgressBar(ev) {
     ev.preventDefault();
 

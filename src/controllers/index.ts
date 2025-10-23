@@ -14,19 +14,25 @@ import { Prisma } from '@prisma/client';
 import { CustomNotFoundError } from '../errors/index.js';
 import { validationResult } from 'express-validator';
 import { getHomepageData } from '../lib/index-data.js';
+import { configureSupabase } from '../config/supabase.js';
 
+const supabase = configureSupabase();
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 const isDev = process.env.NODE_ENV === 'development';
 
 // Get saved files
 export const getFolderContent: RequestHandler = async (req, res) => {
+  const q = req.query['q'];
+  const sortBy = req.query['sort-by'];
+  const sortDirection = req.query['sort-direction'];
+
+  console.log({ q, sortBy, sortDirection });
+
   try {
     const data = await getHomepageData(
       res.locals.currentUser!.id,
       req.params.folderId || null,
     );
-
-    console.log('Breadcrumbs: ', data.breadcrumbs);
 
     res.render('index', {
       ...data,
@@ -125,7 +131,6 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
 
         if (isDev) {
           // LOCAL STORAGE FOR DEVELOPMENT
-          console.log({ folderId });
           const folderPath = folderId
             ? path.join(
                 process.cwd(),
@@ -147,7 +152,26 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
           publicUrl = `uploads/user-${userId}/${folderId ? `folder-${folderId}` : 'root'}/${fileName}`;
         } else {
           // SUPABASE STORAGE FOR PRODUCTION
-          // TODO:
+          const supabasePath = `uploads/${userId}/${folderId ? `folder-${folderId}` : 'root'}/${fileName}`;
+
+          const { data, error } = await supabase.storage
+            .from('files')
+            .upload(supabasePath, file.buffer, {
+              contentType: file.mimetype,
+              upsert: false,
+            });
+
+          if (error) {
+            console.error('Supabase upload error: ', error);
+            return res.status(500).json({ error: 'Failed to upload file' });
+          }
+
+          const { data: publicUrlData } = supabase.storage
+            .from('files')
+            .getPublicUrl(supabasePath);
+
+          filePath = supabasePath;
+          publicUrl = publicUrlData.publicUrl;
         }
 
         // 7. Save file metadata to database
@@ -185,19 +209,19 @@ export const handleFileUpload: RequestHandler = async (req, res) => {
 // --- Handle new folder creation ---
 export const handleFolderCreate: RequestHandler = async (req, res) => {
   const userId = res.locals.currentUser!.id;
+  const parentFolderId = req.params.parentFolderId;
+
   const errors = validationResult(req);
-  const data = await getHomepageData(userId, req.params.folderId);
 
   if (!errors.isEmpty()) {
-    return res.status(400).render('index', {
-      ...data,
+    return res.status(400).json({
       errors: errors.mapped(),
       oldInput: req.body,
     });
   }
 
   try {
-    const { name, parentFolderId } = req.body;
+    const { name } = req.body;
 
     // Validate parent folder exists and belongs to user (if specified)
     if (parentFolderId) {
@@ -222,8 +246,10 @@ export const handleFolderCreate: RequestHandler = async (req, res) => {
       },
     });
 
-    const redirectUrl = parentFolderId ? `/${parentFolderId}` : '/';
-    res.redirect(redirectUrl);
+    res.json({
+      success: true,
+      message: 'Folder created',
+    });
   } catch (error) {
     // Check if it's a Prisma error
     if (error instanceof Prisma.PrismaClientKnownRequestError) {

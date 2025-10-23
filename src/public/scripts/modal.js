@@ -100,13 +100,13 @@ import { handleUploadInput } from './lib/upload-helpers.js';
     });
 
     // 2.4 hide on form submit
-    modal.querySelector('form').addEventListener('submit', function (ev) {
-      ev.preventDefault();
+    // modal.querySelector('form').addEventListener('submit', function (ev) {
+    //   ev.preventDefault();
 
-      isHidden = hideModal(modal);
+    //   // isHidden = hideModal(modal);
 
-      this.submit();
-    });
+    //   this.submit();
+    // });
 
     // 2.5 hide on pressing 'Escape'
     document.addEventListener('keydown', (ev) => {

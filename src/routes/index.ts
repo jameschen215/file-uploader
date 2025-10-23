@@ -9,6 +9,9 @@ import {
   handleFolderCreate,
 } from '../controllers/index.js';
 import { folderSchema } from '../validators/folder.js';
+import multer from 'multer';
+
+const upload = multer();
 
 const router = Router();
 
@@ -24,6 +27,12 @@ router.post('/upload/', isAuthenticated, handleFileUpload);
 
 router.post('/upload/:folderId', isAuthenticated, handleFileUpload);
 
-router.post('/folders', isAuthenticated, folderSchema, handleFolderCreate);
+router.post(
+  '/folders',
+  isAuthenticated,
+  upload.none(),
+  folderSchema,
+  handleFolderCreate,
+);
 
 export default router;
