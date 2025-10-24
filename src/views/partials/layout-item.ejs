@@ -1,5 +1,5 @@
 <a
-  href="/folders/<%= item.id %>"
+  href="<%= category === 'folder' ? `/folders/${item.id}` : `files/${item.id}` %>"
   role="button"
   tabindex="0"
   class="item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer"
