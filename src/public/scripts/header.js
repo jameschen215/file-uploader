@@ -40,6 +40,13 @@ const avatar = isLoggedIn ? iconWrapper.textContent : '';
     }
   });
 
+  // 2.4 Show clear button when input isn't empty after loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    if (searchInput.value.trim()) {
+      showClearButton(clearButton);
+    }
+  });
+
   // 3. Clear the input when clear button is clicked
   // 3.1 Prevent the input from blurring when the clear button is clicked.
   // This allows the clear button's click event to fire.

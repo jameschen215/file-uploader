@@ -11,7 +11,13 @@
     </div>
 
     <!-- Search form -->
-    <form id="search-form" action="/" class="relative w-full" novalidate>
+    <form
+      id="search-form-in-modal"
+      action="/search"
+      method="get"
+      class="relative w-full"
+      novalidate
+    >
       <div
         class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
         aria-hidden="true"
@@ -40,10 +46,11 @@
     </form>
 
     <!-- Search results -->
-    <div
-      class="flex-grow mt-5 border-gray-200 dark:border-gray-800 flex items-center justify-center text-[80px] sm:text-[108px]"
+    <ul
+      id="search-results-for-mobile"
+      class="flex-grow mt-5 border-gray-200 dark:border-gray-800 flex items-center justify-center sm:text-[108px]"
     >
-      🧐
-    </div>
+      <span class="text-[80px]">🧐</span>
+    </ul>
   </div>
 </div>

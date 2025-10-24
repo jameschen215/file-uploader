@@ -1,5 +1,7 @@
 <div class="px-5">
-  <!-- up -->
+  <% if (!locals.currentPath.includes('search')) { %>
+
+  <!-- up (hidden on search route) -->
   <div class="hidden sm:flex items-center gap-4 h-16">
     <button
       id="upload-btn-for-desktop"
@@ -18,11 +20,18 @@
       <span>New folder</span>
     </button>
   </div>
+  <% } %>
 
   <!-- down -->
 
   <div class="h-12 flex items-center justify-between w-full max-w-7xl mx-auto">
-    <!-- breadcrumbs -->
+    <% if (locals.currentPath.includes('search')) { %>
+    <div>
+      <span><%= locals.files.length || 0 %></span>
+      <%= locals.files.length === 1 ? 'result' : 'results' %>
+    </div>
+    <% } else { %>
+    <!-- breadcrumbs (hidden on search route) -->
     <nav aria-label="breadcrumb" class="flex items-center gap-2">
       <button
         id="breadcrumb-back-btn"
@@ -52,10 +61,13 @@
       <% }) %>
       <% } %>
     </nav>
+    <% } %>
 
     <!-- buttons -->
     <div class="flex items-center gap-3">
-      <!-- desktop -->
+      <!-- Hidden on search route -->
+      <% if (!locals.currentPath.includes('search')) { %>
+      <!-- desktop sort -->
       <div
         class="hidden relative sm:flex items-center justify-between gap-2 shrink-0"
       >
@@ -144,6 +156,7 @@
           </ul>
         </div>
       </div>
+      <% } %>
 
       <button
         id="search-btn-for-mobile"

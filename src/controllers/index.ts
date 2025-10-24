@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { MulterError } from 'multer';
-import { RequestHandler, Request, Response } from 'express';
+import { RequestHandler } from 'express';
 
 import { configureMulter } from '../config/multer.js';
 import {
@@ -11,7 +11,7 @@ import {
 } from '../lib/constants.js';
 import prisma from '../lib/prisma.js';
 import { Prisma } from '@prisma/client';
-import { CustomNotFoundError } from '../errors/index.js';
+import { CustomInternalError, CustomNotFoundError } from '../errors/index.js';
 import { validationResult } from 'express-validator';
 import { getHomepageData } from '../lib/index-data.js';
 import { configureSupabase } from '../config/supabase.js';
@@ -23,12 +23,11 @@ const isDev = process.env.NODE_ENV === 'development';
 // Get saved files
 export const getFiles: RequestHandler = async (req, res) => {
   const query = req.query;
-  const q = typeof query.q === 'string' ? query.q : '';
   const sortBy = typeof query.sortBy === 'string' ? query.sortBy : 'name';
   const direction =
     typeof query.sortDirection === 'string' ? query.sortDirection : 'asc';
 
-  console.log({ q, sortBy, direction });
+  console.log({ sortBy, direction });
 
   try {
     const data = await getHomepageData(
@@ -261,5 +260,44 @@ export const createFolder: RequestHandler = async (req, res) => {
     console.error('Create folder error: ', error);
 
     res.status(500).json({ error: 'Failed to create folder' });
+  }
+};
+
+export const handleSearch: RequestHandler = async (req, res) => {
+  try {
+    const query = req.query;
+    const q = typeof query.q === 'string' ? query.q : '';
+
+    if (!q) return res.json([]);
+
+    const files = await prisma.file.findMany({
+      where: { originalName: { contains: q, mode: 'insensitive' } },
+      orderBy: { uploadedAt: 'desc' },
+    });
+
+    res.json(files);
+  } catch (error) {
+    console.error('Search error:', error);
+    res.status(500).json({ error: 'Failed to search files' });
+  }
+};
+
+export const handleDesktopSearch: RequestHandler = async (req, res) => {
+  try {
+    const query = req.query;
+    const q = typeof query.q === 'string' ? query.q : '';
+
+    console.log({ q });
+
+    if (!q) return res.json([]);
+
+    const files = await prisma.file.findMany({
+      where: { originalName: { contains: q, mode: 'insensitive' } },
+      orderBy: { uploadedAt: 'desc' },
+    });
+
+    res.render('search', { files, q });
+  } catch (error) {
+    throw new CustomInternalError('Failed to search files');
   }
 };
