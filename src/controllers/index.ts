@@ -10,9 +10,7 @@ import {
   MAX_FILE_SIZE,
 } from '../lib/constants.js';
 import prisma from '../lib/prisma.js';
-import { Prisma } from '@prisma/client';
-import { CustomInternalError, CustomNotFoundError } from '../errors/index.js';
-import { validationResult } from 'express-validator';
+
 import { getHomepageData } from '../lib/index-data.js';
 import { configureSupabase } from '../config/supabase.js';
 
@@ -20,7 +18,6 @@ const supabase = configureSupabase();
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 const isDev = process.env.NODE_ENV === 'development';
 
-// Get saved files
 export const getFiles: RequestHandler = async (req, res) => {
   const query = req.query;
   const sortBy = typeof query.sortBy === 'string' ? query.sortBy : 'name';
@@ -50,7 +47,6 @@ export const getFiles: RequestHandler = async (req, res) => {
   }
 };
 
-// --- --- --- --- --- Handle file upload --- --- --- --- ---  //
 export const uploadFiles: RequestHandler = async (req, res) => {
   upload(req, res, async (error) => {
     // 1. handle Multer error
@@ -200,104 +196,4 @@ export const uploadFiles: RequestHandler = async (req, res) => {
       res.status(500).json({ error: 'Failed to save files' });
     }
   });
-};
-
-// --- Handle new folder creation ---
-export const createFolder: RequestHandler = async (req, res) => {
-  const userId = res.locals.currentUser!.id;
-  const parentFolderId = req.params.parentFolderId;
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      errors: errors.mapped(),
-      oldInput: req.body,
-    });
-  }
-
-  try {
-    const { name } = req.body;
-
-    // Validate parent folder exists and belongs to user (if specified)
-    if (parentFolderId) {
-      const parentFolder = await prisma.folder.findFirst({
-        where: { id: parentFolderId, userId },
-      });
-
-      if (!parentFolder) {
-        throw new CustomNotFoundError('Parent folder not found');
-      }
-    }
-
-    await prisma.folder.create({
-      data: {
-        name: name.trim(),
-        userId,
-        parentFolderId: parentFolderId || null,
-      },
-      include: {
-        parentFolder: { select: { name: true } },
-        _count: { select: { files: true, subFolders: true } },
-      },
-    });
-
-    res.json({
-      success: true,
-      message: 'Folder created',
-    });
-  } catch (error) {
-    // Check if it's a Prisma error
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2002') {
-        // Unique constraint violation
-        return res
-          .status(400)
-          .json({ error: 'Folder name already exists in this location' });
-      }
-    }
-
-    console.error('Create folder error: ', error);
-
-    res.status(500).json({ error: 'Failed to create folder' });
-  }
-};
-
-export const handleSearch: RequestHandler = async (req, res) => {
-  try {
-    const query = req.query;
-    const q = typeof query.q === 'string' ? query.q : '';
-
-    if (!q) return res.json([]);
-
-    const files = await prisma.file.findMany({
-      where: { originalName: { contains: q, mode: 'insensitive' } },
-      orderBy: { uploadedAt: 'desc' },
-    });
-
-    res.json(files);
-  } catch (error) {
-    console.error('Search error:', error);
-    res.status(500).json({ error: 'Failed to search files' });
-  }
-};
-
-export const handleDesktopSearch: RequestHandler = async (req, res) => {
-  try {
-    const query = req.query;
-    const q = typeof query.q === 'string' ? query.q : '';
-
-    console.log({ q });
-
-    if (!q) return res.json([]);
-
-    const files = await prisma.file.findMany({
-      where: { originalName: { contains: q, mode: 'insensitive' } },
-      orderBy: { uploadedAt: 'desc' },
-    });
-
-    res.render('search', { files, q });
-  } catch (error) {
-    throw new CustomInternalError('Failed to search files');
-  }
 };

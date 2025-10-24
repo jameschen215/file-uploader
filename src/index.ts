@@ -13,6 +13,9 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import authRoutes from './routes/auth.js';
 import indexRoutes from './routes/index.js';
+import folderRoutes from './routes/folder.js';
+import searchRoutes from './routes/search.js';
+
 import { CustomNotFoundError } from './errors/index.js';
 import { errorsHandler } from './errors/error-handler.js';
 import { configurePassport } from './auth/index.js';
@@ -101,6 +104,8 @@ app.use(setCurrentFolder);
 // routes
 app.use('/', indexRoutes);
 app.use('/auth', authRoutes);
+app.use('/folders', folderRoutes);
+app.use('/search', searchRoutes);
 
 // handle other routes with not found
 app.use((_req, _res, _next) => {
