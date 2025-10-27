@@ -24,6 +24,7 @@ import { formatAvatar } from './middlewares/format-avatar.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 import { setCurrentFolder } from './middlewares/set-current-folder.js';
 import { setCurrentPath } from './middlewares/set-current-path.js';
+import { getFileFormatter } from './middlewares/get-formatters-for-file.js';
 
 const app = express();
 
@@ -65,7 +66,7 @@ if (process.env.NODE_ENV === 'development') {
 // custom middlewares
 app.use(getLucideIcons);
 app.use(formatAvatar);
-// app.use(formatDate);
+app.use(getFileFormatter);
 app.use(setCurrentPath);
 
 // Trust Railway's proxy

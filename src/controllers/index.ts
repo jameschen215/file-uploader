@@ -47,6 +47,19 @@ export const getFiles: RequestHandler = async (req, res) => {
   }
 };
 
+export const getFileById: RequestHandler = async (req, res) => {
+  const userId = res.locals.currentUser!.id;
+  const { fileId } = req.params;
+
+  console.log({ fileId });
+
+  const file = await prisma.file.findFirst({
+    where: { id: fileId, userId },
+  });
+
+  res.render('file', { file });
+};
+
 export const uploadFiles: RequestHandler = async (req, res) => {
   upload(req, res, async (error) => {
     // 1. handle Multer error

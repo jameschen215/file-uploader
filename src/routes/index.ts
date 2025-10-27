@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
 import { isAuthenticated } from '../auth/index.js';
-import { getFiles, uploadFiles } from '../controllers/index.js';
+import { getFileById, getFiles, uploadFiles } from '../controllers/index.js';
 
 const router = Router();
 
 router.get('/', isAuthenticated, getFiles);
+
+router.get('/files/:fileId', getFileById);
 
 router.post('/upload/', isAuthenticated, uploadFiles);
 
