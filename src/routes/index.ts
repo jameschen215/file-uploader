@@ -20,6 +20,6 @@ router.get('/files/:fileId', handleGetFileById);
 
 router.post('/upload/', isAuthenticated, upload, handleUploadFiles);
 
-router.post('/upload/:folderId', isAuthenticated, handleUploadFiles);
+router.post('/upload/:folderId', isAuthenticated, upload, handleUploadFiles);
 
 export default router;

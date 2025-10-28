@@ -21,7 +21,7 @@ export function errorsHandler(
   const isJSONRequest =
     req.xhr || // AJAX request
     req.headers.accept?.includes('application/json') ||
-    req.path.startsWith('/api'); // API routes
+    req.path.startsWith('/upload'); // upload routes
 
   // Handle Multer errors
   if (error instanceof multer.MulterError) {
@@ -35,6 +35,8 @@ export function errorsHandler(
     } else if (error.code === 'LIMIT_UNEXPECTED_FILE') {
       message = 'Unexpected file field';
     }
+
+    console.log({ isJSONRequest, message });
 
     return isJSONRequest
       ? res.status(statusCode).json({ error: message })
