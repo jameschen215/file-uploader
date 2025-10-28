@@ -6,8 +6,9 @@ import prisma from '../lib/prisma.js';
 import { CreateUserType, PublicUserType } from '../types/user.js';
 import passport from 'passport';
 import { validationResult } from 'express-validator';
+import { asyncHandler } from '../lib/async-handler.js';
 
-export const signUpNewUser: RequestHandler = async (req, res, next) => {
+export const signUpNewUser = asyncHandler(async (req, res, next) => {
   // THIS IS CRUCIAL - check for validation errors
   const errors = validationResult(req);
 
@@ -30,7 +31,7 @@ export const signUpNewUser: RequestHandler = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
+});
 
 export const signInUser: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);

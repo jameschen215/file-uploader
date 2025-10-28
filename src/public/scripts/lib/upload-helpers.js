@@ -205,8 +205,10 @@ export function handleUploadInput() {
         // Handle error response
         try {
           const data = JSON.parse(xhr.responseText);
+          console.log('Error: ', data.error);
           showError(data.error || 'Upload failed');
         } catch (error) {
+          console.log('Error: ', error.message);
           showError(error.message || 'Upload failed');
         }
 

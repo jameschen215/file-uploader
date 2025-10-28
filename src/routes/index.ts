@@ -1,16 +1,25 @@
 import { Router } from 'express';
 
 import { isAuthenticated } from '../auth/index.js';
-import { getFileById, getFiles, uploadFiles } from '../controllers/index.js';
+import { configureMulter } from '../config/multer.js';
+import { MAX_FILE_SIZE, MAX_FILES } from '../lib/constants.js';
+
+import {
+  handleGetFileById,
+  handleGetFiles,
+  handleUploadFiles,
+} from '../controllers/index.js';
 
 const router = Router();
 
-router.get('/', isAuthenticated, getFiles);
+const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 
-router.get('/files/:fileId', getFileById);
+router.get('/', isAuthenticated, handleGetFiles);
 
-router.post('/upload/', isAuthenticated, uploadFiles);
+router.get('/files/:fileId', handleGetFileById);
 
-router.post('/upload/:folderId', isAuthenticated, uploadFiles);
+router.post('/upload/', isAuthenticated, upload, handleUploadFiles);
+
+router.post('/upload/:folderId', isAuthenticated, handleUploadFiles);
 
 export default router;

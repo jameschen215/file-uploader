@@ -1,6 +1,6 @@
 import prisma from '../lib/prisma.js';
 import { RequestHandler } from 'express';
-import { CustomInternalError } from '../errors/index.js';
+import { asyncHandler } from '../lib/async-handler.js';
 
 export const handleMobileSearch: RequestHandler = async (req, res) => {
   try {
@@ -21,22 +21,16 @@ export const handleMobileSearch: RequestHandler = async (req, res) => {
   }
 };
 
-export const handleDesktopSearch: RequestHandler = async (req, res) => {
-  try {
-    const query = req.query;
-    const q = typeof query.q === 'string' ? query.q : '';
+export const handleDesktopSearch = asyncHandler(async (req, res) => {
+  const query = req.query;
+  const q = typeof query.q === 'string' ? query.q : '';
 
-    console.log({ q });
+  if (!q) return res.json([]);
 
-    if (!q) return res.json([]);
+  const files = await prisma.file.findMany({
+    where: { originalName: { contains: q, mode: 'insensitive' } },
+    orderBy: { uploadedAt: 'desc' },
+  });
 
-    const files = await prisma.file.findMany({
-      where: { originalName: { contains: q, mode: 'insensitive' } },
-      orderBy: { uploadedAt: 'desc' },
-    });
-
-    res.render('search', { files, q });
-  } catch (error) {
-    throw new CustomInternalError('Failed to search files');
-  }
-};
+  res.render('search', { files, q });
+});
