@@ -5,6 +5,7 @@ import { configureMulter } from '../config/multer.js';
 import { MAX_FILE_SIZE, MAX_FILES } from '../lib/constants.js';
 
 import {
+  handleDownLoad,
   handleGetFileById,
   handleGetFiles,
   handleUploadFiles,
@@ -16,7 +17,9 @@ const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 
 router.get('/', isAuthenticated, handleGetFiles);
 
-router.get('/files/:fileId', handleGetFileById);
+router.get('/files/:fileId', isAuthenticated, handleGetFileById);
+
+router.get('/files/:fileId/download', isAuthenticated, handleDownLoad);
 
 router.post('/upload/', isAuthenticated, upload, handleUploadFiles);
 

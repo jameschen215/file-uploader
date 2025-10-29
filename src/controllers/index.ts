@@ -150,3 +150,50 @@ export const handleUploadFiles = asyncHandler(async (req, res) => {
     files: uploadedFiles,
   });
 });
+
+export const handleDownLoad = asyncHandler(async (req, res) => {
+  const fileId = req.params.fileId;
+  const userId = res.locals.currentUser!.id;
+
+  // Get file from database
+  const file = await prisma.file.findFirst({
+    where: { id: fileId, userId },
+  });
+
+  if (!file) {
+    throw new CustomNotFoundError('File not found');
+  }
+
+  // supabase storage
+  const { data, error } = await supabase.storage
+    .from('files')
+    .download(file.filePath);
+
+  if (error) {
+    throwSupabaseError(error, 'download file');
+  }
+
+  // Convert blob to buffer and send
+  const buffer = Buffer.from(await data.arrayBuffer());
+
+  /**
+   * WHAT IT DOES HERE?
+   * - Tells browser what type of file it is (image/jpeg, application/pdf, etc.)
+   * - Browser uses this to handle the file correctly
+   * - 'attachment': tells browser to download the file instead of displaying it
+   * - 'filename="${file.originalName}": sets the download file's name
+   *
+   * WHY IT MATTERS?
+   * - Window uses it to suggest the right program to open the file
+   * - Browser knows if it's safe to download
+   * - Prevents browser form trying to display binary files as text
+   *
+   */
+
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="${file.originalName}"`,
+  );
+  res.setHeader('Content-Type', file.mimeType);
+  res.send(buffer);
+});
