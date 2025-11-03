@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Modify className and icon of info button
     layoutContainer.querySelectorAll('.item .item-info-btn').forEach((btn) => {
       btn.className =
-        'item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200';
+        'modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200';
       btn.innerHTML = icon({ name: 'EllipsisVertical' });
     });
   }
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Modify className and icon of info button
     layoutContainer.querySelectorAll('.item .item-info-btn').forEach((btn) => {
       btn.className =
-        'item-info-btn ml-auto py-1 px-0.5 rounded-sm text-gray-500 hover:dark:text-gray-50 hover:text-gray-950';
+        'modal-trigger item-info-btn ml-auto py-1 px-0.5 rounded-sm text-gray-500 hover:dark:text-gray-50 hover:text-gray-950';
       btn.innerHTML = icon({ name: 'Ellipsis' });
     });
   }

@@ -49,7 +49,14 @@ if (process.env.NODE_ENV === 'production') {
 
 // middlewares
 app.use(cors());
-app.use(helmet());
+// app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      imgSrc: ["'self'", 'data:', 'https://djckxvnpmjpsxsmphbqa.supabase.co'],
+    },
+  }),
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(methodOverride('_method'));

@@ -48,6 +48,8 @@ export const handleGetFileById = asyncHandler(async (req, res) => {
   const { data } = supabase.storage.from('files').getPublicUrl(file.filePath, {
     transform: { width: 200, height: 200, resize: 'cover' },
   });
+
+  res.render('file', { file });
 });
 
 export const handleUploadFiles = asyncHandler(async (req, res) => {

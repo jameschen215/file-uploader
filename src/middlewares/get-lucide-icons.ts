@@ -21,6 +21,9 @@ import {
   FolderOpen,
   CloudUpload,
   MessageCircleWarning,
+  Share2,
+  Download,
+  Trash2,
 } from 'lucide-static';
 
 interface IconParams {
@@ -54,6 +57,9 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     FolderOpen,
     CloudUpload,
     MessageCircleWarning,
+    Share2,
+    Download,
+    Trash2,
   };
 
   // Helper function to modify svg string

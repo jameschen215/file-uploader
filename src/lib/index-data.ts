@@ -1,7 +1,9 @@
+import { format } from 'date-fns';
 import { CustomNotFoundError } from '../errors/index.js';
 import { buildPath } from './build-path.js';
 import { SORT_BY_METHODS, SORT_ORDERS } from './constants.js';
 import prisma from './prisma.js';
+import { formatFileSize } from './utils.js';
 
 export async function getHomepageData(
   userId: string,
@@ -45,5 +47,11 @@ export async function getHomepageData(
     orderBy: { [sortField.file]: sortOrder },
   });
 
-  return { currentFolder, breadcrumbs, folders, files };
+  const formattedFiles = files.map((file) => ({
+    ...file,
+    fileSize: formatFileSize(file.fileSize),
+    uploadedAt: format(file.uploadedAt, 'yyyy-MM-dd'),
+  }));
+
+  return { currentFolder, breadcrumbs, folders, files: formattedFiles };
 }

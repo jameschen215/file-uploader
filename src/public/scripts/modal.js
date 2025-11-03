@@ -4,6 +4,7 @@ import { handleAddInput } from './lib/add-helpers.js';
 import { handleFolderInput } from './lib/folder-helpers.js';
 import { showModal, hideModal } from './lib/modal-helpers.js';
 import { handleUploadInput } from './lib/upload-helpers.js';
+import { handleShowFileInfo } from './lib/file-info-helpers.js';
 
 // Handle modal show/hide
 (function handleModalVisibility() {
@@ -13,7 +14,9 @@ import { handleUploadInput } from './lib/upload-helpers.js';
 
   // 1. Show modal with correct content
   document.querySelectorAll('.modal-trigger').forEach((trigger) => {
-    trigger.addEventListener('click', () => {
+    trigger.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+
       const modalName = trigger.id.split('-')[0];
       console.log({ modalName });
 
@@ -53,6 +56,10 @@ import { handleUploadInput } from './lib/upload-helpers.js';
             break;
           case 'upload':
             isHidden = showModal(modal, trigger, modalName, 'Upload files');
+            break;
+          case 'file':
+            modal.setAttribute('data-file', trigger.dataset.file);
+            isHidden = showModal(modal, trigger, modalName, 'File details');
             break;
         }
       }
@@ -146,6 +153,11 @@ import { handleUploadInput } from './lib/upload-helpers.js';
       case 'upload':
         handleUploadInput();
         break;
+      case 'file':
+        const fileJson = atob(modal.dataset.file);
+        const file = JSON.parse(fileJson);
+
+        handleShowFileInfo(file);
     }
   });
 })();

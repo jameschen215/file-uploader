@@ -1,26 +1,15 @@
-<a
-  href="<%= category === 'folder' ? `/folders/${item.id}` : `files/${item.id}` %>"
-  role="button"
-  tabindex="0"
+<div
   class="item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer"
 >
-  <!-- file/folder Icon -->
+  <!-- file icon -->
   <div
     class="item-icon-wrapper group-focus:bg-sky-100 group-focus:dark:bg-sky-950 w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800"
   >
-    <% if (category === 'folder') { %>
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <!-- prettier-ignore-start -->
-      <%- icon({ name: 'Folder', fill: 'currentColor', className: 'w-full h-auto'}) %>
-      <!-- prettier-ignore-end -->
-    </span>
-
-    <% } else if (category === 'file') { %>
-    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-      <% if (item.mimeType.startsWith('image')) { %>
+      <% if (file.mimeType.startsWith('image')) { %>
       <!-- Image icon -->
       <%- icon({name: 'Image', strokeWidth: 1, className: 'w-full h-auto'}) %>
-      <% } else if (item.mimeType.startsWith('video')) { %>
+      <% } else if (file.mimeType.startsWith('video')) { %>
       <!-- video icon -->
       <%- icon({name: 'Film', strokeWidth: 1, className: 'w-full h-auto'}) %>
       <% } else { %>
@@ -28,17 +17,18 @@
       <%- icon({name: 'File', strokeWidth: 1, className: 'w-full h-auto'}) %>
       <% } %>
     </span>
-    <% } %>
   </div>
 
-  <!-- file/folder name -->
+  <!-- file name -->
   <div class="item-info relative w-full text-center">
     <span class="text-sm inline-block w-[calc(100%-24px)] mx-auto line-clamp-1">
-      <%= category === 'folder' ? item.name : item.originalName %>
+      <%= file.originalName %>
     </span>
     <button
+      id="file-btn-<%= file.id %>"
+      data-file="<%= Buffer.from(JSON.stringify(file)).toString('base64') %>"
       type="button"
       class="modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200"
     ></button>
   </div>
-</a>
+</div>
