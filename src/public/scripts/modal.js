@@ -126,6 +126,9 @@ import { handleShowFileInfo } from './lib/file-info-helpers.js';
   });
 })();
 
+// Track which handlers have been initialized
+const initializedHandlers = new Set();
+
 // Handle actions in modals
 (function handleModalActions() {
   document.addEventListener('modal-open', () => {
@@ -138,20 +141,32 @@ import { handleShowFileInfo } from './lib/file-info-helpers.js';
     const contentName = content.id.split('-')[0];
 
     switch (contentName) {
-      case 'add':
-        handleAddInput();
-        break;
+      // case 'add':
+      //   handleAddInput();
+      //   break;
       case 'sort':
-        handleSortInput();
+        if (!initializedHandlers.has('sort')) {
+          handleSortInput();
+          initializedHandlers.add('sort');
+        }
         break;
       case 'search':
-        handleSearchInput();
+        if (!initializedHandlers.has('search')) {
+          handleSearchInput();
+          initializedHandlers.add('search');
+        }
         break;
       case 'folder':
-        handleFolderInput();
+        if (!initializedHandlers.has('folder')) {
+          handleFolderInput();
+          initializedHandlers.add('folder');
+        }
         break;
       case 'upload':
-        handleUploadInput();
+        if (!initializedHandlers.has('upload')) {
+          handleUploadInput();
+          initializedHandlers.add('upload');
+        }
         break;
       case 'file':
         const fileJson = atob(modal.dataset.file);

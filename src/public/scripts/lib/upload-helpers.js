@@ -56,7 +56,6 @@ export function handleUploadInput() {
   });
 
   fileInput.addEventListener('change', (ev) => {
-    console.log('file number: ', ev.target.files.length);
     handleFiles(ev.target.files);
   });
 
@@ -75,32 +74,25 @@ export function handleUploadInput() {
     selectedFiles = [];
 
     for (const file of files) {
-      console.log({ file });
-    }
-
-    for (const file of files) {
-      console.log('Number of files: ', selectedFiles.length);
-
       if (selectedFiles.length >= MAX_UPLOAD_FILES) {
         showError(`Maximum ${MAX_UPLOAD_FILES} files allowed`);
         break;
       }
 
+      console.log('File size: ', file.size);
       if (file.size > MAX_FILE_SIZE) {
         showError(
-          `"${file.name}" exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit`,
+          `"${file.name}" exceeds ${MAX_FILE_SIZE / 1024 / 1024} MB limit`,
         );
-        continue;
+        break;
       }
 
       if (!ALLOWED_FILE_TYPES.some((type) => file.type.startsWith(type))) {
         showError(`"${file.name}" is not a supported file type`);
-        continue;
+        break;
       }
 
       selectedFiles.push(file);
-
-      console.log(selectedFiles, selectedFiles.length);
     }
 
     updateFileDisplay();
@@ -139,7 +131,7 @@ export function handleUploadInput() {
               <button
                 type="button"
                 data-index="${index}"
-                class="clear-file-btn opacity-0 group-hover:opacity-100 p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-800 rounded transition-all"
+                class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-800 rounded transition-all"
               >
                 ${icon({ name: 'X', size: 16 })}
               </button>
@@ -176,11 +168,15 @@ export function handleUploadInput() {
 
     if (selectedFiles.length === 0) return;
 
+    console.log('File count: ', selectedFiles.length);
+
     // Create formData with selected files
     const formData = new FormData();
     selectedFiles.forEach((file) => {
       formData.append('files', file);
     });
+
+    console.log({ formData });
 
     submitBtn.disabled = true;
     uploadProgress.classList.remove('hidden');
@@ -207,7 +203,7 @@ export function handleUploadInput() {
 
         setTimeout(() => {
           window.location.reload();
-        }, 10);
+        }, 500);
       } else {
         // Handle error response
         try {
