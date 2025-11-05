@@ -1,4 +1,5 @@
 import path from 'path';
+import sharp from 'sharp';
 import prisma from '../lib/prisma.js';
 
 import { asyncHandler } from '../lib/async-handler.js';
@@ -6,7 +7,12 @@ import { getHomepageData } from '../lib/index-data.js';
 import { ALLOWED_FILE_TYPES } from '../lib/constants.js';
 import { configureSupabase } from '../config/supabase.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
-import { CustomBadRequestError, CustomNotFoundError } from '../errors/index.js';
+import {
+  CustomBadRequestError,
+  CustomInternalError,
+  CustomNotFoundError,
+} from '../errors/index.js';
+import { RequestHandler } from 'express';
 
 const supabase = configureSupabase();
 
@@ -121,6 +127,16 @@ export const handleUploadFiles = asyncHandler(async (req, res) => {
       throwSupabaseError(error, 'upload file');
     }
 
+    // Extract metadata based on file type
+    let width = null;
+    let height = null;
+
+    if (file.mimetype.startsWith('image/')) {
+      const metadata = await sharp(file.buffer).metadata();
+      width = metadata.width || null;
+      height = metadata.height || null;
+    }
+
     const { data: publicUrlData } = supabase.storage
       .from('files')
       .getPublicUrl(supabasePath);
@@ -137,6 +153,8 @@ export const handleUploadFiles = asyncHandler(async (req, res) => {
         fileSize: file.size,
         mimeType: file.mimetype,
         publicUrl,
+        width,
+        height,
         userId,
         folderId,
       },
@@ -198,4 +216,30 @@ export const handleDownLoad = asyncHandler(async (req, res) => {
   );
   res.setHeader('Content-Type', file.mimeType);
   res.send(buffer);
+});
+
+export const handleThumbnail = asyncHandler(async (req, res) => {
+  const { fileId } = req.params;
+
+  const file = await prisma.file.findFirst({
+    where: { id: fileId, userId: res.locals.currentUser!.id },
+  });
+
+  if (!file || !file.mimeType.startsWith('image/')) {
+    throw new CustomNotFoundError('File not found or not an image');
+  }
+
+  // Generate signed URL with transformation
+  const { data, error } = await supabase.storage
+    .from('files')
+    .createSignedUrl(file.filePath, 3600, {
+      transform: { width: 450, height: 450, resize: 'cover' },
+    });
+
+  if (error) {
+    throw new CustomInternalError('Failed to generate thumbnail');
+  }
+
+  // Redirect to the signed URL
+  res.redirect(data.signedUrl);
 });

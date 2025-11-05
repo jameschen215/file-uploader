@@ -8,6 +8,7 @@ import {
   handleDownLoad,
   handleGetFileById,
   handleGetFiles,
+  handleThumbnail,
   handleUploadFiles,
 } from '../controllers/index.js';
 
@@ -20,6 +21,8 @@ router.get('/', isAuthenticated, handleGetFiles);
 router.get('/files/:fileId', isAuthenticated, handleGetFileById);
 
 router.get('/files/:fileId/download', isAuthenticated, handleDownLoad);
+
+router.get('/files/:fileId/thumbnail', isAuthenticated, handleThumbnail);
 
 router.post('/upload/', isAuthenticated, upload, handleUploadFiles);
 

@@ -69,6 +69,10 @@ model File {
   publicUrl    String   @map("public_url")
   uploadedAt   DateTime @default(now()) @map("uploaded_at")
 
+  // Resolution metadata
+  width  Int?
+  height Int?
+
   // Folder relationship (nullable for root-level files)
   folderId String? @map("folder_id")
   folder   Folder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
@@ -77,8 +81,22 @@ model File {
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Share 
+  shares FileShare[]
+
   //  Unique constraint: file name must be unique within the same folder for each user
   @@unique([originalName, userId, folderId])
   @@index([userId, folderId])
   @@map("files")
+}
+
+model FileShare {
+  id        String    @id @default(uuid())
+  fileId    String    @map("file_id")
+  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  token     String    @unique @default(uuid())
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([token])
 }

@@ -56,6 +56,7 @@ export function handleUploadInput() {
   });
 
   fileInput.addEventListener('change', (ev) => {
+    console.log('file number: ', ev.target.files.length);
     handleFiles(ev.target.files);
   });
 
@@ -72,6 +73,10 @@ export function handleUploadInput() {
   function handleFiles(files) {
     errorDiv.classList.add('hidden');
     selectedFiles = [];
+
+    for (const file of files) {
+      console.log({ file });
+    }
 
     for (const file of files) {
       console.log('Number of files: ', selectedFiles.length);
@@ -94,6 +99,8 @@ export function handleUploadInput() {
       }
 
       selectedFiles.push(file);
+
+      console.log(selectedFiles, selectedFiles.length);
     }
 
     updateFileDisplay();

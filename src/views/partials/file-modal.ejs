@@ -32,7 +32,7 @@
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Path:</span>
           <span id="modal-file-path" class="text-gray-700 dark:text-gray-300">
-            <%= locals.breadcrumbs.length > 0 ? breadcrumbs : 'Cloud store' %>
+            <%= breadcrumbs.length > 0 ? breadcrumbs : 'Cloud store' %>
           </span>
         </div>
         <div class="flex flex-col gap-1">
@@ -47,6 +47,17 @@
             PDF document
           </span>
         </div>
+
+        <div id="modal-resolution-container" class="hidden flex-col gap-1">
+          <span class="font-semibold">Resolution:</span>
+          <span
+            id="modal-file-resolution"
+            class="text-gray-700 dark:text-gray-300"
+          >
+            PDF document
+          </span>
+        </div>
+
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Date added:</span>
           <span id="modal-file-date" class="text-gray-700 dark:text-gray-300">
