@@ -168,17 +168,20 @@ export function handleUploadInput() {
 
     if (selectedFiles.length === 0) return;
 
-    console.log('File count: ', selectedFiles.length);
-
     // Create formData with selected files
     const formData = new FormData();
     selectedFiles.forEach((file) => {
       formData.append('files', file);
     });
 
-    console.log({ formData });
-
+    // Disable buttons
+    document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+      btn.disabled = true;
+    });
+    clearFilesBtn.disabled = true;
     submitBtn.disabled = true;
+
+    // Display progress bar
     uploadProgress.classList.remove('hidden');
     errorDiv.classList.add('hidden');
 
@@ -216,7 +219,8 @@ export function handleUploadInput() {
         }
 
         uploadProgress.classList.add('hidden');
-        submitBtn.disabled = false;
+
+        enableButtons();
       }
     });
 
@@ -225,7 +229,8 @@ export function handleUploadInput() {
       showError('Network error during upload');
 
       uploadProgress.classList.add('hidden');
-      submitBtn.disabled = false;
+
+      enableButtons();
     });
 
     // Handle abort
@@ -233,7 +238,7 @@ export function handleUploadInput() {
       showError('Upload cancelled');
 
       uploadProgress.classList.add('hidden');
-      submitBtn.disabled = false;
+      enableButtons();
     });
 
     // Set request method and route
@@ -241,6 +246,14 @@ export function handleUploadInput() {
 
     // Send the request
     xhr.send(formData);
+
+    function enableButtons() {
+      document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+        btn.disabled = false;
+      });
+      clearFilesBtn.disabled = false;
+      submitBtn.disabled = false;
+    }
   }
 
   // Deprecated submit handler
