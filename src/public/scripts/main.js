@@ -4,13 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const layoutToggle = document.querySelector('#layout-toggle');
   const layoutContainer = document.querySelector('#layout-container');
 
-  let isGrid = true;
+  let isGrid =
+    localStorage.getItem('isGrid') !== undefined
+      ? JSON.parse(localStorage.getItem('isGrid'))
+      : true;
+
+  // Load layout
+  console.log({ isGrid });
+  if (isGrid) {
+    changeLayoutToGrid();
+  } else {
+    changeLayoutToList();
+  }
 
   if (layoutToggle && layoutContainer) {
-    changeLayoutToGrid();
-
     layoutToggle.addEventListener('click', () => {
       isGrid = !isGrid;
+      localStorage.setItem('isGrid', isGrid);
 
       if (isGrid) {
         changeLayoutToGrid();
