@@ -13,6 +13,7 @@ import {
   CustomNotFoundError,
 } from '../errors/index.js';
 import { RequestHandler } from 'express';
+import { generateVideoThumbnail, getVideoMetadata } from '../lib/utils.js';
 
 const supabase = configureSupabase();
 
@@ -36,26 +37,6 @@ export const handleGetFiles = asyncHandler(async (req, res) => {
     sortBy,
     direction,
   });
-});
-
-export const handleGetFileById = asyncHandler(async (req, res) => {
-  const userId = res.locals.currentUser!.id;
-  const { fileId } = req.params;
-
-  const file = await prisma.file.findUnique({
-    where: { id: fileId, userId },
-  });
-
-  if (!file) {
-    throw new CustomNotFoundError('File not found');
-  }
-
-  // Add thumbnail URL
-  const { data } = supabase.storage.from('files').getPublicUrl(file.filePath, {
-    transform: { width: 200, height: 200, resize: 'cover' },
-  });
-
-  res.render('file', { file });
 });
 
 export const handleUploadFiles = asyncHandler(async (req, res) => {
@@ -130,31 +111,57 @@ export const handleUploadFiles = asyncHandler(async (req, res) => {
     // Extract metadata based on file type
     let width = null;
     let height = null;
+    let duration = null;
+    let thumbnailPath = null;
 
     if (file.mimetype.startsWith('image/')) {
+      // Images: Just extract metadata, no thumbnail needed
       const metadata = await sharp(file.buffer).metadata();
       width = metadata.width || null;
       height = metadata.height || null;
+    } else if (file.mimetype.startsWith('video/')) {
+      // Videos: Extract metadata AND generate thumbnail
+      const metadata = await getVideoMetadata(file.buffer);
+      const videoStream = metadata.streams.find(
+        (s: any) => s.codec_type === 'video',
+      );
+
+      width = videoStream?.width || null;
+      height = videoStream?.height || null;
+      duration = metadata.format.duration
+        ? Math.floor(metadata.format.duration)
+        : null;
+
+      // Generate thumbnail
+      const thumbnailBuffer = await generateVideoThumbnail(file.buffer, {
+        width: 480,
+        height: Math.floor(
+          width && height ? 480 / (width / height) : 480 / (4 / 3),
+        ),
+      });
+      const thumbnailFileName = fileName.replace(/\.[^.]+$/, '-thumb.jpg');
+      thumbnailPath = `uploads/${userId}/${folderId || 'root'}/${thumbnailFileName}`;
+
+      await supabase.storage
+        .from('files')
+        .upload(thumbnailPath, thumbnailBuffer, {
+          contentType: 'image/jpeg',
+          upsert: false,
+        });
     }
-
-    const { data: publicUrlData } = supabase.storage
-      .from('files')
-      .getPublicUrl(supabasePath);
-
-    const filePath = supabasePath;
-    const publicUrl = publicUrlData.publicUrl;
 
     // Save file metadata to database
     const savedFile = await prisma.file.create({
       data: {
         originalName: file.originalname,
         fileName,
-        filePath,
+        filePath: supabasePath,
+        thumbnailPath,
         fileSize: file.size,
         mimeType: file.mimetype,
-        publicUrl,
         width,
         height,
+        duration,
         userId,
         folderId,
       },
@@ -225,21 +232,42 @@ export const handleThumbnail = asyncHandler(async (req, res) => {
     where: { id: fileId, userId: res.locals.currentUser!.id },
   });
 
-  if (!file || !file.mimeType.startsWith('image/')) {
-    throw new CustomNotFoundError('File not found or not an image');
+  if (!file) {
+    throw new CustomNotFoundError('File not found');
   }
 
-  // Generate signed URL with transformation
-  const { data, error } = await supabase.storage
-    .from('files')
-    .createSignedUrl(file.filePath, 3600, {
-      transform: { width: 450, height: 450, resize: 'cover' },
-    });
+  // Images: Use Supabase transformation (fast, on-the-fly)
+  if (file.mimeType.startsWith('image/')) {
+    const { data, error } = await supabase.storage
+      .from('files')
+      .createSignedUrl(file.filePath, 3600, {
+        transform: {
+          width: 480,
+          height: Math.floor((480 / file.width!) * file.height!),
+          resize: 'cover',
+        },
+      });
 
-  if (error) {
-    throw new CustomInternalError('Failed to generate thumbnail');
+    if (error) {
+      throw new CustomInternalError('Failed to generate thumbnail');
+    }
+
+    return res.redirect(data.signedUrl);
   }
 
-  // Redirect to the signed URL
-  res.redirect(data.signedUrl);
+  // Videos: Use pre-generated thumbnail (fast, from storage)
+  if (file.mimeType.startsWith('video/') && file.thumbnailPath) {
+    const { data, error } = await supabase.storage
+      .from('files')
+      .createSignedUrl(file.thumbnailPath, 3600);
+
+    if (error) {
+      throw new CustomInternalError('Failed to fetch thumbnail for the video');
+    }
+
+    return res.redirect(data.signedUrl);
+  }
+
+  // Fallback: No thumbnail available
+  res.status(404).send('Thumbnail not available');
 });

@@ -60,18 +60,19 @@ model Folder {
 }
 
 model File {
-  id           String   @id @default(uuid())
-  originalName String   @map("original_name")
-  fileName     String   @map("file_name") // Unique filename in storage
-  filePath     String   @map("file_path") // Path in Supabase storage
-  fileSize     Int      @map("file_size")
-  mimeType     String   @map("mime_type")
-  publicUrl    String   @map("public_url")
-  uploadedAt   DateTime @default(now()) @map("uploaded_at")
+  id            String   @id @default(uuid())
+  originalName  String   @map("original_name")
+  fileName      String   @map("file_name") // Unique filename in storage
+  filePath      String   @map("file_path") // Path in Supabase storage
+  thumbnailPath String?  @map("thumbnail_path") // Only for videos
+  fileSize      Int      @map("file_size")
+  mimeType      String   @map("mime_type")
+  uploadedAt    DateTime @default(now()) @map("uploaded_at")
 
   // Resolution metadata
-  width  Int?
-  height Int?
+  width    Int?
+  height   Int?
+  duration Int? // For video, in seconds
 
   // Folder relationship (nullable for root-level files)
   folderId String? @map("folder_id")
