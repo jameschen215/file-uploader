@@ -5,6 +5,7 @@ import { configureMulter } from '../config/multer.js';
 import { MAX_FILE_SIZE, MAX_FILES } from '../lib/constants.js';
 
 import {
+  handleDeleteFileById,
   handleDownLoad,
   handleGetFiles,
   handleThumbnail,
@@ -26,5 +27,7 @@ router.get('/files/:fileId/thumbnail', isAuthenticated, handleThumbnail);
 router.post('/upload/', isAuthenticated, upload, handleUploadFiles);
 
 router.post('/upload/:folderId', isAuthenticated, upload, handleUploadFiles);
+
+router.delete('/files/:fileId', isAuthenticated, handleDeleteFileById);
 
 export default router;

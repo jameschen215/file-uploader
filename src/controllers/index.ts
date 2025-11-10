@@ -12,7 +12,7 @@ import {
   CustomInternalError,
   CustomNotFoundError,
 } from '../errors/index.js';
-import { RequestHandler } from 'express';
+
 import { generateVideoThumbnail, getVideoMetadata } from '../lib/utils.js';
 
 const supabase = configureSupabase();
@@ -270,4 +270,44 @@ export const handleThumbnail = asyncHandler(async (req, res) => {
 
   // Fallback: No thumbnail available
   res.status(404).send('Thumbnail not available');
+});
+
+export const handleDeleteFileById = asyncHandler(async (req, res) => {
+  const { fileId } = req.params;
+  const userId = res.locals.currentUser!.id;
+
+  const file = await prisma.file.findFirst({
+    where: { id: fileId, userId },
+  });
+
+  if (!file) {
+    throw new CustomNotFoundError('File not found');
+  }
+
+  // Collect all files to delete, in case there exists a thumbnail of the file
+  const filesToDelete = [file.filePath];
+  if (file.thumbnailPath) {
+    filesToDelete.push(file.thumbnailPath);
+  }
+
+  // Delete from Supabase storage first
+  const { error: storageError } = await supabase.storage
+    .from('files')
+    .remove(filesToDelete);
+
+  if (storageError) {
+    console.error('Storage deletion failed:', storageError);
+    throw new CustomInternalError('Failed to delete the file from the storage');
+  }
+
+  // Only delete from database if storage deletion succeeded
+  await prisma.file.delete({
+    where: { id: fileId },
+  });
+
+  res.json({
+    success: true,
+    message: 'File has been deleted successfully',
+    file,
+  });
 });

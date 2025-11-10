@@ -34,12 +34,14 @@ export async function getHomepageData(
 
   // Get subfolders in current folder
   const folders = await prisma.folder.findMany({
-    where: { parentFolderId: folderId || null, userId },
+    where: { parentFolderId: folderId, userId },
     include: {
       _count: { select: { files: true, subFolders: true } },
     },
     orderBy: { [sortField.folder]: sortOrder },
   });
+
+  console.log({ folders });
 
   // Get files in current folder
   const files = await prisma.file.findMany({

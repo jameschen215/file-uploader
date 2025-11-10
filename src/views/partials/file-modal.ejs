@@ -43,7 +43,10 @@
         </div>
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Type:</span>
-          <span id="modal-file-type" class="text-gray-700 dark:text-gray-300">
+          <span
+            id="modal-file-type"
+            class="text-gray-700 dark:text-gray-300 uppercase"
+          >
             PDF document
           </span>
         </div>
@@ -79,6 +82,7 @@
       class="h-16 px-5 flex items-center justify-between border-t border-gray-200 dark:border-gray-800"
     >
       <button
+        id="delete-file-btn"
         title="Delete"
         aria-label="Delete the file"
         class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
@@ -86,6 +90,7 @@
         <span><%- icon({name: 'Trash2'}) %></span>
       </button>
       <button
+        id="share-file-btn"
         title="Share"
         aria-label="Share the file"
         class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
@@ -93,6 +98,7 @@
         <span><%- icon({name: 'Share2'}) %></span>
       </button>
       <button
+        id="download-file-btn"
         title="Download"
         aria-label="Download the file"
         class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
