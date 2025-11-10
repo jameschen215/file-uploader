@@ -32,7 +32,10 @@
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Path:</span>
           <span id="modal-file-path" class="text-gray-700 dark:text-gray-300">
-            <%= breadcrumbs.length > 0 ? breadcrumbs : 'Cloud store' %>
+            <!-- prettier-ignore-start -->
+            <%= breadcrumbs.length > 0 ? 'Cloud drive/' + breadcrumbs.map(bc =>
+            bc.name).join('/') : 'Cloud drive' %>
+            <!-- prettier-ignore-end -->
           </span>
         </div>
         <div class="flex flex-col gap-1">
