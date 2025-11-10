@@ -8,8 +8,6 @@ import { asyncHandler } from '../lib/async-handler.js';
 
 export const createFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;
-  const parentFolderId = req.params.parentFolderId;
-
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -19,7 +17,7 @@ export const createFolder = asyncHandler(async (req, res) => {
     });
   }
 
-  const { name } = req.body;
+  const { name, parentFolderId } = req.body;
 
   // Validate parent folder exists and belongs to user (if specified)
   if (parentFolderId) {

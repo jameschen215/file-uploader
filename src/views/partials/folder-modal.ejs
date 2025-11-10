@@ -22,6 +22,11 @@
 
       <div class="w-full">
         <input
+          type="hidden"
+          name="parentFolderId"
+          value="<%= currentFolder.id || '' %>"
+        />
+        <input
           type="text"
           name="name"
           autocomplete="off"
