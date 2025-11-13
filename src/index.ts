@@ -12,9 +12,7 @@ import expressEjsLayouts from 'express-ejs-layouts';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
 import authRoutes from './routes/auth.js';
-import indexRoutes from './routes/index.js';
-import folderRoutes from './routes/folder.js';
-import searchRoutes from './routes/search.js';
+import routes from './routes/index.routes.js';
 
 import { CustomNotFoundError } from './errors/index.js';
 import { errorsHandler } from './errors/error-handler.js';
@@ -109,11 +107,11 @@ app.use(setCurrentUser);
 // after currentUser has been set for it's used in this middleware
 app.use(setCurrentFolder);
 
-// routes
-app.use('/', indexRoutes);
+// Auth routes
 app.use('/auth', authRoutes);
-app.use('/folders', folderRoutes);
-app.use('/search', searchRoutes);
+
+// Main app routes
+app.use('/', routes);
 
 // handle other routes with not found
 app.use((_req, _res, _next) => {

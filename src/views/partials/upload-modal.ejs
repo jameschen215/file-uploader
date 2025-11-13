@@ -1,139 +1,150 @@
 <div
-  id="upload-in-modal"
-  class="hidden w-full max-w-md mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl px-5 py-5"
+  id="upload-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Upload files"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
 >
-  <div class="flex flex-col flex-grow relative">
-    <!-- Header with close button -->
-    <div class="flex justify-between items-center mb-5">
-      <h2 class="text-xl font-bold">Upload Files</h2>
+  <div
+    class="w-full max-w-md mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl px-5 py-5"
+  >
+    <div class="flex flex-col flex-grow relative">
+      <!-- Header with close button -->
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="text-xl font-bold">Upload Files</h2>
 
-      <button
-        type="button"
-        aria-label="Close upload modal"
-        class="close-modal-btn p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-      >
-        <%- icon({ name: 'X' }) %>
-      </button>
-    </div>
+        <button
+          type="button"
+          aria-label="Close upload modal"
+          class="close-modal-btn p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+        >
+          <%- icon({ name: 'X' }) %>
+        </button>
+      </div>
 
-    <!-- Form -->
-    <form
-      id="upload-form"
-      action="/upload<%= locals.currentFolder ? '/' + currentFolder.id : '' %>"
-      method="post"
-      enctype="multipart/form-data"
-      class="w-full flex flex-col gap-5"
-      novalidate
-    >
-      <!-- Drag and drop area -->
-      <div
-        id="drop-zone"
-        class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-5 text-center transition-all hover:border-blue-400 hover:bg-blue-50 dark:hover:border-blue-600 dark:hover:bg-blue-950 cursor-pointer"
+      <!-- Form -->
+      <form
+        id="upload-form"
+        action="/upload<%= locals.currentFolder ? '/' + currentFolder.id : '' %>"
+        method="post"
+        enctype="multipart/form-data"
+        class="w-full flex flex-col gap-5"
+        novalidate
       >
-        <div class="flex flex-col items-center gap-2">
-          <!-- prettier-ignore-start -->
-          <%- icon({ name: 'CloudUpload', size: 48, className: 'text-gray-400', strokeWidth: 1.5 }) %>
-          <!-- prettier-ignore-end -->
+        <!-- Drag and drop area -->
+        <div
+          id="drop-zone"
+          class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-5 text-center transition-all hover:border-blue-400 hover:bg-blue-50 dark:hover:border-blue-600 dark:hover:bg-blue-950 cursor-pointer"
+        >
+          <div class="flex flex-col items-center gap-2">
+            <!-- prettier-ignore-start -->
+            <%- icon({ name: 'CloudUpload', size: 48, className: 'text-gray-400', strokeWidth: 1.5 }) %>
+            <!-- prettier-ignore-end -->
+
+            <div>
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-50">
+                Drag and drop your files here
+              </p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                or click to select files
+              </p>
+            </div>
+          </div>
+
+          <input
+            type="file"
+            id="file-input"
+            name="files"
+            multiple
+            accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          />
+        </div>
+
+        <!-- File preview -->
+        <div id="file-list" class="hidden">
+          <div class="flex justify-between items-center mb-3">
+            <label
+              class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
+              Files to upload (<span id="file-count">0</span>/3)
+            </label>
+            <button
+              type="button"
+              id="clear-files-btn"
+              class="text-xs text-red-500 hover:text-red-600 dark:hover:text-red-400 font-medium"
+            >
+              Clear all
+            </button>
+          </div>
+
+          <div
+            id="selected-files"
+            class="space-y-2 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+          ></div>
+        </div>
+
+        <!-- File size info -->
+        <div
+          class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg"
+        >
+          <%- icon({ name: 'MessageCircleWarning', size: 16 }) %>
 
           <div>
-            <p class="text-sm font-medium text-gray-900 dark:text-gray-50">
-              Drag and drop your files here
-            </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              or click to select files
-            </p>
+            <p class="font-medium">Upload limits:</p>
+            <ul class="list-disc list-inside space-y-1 mt-1">
+              <li>Maximum 3 files per upload</li>
+              <li>Maximum 5MB per file</li>
+              <li>Supported: Images, Videos, PDFs, Word docs, Excel files</li>
+            </ul>
           </div>
         </div>
 
-        <input
-          type="file"
-          id="file-input"
-          name="files"
-          multiple
-          accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx"
-          class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
-      </div>
-
-      <!-- File preview -->
-      <div id="file-list" class="hidden">
-        <div class="flex justify-between items-center mb-3">
-          <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-            Files to upload (<span id="file-count">0</span>/3)
-          </label>
-          <button
-            type="button"
-            id="clear-files-btn"
-            class="text-xs text-red-500 hover:text-red-600 dark:hover:text-red-400 font-medium"
-          >
-            Clear all
-          </button>
-        </div>
-
+        <!-- Error message -->
         <div
-          id="selected-files"
-          class="space-y-2 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
-        ></div>
-      </div>
-
-      <!-- File size info -->
-      <div
-        class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg"
-      >
-        <%- icon({ name: 'MessageCircleWarning', size: 16 }) %>
-
-        <div>
-          <p class="font-medium">Upload limits:</p>
-          <ul class="list-disc list-inside space-y-1 mt-1">
-            <li>Maximum 3 files per upload</li>
-            <li>Maximum 5MB per file</li>
-            <li>Supported: Images, Videos, PDFs, Word docs, Excel files</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Error message -->
-      <div
-        id="upload-error"
-        aria-live="polite"
-        aria-atomic="true"
-        class="hidden p-3 rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800"
-      >
-        <p class="text-sm font-medium text-red-800 dark:text-red-100"></p>
-      </div>
-
-      <!-- Submit button -->
-      <button
-        type="submit"
-        id="submit-btn"
-        disabled
-        class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 py-3 outline-none text-white font-semibold rounded-lg cursor-pointer transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Upload <span id="upload-count"></span>
-      </button>
-
-      <!-- Upload progress -->
-      <div id="upload-progress" class="hidden">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Uploading...
-          </span>
-          <span
-            id="progress-percent"
-            class="text-sm text-gray-600 dark:text-gray-400"
-          >
-            0%
-          </span>
+          id="upload-error"
+          aria-live="polite"
+          aria-atomic="true"
+          class="hidden p-3 rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800"
+        >
+          <p class="text-sm font-medium text-red-800 dark:text-red-100"></p>
         </div>
 
-        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-          <div
-            id="progress-bar"
-            class="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style="width: 0%"
-          ></div>
+        <!-- Submit button -->
+        <button
+          type="submit"
+          id="submit-btn"
+          disabled
+          class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 py-3 outline-none text-white font-semibold rounded-lg cursor-pointer transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Upload <span id="upload-count"></span>
+        </button>
+
+        <!-- Upload progress -->
+        <div id="upload-progress" class="hidden">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Uploading...
+            </span>
+            <span
+              id="progress-percent"
+              class="text-sm text-gray-600 dark:text-gray-400"
+            >
+              0%
+            </span>
+          </div>
+
+          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div
+              id="progress-bar"
+              class="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style="width: 0%"
+            ></div>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
+
+<script type="module" src="/scripts/upload-modal.js"></script>

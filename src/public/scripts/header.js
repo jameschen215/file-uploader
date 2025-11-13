@@ -1,5 +1,5 @@
 import { icon } from './lib/icons.js';
-import { showClearButton, hideClearButton } from './lib/search-helpers.js';
+import { hideClearButton, showClearButton } from './lib/modal-helpers.js';
 
 const iconWrapper = document.querySelector('#menu-btn span');
 const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');

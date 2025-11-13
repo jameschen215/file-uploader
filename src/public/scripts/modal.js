@@ -58,7 +58,7 @@ import { handleShowFileInfo } from './lib/file-info-helpers.js';
             isHidden = showModal(modal, trigger, modalName, 'Upload files');
             break;
           case 'file':
-            modal.setAttribute('data-file', trigger.dataset.file);
+            modal.setAttribute('', trigger.dataset.file);
             isHidden = showModal(modal, trigger, modalName, 'File details');
             break;
         }

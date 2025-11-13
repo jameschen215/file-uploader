@@ -1,4 +1,9 @@
+// index.routes.ts
+
 import { Router } from 'express';
+import fileRoutes from './file.routes.js';
+import folderRoutes from './folder.routes.js';
+import uploadRoutes from './upload.routes.js';
 
 import { isAuthenticated } from '../auth/index.js';
 import { configureMulter } from '../config/multer.js';
@@ -15,10 +20,6 @@ import {
 const router = Router();
 
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
-
-router.get('/', isAuthenticated, handleGetFiles);
-
-// router.get('/files/:fileId', isAuthenticated, handleGetFileById);
 
 router.get('/files/:fileId/download', isAuthenticated, handleDownLoad);
 

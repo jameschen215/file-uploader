@@ -1640,6 +1640,11 @@ video {
   cursor: not-allowed;
 }
 
+.disabled\:text-gray-500:disabled {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
 }

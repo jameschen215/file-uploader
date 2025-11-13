@@ -54,44 +54,37 @@
         type="button"
         aria-controls="modal"
         aria-expanded="false"
-        class="modal-trigger fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
+        class="fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
       >
         <%- icon({ name: 'Plus' }) %>
       </button>
       <% } %>
     </div>
 
-    <!-- GENERAL MODAL -->
+    <!-- MODALS -->
     <% if (locals.currentUser) { %>
-    <div
-      id="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Upload files or create folders"
-      class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
-    >
-      <!-- Search modal -->
-      <%- include('partials/search-modal') %>
+    <!-- Search modal -->
+    <%- include('partials/search-modal') %>
 
-      <!-- Sort modal -->
-      <%- include('partials/sort-modal') %>
+    <!-- Sort modal -->
+    <%- include('partials/sort-modal') %>
 
-      <!-- Add modal -->
-      <%- include('partials/add-modal') %>
+    <!-- Add modal -->
+    <%- include('partials/add-modal') %>
 
-      <!-- folder modal -->
-      <%- include('partials/folder-modal') %>
+    <!-- folder modal -->
+    <%- include('partials/folder-modal') %>
 
-      <!-- upload modal -->
-      <%- include('partials/upload-modal') %>
+    <!-- upload modal -->
+    <%- include('partials/upload-modal') %>
 
-      <!-- file modal -->
-      <%- include('partials/file-modal') %>
-    </div>
+    <!-- file and folder details modal -->
+    <%- include('partials/details-modal') %>
     <% } %>
+
     <!-- scripts -->
     <script type="module" src="/scripts/header.js"></script>
-    <script type="module" src="/scripts/modal.js"></script>
+    <!-- <script type="module" src="/scripts/modal.js"></script> -->
     <script type="module" src="/scripts/main.js"></script>
   </body>
 </html>

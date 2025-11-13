@@ -83,7 +83,7 @@ model File {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Share 
-  shares FileShare[]
+  fileShares FileShare[]
 
   //  Unique constraint: file name must be unique within the same folder for each user
   @@unique([originalName, userId, folderId])
@@ -94,10 +94,11 @@ model File {
 model FileShare {
   id        String    @id @default(uuid())
   fileId    String    @map("file_id")
-  File      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  file      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
   token     String    @unique @default(uuid())
   expiresAt DateTime? @map("expires_at")
   createdAt DateTime  @default(now()) @map("created_at")
 
   @@index([token])
+  @@map("file_shares")
 }

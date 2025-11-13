@@ -1,0 +1,56 @@
+<div
+  id="search-in-modal"
+  class="hidden absolute bottom-0 left-0 min-h-screen w-full flex-col p-5 bg-gray-50 dark:bg-gray-900"
+>
+  <div class="flex flex-col flex-grow">
+    <!-- Back button -->
+    <div class="flex mb-5">
+      <button type="button" class="close-modal-btn text-xl px-1 rounded-md">
+        &#x2190;
+      </button>
+    </div>
+
+    <!-- Search form -->
+    <form
+      id="search-form-in-modal"
+      action="/search/mobile"
+      method="get"
+      class="relative w-full"
+      novalidate
+    >
+      <div
+        class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
+        aria-hidden="true"
+      >
+        <%- icon({ name: 'Search' }) %>
+      </div>
+      <label for="search" class="sr-only">Search for folders or files</label>
+      <input
+        type="text"
+        name="q"
+        value="<%= typeof q !== 'undefined' ? q : '' %>"
+        aria-label="Search input"
+        autocomplete="off"
+        spellcheck="false"
+        class="w-full pl-12 h-12 pr-8 outline-none rounded-md placeholder:text-gray-500 placeholder:font-light border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800"
+        placeholder="Search..."
+      />
+
+      <button
+        type="button"
+        aria-label="Clear search"
+        class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
+      >
+        <%- icon({ name: 'X' }) %>
+      </button>
+    </form>
+
+    <!-- Search results -->
+    <ul
+      id="search-results-for-mobile"
+      class="flex-grow mt-5 border-gray-200 dark:border-gray-800 flex items-center justify-center sm:text-[108px]"
+    >
+      <span class="text-[80px]">🧐</span>
+    </ul>
+  </div>
+</div>

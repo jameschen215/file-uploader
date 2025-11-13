@@ -1,7 +1,32 @@
-export function handleSearchInput() {
-  const form = document.querySelector('#search-form-in-modal');
-  const input = document.querySelector('#search-form-in-modal > input');
-  const clearButton = document.querySelector('#search-form-in-modal > button');
+import {
+  hideModal,
+  showModal,
+  hideClearButton,
+  showClearButton,
+} from './lib/modal-helpers.js';
+
+(function handleSearchModalVisibility() {
+  const trigger = document.querySelector('#search-btn-for-mobile');
+  const modal = document.querySelector('#search-modal');
+  const closeButton = document.querySelector('#search-modal .close-modal-btn');
+
+  if (!trigger || !modal || !closeButton) return;
+
+  trigger.addEventListener('click', () => {
+    showModal(modal, trigger);
+  });
+
+  closeButton.addEventListener('click', () => {
+    hideModal(modal, trigger);
+  });
+})();
+
+(function handleSearchModalActions() {
+  const form = document.querySelector('#search-modal .search-form');
+  const input = document.querySelector('#search-modal .search-form input');
+  const clearButton = document.querySelector(
+    '#search-modal .search-form button[type="button"]',
+  );
 
   if (!form || !input || !clearButton) return;
 
@@ -95,4 +120,4 @@ export function handleSearchInput() {
         '<li class="text-red-500">Error searching files</li>';
     }
   });
-}
+})();

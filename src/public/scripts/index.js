@@ -1,4 +1,4 @@
-import { hideClearButton } from './lib/search-helpers.js';
+import { hideClearButton } from './lib/modal-helpers.js';
 
 window.addEventListener('pageshow', function () {
   const searchInput = document.getElementById('search-desktop');
