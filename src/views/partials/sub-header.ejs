@@ -58,7 +58,7 @@
       <% if (i === breadcrumbs.length - 1) { %>
       <span aria-current="page" class="font-semibold"> <%= bc.name %> </span>
       <% } else { %>
-      <a href="/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
+      <a href="/folders/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
       <% } %>
       <% }) %>
       <% } %>

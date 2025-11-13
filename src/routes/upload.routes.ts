@@ -14,6 +14,6 @@ router.use(isAuthenticated);
 router.post('/', upload, handleUploadFiles);
 
 // Upload to specific folder
-router.post('/:folderId', handleUploadFiles);
+router.post('/:folderId', upload, handleUploadFiles);
 
 export default router;
