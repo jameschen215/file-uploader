@@ -73,7 +73,7 @@
     <%- include('partials/add-modal') %>
 
     <!-- folder modal -->
-    <%- include('partials/folder-modal') %>
+    <%- include('partials/folder-modal', {currentFolder: locals.currentFolder || null}) %>
 
     <!-- upload modal -->
     <%- include('partials/upload-modal') %>
