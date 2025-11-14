@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import { asyncHandler } from '../lib/async-handler.js';
 import { CustomNotFoundError } from '../errors/index.js';
 import { getFolderData } from '../lib/get-folder-data.js';
+import { configureSupabase } from '../config/supabase.js';
 
 export const handleCreateFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;
@@ -69,6 +70,43 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
   });
 });
 
-export const handleDeleteFolder = asyncHandler(async (req, res) => {});
+export const handleDeleteFolder = asyncHandler(async (req, res) => {
+  const { folderId } = req.params;
+  const userId = res.locals.currentUser!.id;
+
+  const folder = await prisma.folder.findFirst({
+    where: { id: folderId, userId },
+    include: { _count: { select: { files: true, subFolders: true } } },
+  });
+
+  if (!folder) {
+    // throw new CustomNotFoundError('Folder not found');
+    return res.json({
+      success: false,
+      message: 'Folder not found',
+      data: null,
+    });
+  }
+
+  if (folder._count.files > 0 || folder._count.subFolders > 0) {
+    return res.json({
+      success: false,
+      message: 'Failed to delete a non-empty folder.',
+      data: null,
+    });
+  }
+
+  // Since Supabase don't create empty folder, so you don't need to delete it
+  // Just delete it from local database
+  await prisma.folder.delete({
+    where: { id: folderId },
+  });
+
+  res.json({
+    success: true,
+    message: `Folder ${folder.name} has been deleted successfully.`,
+    data: folder,
+  });
+});
 
 export const handleRenameFolder = asyncHandler(async (req, res) => {});

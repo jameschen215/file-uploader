@@ -66,7 +66,11 @@
 export function showModal(modal, trigger) {
   if (!modal.classList.contains('translate-y-full')) return; // already open
 
+  console.log('Open modal');
+
   if (trigger.getAttribute('aria-expanded') === 'true') return; // already open as well
+
+  console.log('Modify trigger a11y');
 
   // 1. Modify the trigger attribute
   trigger.setAttribute('aria-expanded', 'true');
@@ -82,11 +86,12 @@ export function showModal(modal, trigger) {
 
   // 5. Dispatch modal open event
   const file = JSON.parse(trigger.dataset.file || null);
+  const folder = JSON.parse(trigger.dataset.folder || null);
   const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs || null);
 
   document.dispatchEvent(
     new CustomEvent(`${modal.id}-open`, {
-      detail: { file, breadcrumbs },
+      detail: { file, folder, breadcrumbs },
     }),
   );
 

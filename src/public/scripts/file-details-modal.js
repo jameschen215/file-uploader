@@ -9,10 +9,12 @@ let currentDownloadHandler = null;
 let currentDeleteHandler = null;
 let currentShareHandler = null;
 
-(function handleDetailsModalVisibility() {
-  const triggers = document.querySelectorAll('[id^="details-trigger"]');
-  const modal = document.querySelector('#details-modal');
-  const closeButton = document.querySelector('#details-modal .close-modal-btn');
+(function handleFileDetailsModalVisibility() {
+  const triggers = document.querySelectorAll('[id^="file-details-trigger"]');
+  const modal = document.querySelector('#file-details-modal');
+  const closeButton = document.querySelector(
+    '#file-details-modal .close-modal-btn',
+  );
 
   if (!(triggers && modal && closeButton)) return;
 
@@ -30,8 +32,8 @@ let currentShareHandler = null;
   });
 })();
 
-(function handleDetailsModalActions() {
-  document.addEventListener('details-modal-open', (ev) => {
+(function handleFileDetailsModalActions() {
+  document.addEventListener('file-details-modal-open', (ev) => {
     console.log('Handling details display...');
 
     const { file, breadcrumbs } = ev.detail;

@@ -52,8 +52,19 @@ export async function getFolderData(
   const formattedFiles = files.map((file) => ({
     ...file,
     fileSize: formatFileSize(file.fileSize),
-    uploadedAt: format(file.uploadedAt, 'yyyy-MM-dd'),
+    uploadedAt: format(file.uploadedAt, 'yyyy-MM-dd, hh:mm:ss'),
   }));
 
-  return { currentFolder, breadcrumbs, folders, files: formattedFiles };
+  const formattedFolders = folders.map((folder) => ({
+    ...folder,
+    createdAt: format(folder.createdAt, 'yyyy-MM-dd, hh:mm:ss'),
+    updatedAt: format(folder.updatedAt, 'yyyy-MM-dd, hh:mm:ss'),
+  }));
+
+  return {
+    currentFolder,
+    breadcrumbs,
+    folders: formattedFolders,
+    files: formattedFiles,
+  };
 }

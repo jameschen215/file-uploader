@@ -1,0 +1,113 @@
+<div
+  id="folder-details-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Show folder details"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+>
+  <div
+    class="w-full max-w-sm mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl"
+  >
+    <div class="flex flex-col flex-grow relative">
+      <!-- Header with close button -->
+      <div class="flex justify-between items-center p-5">
+        <h2 class="text-2xl font-bold">Folder Info</h2>
+
+        <button
+          type="button"
+          aria-label="Close upload modal"
+          class="close-modal-btn p-2 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg transition-colors"
+        >
+          <%- icon({ name: 'X' }) %>
+        </button>
+      </div>
+
+      <!-- Folder information -->
+      <div class="px-5 flex flex-col gap-3 mb-5">
+        <!-- Folder Icon -->
+        <div class="flex items-center justify-center my-5">
+          <span class="text-sky-400">
+            <!-- prettier-ignore-start -->
+            <%- icon({name: 'Folder', size: 72, fill: 'currentColor'}) %>
+            <!-- prettier-ignore-end -->
+          </span>
+        </div>
+
+        <!-- Folder name -->
+        <div class="flex flex-col gap-0.5">
+          <span class="font-semibold">Name:</span>
+          <span
+            id="folder-name"
+            class="text-gray-600 dark:text-gray-400 font-light"
+            >test</span
+          >
+        </div>
+
+        <!-- Folder path -->
+        <div class="flex flex-col gap-0.5">
+          <span class="font-semibold">Path:</span>
+          <span
+            id="folder-path"
+            class="text-gray-600 dark:text-gray-400 font-light"
+          >
+            Cloud drive
+          </span>
+        </div>
+
+        <!-- Folder created date -->
+        <div class="flex flex-col gap-0.5">
+          <span class="font-semibold">Date created:</span>
+          <span
+            id="folder-created-date"
+            class="text-gray-600 dark:text-gray-400 font-light"
+          >
+            2025-11-03
+          </span>
+        </div>
+
+        <!-- Folder updated date -->
+        <div class="flex flex-col gap-0.5">
+          <span class="font-semibold">Date modified:</span>
+          <span
+            id="folder-updated-date"
+            class="text-gray-600 dark:text-gray-400 font-light"
+          >
+            2025-11-03
+          </span>
+        </div>
+      </div>
+
+      <!-- Folder actions -->
+      <div
+        class="h-20 p-5 flex items-center justify-between border-t border-gray-200 dark:border-gray-800"
+      >
+        <button
+          id="delete-folder-btn"
+          title="Delete the folder"
+          aria-label="Delete this folder"
+          class="p-2 rounded-md disabled:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+        >
+          <span><%- icon({name: 'Trash2', size: 20}) %></span>
+        </button>
+        <button
+          id="rename-folder-btn"
+          title="Rename the folder"
+          aria-label="Rename the folder"
+          class="p-2 rounded-md disabled:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+        >
+          <span><%- icon({name: 'FolderPen', size: 20}) %></span>
+        </button>
+        <button
+          id="download-folder-btn"
+          title="Download the folder"
+          aria-label="Download the folder"
+          class="p-2 rounded-md disabled:text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+        >
+          <span><%- icon({name: 'Download', size: 20}) %></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/scripts/folder-details-modal.js"></script>
