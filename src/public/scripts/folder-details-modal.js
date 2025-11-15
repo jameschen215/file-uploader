@@ -15,7 +15,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       ev.preventDefault();
       ev.stopPropagation();
 
-      showModal(modal);
+      showModal(modal, trigger);
     });
   });
 
@@ -43,6 +43,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
     if (!(folder && breadcrumbs)) return;
 
     displayFolderInfo(folder, breadcrumbs);
+
     addFolderActionHandlers(folder);
   });
 })();
@@ -127,16 +128,26 @@ function addFolderActionHandlers(folder) {
   };
 
   currentRenameHandler = async () => {
-    const detailTriggers = document.querySelectorAll('.folder-details-trigger');
+    console.log('Rename button is clicked');
     const detailsModal = document.querySelector('#folder-details-modal');
 
-    // Close current modal
+    // // Close current modal
     hideModal(detailsModal);
 
     // Then open another folder form modal
     const formModal = document.querySelector('#folder-form-modal');
+    renameButton.dataset.folder = JSON.stringify(folder);
+    setTimeout(() => {
+      showModal(formModal, renameButton);
+    }, 100);
+  };
+
+  currentDownloadHandler = async () => {
+    console.log('Download button is clicked');
   };
 
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
+  renameButton.addEventListener('click', currentRenameHandler);
+  downloadButton.addEventListener('click', currentDownloadHandler);
 }

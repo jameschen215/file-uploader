@@ -26,13 +26,18 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
   });
 })();
 
-// (function handleAddModalActions() {
-//   const createFolderButton = document.querySelector('#folder-btn-for-mobile');
-//   const uploadFilesButton = document.querySelector('#upload-btn-for-mobile');
+(function handleAddModalActions() {
+  const createFolderButton = document.querySelector('#folder-btn-for-mobile');
+  const addModal = document.querySelector('#add-modal');
+  const folderFormModal = document.querySelector('#folder-form-modal');
 
-//   if (!createFolderButton || !uploadFilesButton) return;
+  if (!createFolderButton) return;
 
-//   createFolderButton.addEventListener('click', () => {
-//     showModal()
-//   })
-// })();
+  createFolderButton.addEventListener('click', () => {
+    hideModal(addModal);
+
+    setTimeout(() => {
+      showModal(folderFormModal);
+    }, 100);
+  });
+})();

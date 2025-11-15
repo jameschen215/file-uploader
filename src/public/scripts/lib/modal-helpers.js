@@ -92,6 +92,10 @@ export function showModal(modal, trigger = null) {
     breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs || null);
   }
 
+  if (folder) {
+    console.log({ folder });
+  }
+
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {
       detail: { file, folder, breadcrumbs },

@@ -41,19 +41,34 @@ import {
 (function handleFolderModalActions() {
   const modal = document.querySelector('#folder-form-modal');
   const form = document.querySelector('#folder-form-modal .folder-form');
-  const input = document.querySelector(
+  const formTitle = document.querySelector('h2');
+  const nameInput = document.querySelector(
     '#folder-form-modal .folder-form input[name="name"]',
+  );
+  const parentFolderIdInput = document.querySelector(
+    '#folder-form-modal .folder-form input[type="hidden"]',
   );
   const submitButton = document.querySelector(
     '#folder-form-modal .folder-form button[type="submit"]',
   );
 
-  if (!modal || !form || !input || !submitButton) return;
+  if (!modal || !form || !nameInput || !submitButton) return;
 
+  let isCreate = true;
   let isSubmitting = false;
+  let folder = null;
 
-  document.addEventListener('folder-form-modal-open', () => {
-    input.focus();
+  document.addEventListener('folder-form-modal-open', (ev) => {
+    if (ev.detail.folder) {
+      isCreate = false;
+      folder = ev.detail.folder;
+      formTitle.textContent = 'Rename folder';
+      submitButton.textContent = 'Update';
+      parentFolderIdInput.value = folder.parentFolderId || '';
+      nameInput.value = folder.name;
+    }
+
+    nameInput.focus();
   });
 
   // Client-side validation
@@ -63,9 +78,9 @@ import {
     if (isSubmitting) return;
 
     let isValid = true;
-    console.log({ input });
+    console.log({ nameInput });
 
-    if (!validateField(input)) {
+    if (!validateField(nameInput)) {
       isValid = false;
     }
 
@@ -74,52 +89,63 @@ import {
     } else {
       const formData = new FormData(form);
 
-      // 1. Disable input and submit button
-      input.disabled = true;
+      // 1. Disable nameInput and submit button
+      submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
+      nameInput.disabled = true;
       submitButton.disabled = true;
-      submitButton.textContent = 'Creating folder...';
       isSubmitting = true;
 
+      let resp = null;
+
       try {
-        const resp = await fetch(form.action, {
-          method: 'POST',
-          body: formData,
-        });
+        if (isCreate) {
+          resp = await fetch('/folders', {
+            method: 'POST',
+            body: formData,
+          });
+        } else {
+          resp = await fetch(`/folders/${folder.id}`, {
+            method: 'PUT',
+            body: formData,
+          });
+        }
 
         const data = await resp.json();
 
         if (!resp.ok) {
           // 2. Show validation errors
           if (data.errors?.name) {
-            showErrorStylesAndMessages(input, data.errors.name.msg);
+            showErrorStylesAndMessages(nameInput, data.errors.name.msg);
             focusOnFirstErrorField(form);
           }
-
           return;
         }
 
         // Success - reset form and hide modal
+        alert(data.message);
         form.reset();
         hideModal(modal);
         window.location.reload();
       } catch (error) {
         console.error('Error submitting folder: ', error);
       } finally {
-        // Re-enable input and submit button
-        input.disabled = false;
+        // Re-enable nameInput and submit button
+        nameInput.disabled = false;
         submitButton.disabled = false;
-        submitButton.textContent = 'Create';
+        submitButton.textContent = isCreate ? 'Create' : 'Update';
         isSubmitting = false;
       }
     }
   });
 
   // Remove error info while user typing
-  input.addEventListener('input', () => removeErrorStylesAndMessages(input));
+  nameInput.addEventListener('input', () =>
+    removeErrorStylesAndMessages(nameInput),
+  );
 
-  // Clear the input value when the modal is about to close
+  // Clear the nameInput value when the modal is about to close
   document.addEventListener('folder-form-modal-hidden', () => {
-    input.value = '';
+    nameInput.value = '';
   });
 
   function validateField(field) {

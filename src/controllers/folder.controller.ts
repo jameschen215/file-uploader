@@ -124,11 +124,13 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
   }
   const { name, parentFolderId } = req.body;
 
-  const folder = await prisma.folder.findFirst({
-    where: { id: folderId, userId, parentFolderId },
+  console.log({ name, folderId, parentFolderId });
+
+  const folder = await prisma.folder.findUnique({
+    where: { id: folderId },
   });
 
-  if (!folder) {
+  if (!folder || folder.userId !== userId) {
     return res.json({
       success: false,
       message: 'Folder not found',
@@ -140,7 +142,7 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
     where: { id: folderId },
     data: {
       name,
-      parentFolderId,
+      parentFolderId: parentFolderId || null,
     },
   });
 
