@@ -14,6 +14,10 @@ const router = Router();
 // All routes require authentication
 router.use(isAuthenticated);
 
+// For test tailwind scrollbar
+router.get('/who', (_req, res) => {
+  res.render('who-am-i');
+});
 // File operations
 router.get('/:fileId', handleGetFile);
 router.get('/:fileId/download', handleDownloadFile);

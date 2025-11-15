@@ -43,9 +43,10 @@ let currentShareHandler = null;
   });
 
   function displayFileInfo(file, breadcrumbs) {
-    document.querySelector('#detail-name').textContent = file.originalName;
-    document.querySelector('#detail-size').textContent = file.fileSize;
-    document.querySelector('#detail-date').textContent = file.uploadedAt;
+    document.querySelector('#file-name').textContent = file.originalName;
+    document.querySelector('#file-size').textContent = file.fileSize;
+    document.querySelector('#file-created-date').textContent = file.uploadedAt;
+    document.querySelector('#file-updated-date').textContent = file.uploadedAt;
 
     let fileType = '';
     if (file.mimeType.startsWith('image')) {
@@ -56,15 +57,21 @@ let currentShareHandler = null;
       fileType = file.mimeType.split('/')[1].toUpperCase() + ' File';
     }
 
-    document.querySelector('#detail-type').textContent = fileType;
+    document.querySelector('#file-type').textContent = fileType;
 
-    document.querySelector('#detail-path').innerHTML =
-      breadcrumbs.length > 0
-        ? `Cloud drive &#x203A; ${breadcrumbs.map((bc) => bc.name).join(` &#x203A; `)}`
-        : `Cloud drive`;
+    document.querySelector('#file-path').innerHTML =
+      breadcrumbs.length === 0
+        ? `<a href="/" class="font-medium text-sky-500">Cloud drive</a>`
+        : `<a href="/" class="font-medium text-sky-500">Cloud drive</a> &#x203A; ` +
+          breadcrumbs
+            .map(
+              (bc) =>
+                `<a href="/folders/${bc.id}" class="font-medium text-sky-500">${bc.name}</a>`,
+            )
+            .join(' &#x203A; ');
 
     // Show thumbnail for images and videos
-    const previewDiv = document.querySelector('#detail-preview');
+    const previewDiv = document.querySelector('#file-preview');
     if (file.mimeType.startsWith('image')) {
       previewDiv.innerHTML = `
           <div class="flex items-center justify-center">
@@ -84,50 +91,48 @@ let currentShareHandler = null;
     } else {
       previewDiv.innerHTML = icon({
         name: 'File',
-        size: 144,
+        size: 108,
         strokeWidth: 1,
         className: 'text-gray-500',
       });
     }
 
     // Show resolution if available
-    const resolutionContainer = document.getElementById(
-      'modal-resolution-container',
+    const resolutionWrapper = document.getElementById(
+      'file-resolution-wrapper',
     );
-    const resolutionEl = document.getElementById('detail-resolution');
+    const resolutionEl = document.getElementById('file-resolution');
 
     if (file.width && file.height) {
       resolutionEl.textContent = `${file.width} x ${file.height}`;
-      resolutionContainer.classList.remove('hidden');
-      resolutionContainer.classList.add('flex');
+      resolutionWrapper.classList.remove('hidden');
+      resolutionWrapper.classList.add('flex');
     } else {
       resolutionEl.textContent = '';
-      resolutionContainer.classList.remove('flex');
-      resolutionContainer.classList.add('hidden');
+      resolutionWrapper.classList.remove('flex');
+      resolutionWrapper.classList.add('hidden');
     }
 
     // Show duration if available
-    const durationContainer = document.getElementById(
-      'modal-duration-container',
-    );
-    const durationEl = document.getElementById('detail-duration');
+    const durationWrapper = document.getElementById('file-duration-wrapper');
+    const durationEl = document.getElementById('file-duration');
 
     if (file.duration) {
       durationEl.textContent = `${formatTime(file.duration)}`;
-      durationContainer.classList.remove('hidden');
-      durationContainer.classList.add('flex');
+      durationWrapper.classList.remove('hidden');
+      durationWrapper.classList.add('flex');
     } else {
       durationEl.textContent = '';
-      durationContainer.classList.remove('flex');
-      durationContainer.classList.add('hidden');
+      durationWrapper.classList.remove('flex');
+      durationWrapper.classList.add('hidden');
     }
   }
 
   function addEventHandlers(file) {
     // Handlers
-    const deleteButton = document.querySelector('#delete-btn');
-    const shareButton = document.querySelector('#share-btn');
-    const downloadButton = document.querySelector('#download-btn');
+    const deleteButton = document.querySelector('#delete-file-btn');
+    const shareButton = document.querySelector('#share-file-btn');
+    const downloadButton = document.querySelector('#download-file-btn');
 
     // Remove old listeners if they exist
     if (currentDeleteHandler) {
