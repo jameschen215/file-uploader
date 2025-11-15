@@ -7,54 +7,52 @@ import {
 } from './lib/validation-helpers.js';
 
 (function handleAddModalVisibility() {
-  const triggers = document.querySelectorAll('[id^="folder-btn"]');
-  const modal = document.querySelector('#folder-modal');
-  const closeButton = document.querySelector('#folder-modal .close-modal-btn');
+  const createTriggers = document.querySelectorAll(
+    '.folder-form-modal-trigger',
+  );
+  const modal = document.querySelector('#folder-form-modal');
+  const closeButton = document.querySelector(
+    '#folder-form-modal .close-modal-btn',
+  );
 
-  if (!triggers || !modal || !closeButton) return;
+  if (!createTriggers || !modal || !closeButton) return;
 
-  triggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => {
+  createTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', (ev) => {
       showModal(modal, trigger);
     });
   });
 
   closeButton.addEventListener('click', () => {
-    triggers.forEach((trigger) => {
-      hideModal(modal, trigger);
-    });
+    hideModal(modal);
   });
 
   // Hide when clicking outside modal content
   document.addEventListener('click', (ev) => {
     if (
-      !ev.target.closest('#folder-modal > div') &&
-      !ev.target.closest('#folder-btn-for-mobile') &&
-      !ev.target.closest('#folder-btn-for-desktop')
+      !ev.target.closest('#folder-form-modal > div') &&
+      !ev.target.closest('.folder-form-modal-trigger')
     ) {
-      triggers.forEach((trigger) => {
-        hideModal(modal, trigger);
-      });
+      hideModal(modal);
     }
   });
 })();
 
 (function handleFolderModalActions() {
-  const trigger = document.querySelector('#folder-btn-for-mobile');
-  const modal = document.querySelector('#folder-modal');
-  const form = document.querySelector('#folder-modal .folder-form');
+  const modal = document.querySelector('#folder-form-modal');
+  const form = document.querySelector('#folder-form-modal .folder-form');
   const input = document.querySelector(
-    '#folder-modal .folder-form input[name="name"]',
+    '#folder-form-modal .folder-form input[name="name"]',
   );
   const submitButton = document.querySelector(
-    '#folder-modal .folder-form button[type="submit"]',
+    '#folder-form-modal .folder-form button[type="submit"]',
   );
 
-  if (!modal || !form || !input || !submitButton || !trigger) return;
+  if (!modal || !form || !input || !submitButton) return;
 
   let isSubmitting = false;
 
-  document.addEventListener('folder-modal-open', () => {
+  document.addEventListener('folder-form-modal-open', () => {
     input.focus();
   });
 
@@ -102,7 +100,7 @@ import {
 
         // Success - reset form and hide modal
         form.reset();
-        hideModal(modal, trigger);
+        hideModal(modal);
         window.location.reload();
       } catch (error) {
         console.error('Error submitting folder: ', error);
@@ -120,7 +118,7 @@ import {
   input.addEventListener('input', () => removeErrorStylesAndMessages(input));
 
   // Clear the input value when the modal is about to close
-  document.addEventListener('folder-modal-hidden', () => {
+  document.addEventListener('folder-form-modal-hidden', () => {
     input.value = '';
   });
 

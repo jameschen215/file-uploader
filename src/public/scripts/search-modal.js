@@ -6,18 +6,18 @@ import {
 } from './lib/modal-helpers.js';
 
 (function handleSearchModalVisibility() {
-  const trigger = document.querySelector('#search-btn-for-mobile');
+  const trigger = document.querySelector('.search-modal-trigger');
   const modal = document.querySelector('#search-modal');
   const closeButton = document.querySelector('#search-modal .close-modal-btn');
 
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal, trigger);
+    showModal(modal);
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal, trigger);
+    hideModal(modal);
   });
 })();
 

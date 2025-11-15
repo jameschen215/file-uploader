@@ -1,7 +1,7 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
 
 (function handleFolderDetailsModalVisibility() {
-  const triggers = document.querySelectorAll('[id^="folder-details-trigger"]');
+  const triggers = document.querySelectorAll('.folder-details-modal-trigger');
   const modal = document.querySelector('#folder-details-modal');
   const closeButton = document.querySelector(
     '#folder-details-modal .close-modal-btn',
@@ -12,18 +12,15 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
   // Handle modal show / hide
   triggers.forEach((trigger) => {
     trigger.addEventListener('click', (ev) => {
-      console.log('Trigger is clicked');
       ev.preventDefault();
       ev.stopPropagation();
 
-      showModal(modal, trigger);
+      showModal(modal);
     });
   });
 
   closeButton.addEventListener('click', () => {
-    triggers.forEach((trigger) => {
-      hideModal(modal, trigger);
-    });
+    hideModal(modal);
   });
 
   // Close when clicking outside the modal
@@ -32,9 +29,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       !ev.target.closest('#folder-details-modal > div') &&
       !ev.target.closest('[id^="folder-details-trigger"]')
     ) {
-      triggers.forEach((trigger) => {
-        hideModal(modal, trigger);
-      });
+      hideModal(modal);
     }
   });
 })();
@@ -129,6 +124,17 @@ function addFolderActionHandlers(folder) {
     } finally {
       deleteButton.disabled = false;
     }
+  };
+
+  currentRenameHandler = async () => {
+    const detailTriggers = document.querySelectorAll('.folder-details-trigger');
+    const detailsModal = document.querySelector('#folder-details-modal');
+
+    // Close current modal
+    hideModal(detailsModal);
+
+    // Then open another folder form modal
+    const formModal = document.querySelector('#folder-form-modal');
   };
 
   // Add new listeners

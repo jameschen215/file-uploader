@@ -20,6 +20,6 @@ router.use(isAuthenticated);
 router.post('/', upload.none(), folderSchema, handleCreateFolder);
 router.get('/:folderId', handleGetFolderContent);
 router.delete('/:folderId', handleDeleteFolder);
-router.put('/:folderId', handleRenameFolder);
+router.put('/:folderId', upload.none(), folderSchema, handleRenameFolder);
 
 export default router;

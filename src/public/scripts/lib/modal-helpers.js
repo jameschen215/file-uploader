@@ -63,17 +63,15 @@
 //   return true;
 // }
 
-export function showModal(modal, trigger) {
+export function showModal(modal, trigger = null) {
+  const modalName = modal.id;
+
   if (!modal.classList.contains('translate-y-full')) return; // already open
 
-  console.log('Open modal');
-
-  if (trigger.getAttribute('aria-expanded') === 'true') return; // already open as well
-
-  console.log('Modify trigger a11y');
-
   // 1. Modify the trigger attribute
-  trigger.setAttribute('aria-expanded', 'true');
+  document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
+    t.setAttribute('aria-expanded', 'true');
+  });
 
   // 2. Modify classList on modal to show it
   modal.classList.remove('translate-y-full');
@@ -85,12 +83,17 @@ export function showModal(modal, trigger) {
   document.querySelector('#site-container').setAttribute('inert', '');
 
   // 5. Dispatch modal open event
-  const file = JSON.parse(trigger.dataset.file || null);
-  const folder = JSON.parse(trigger.dataset.folder || null);
-  const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs || null);
+  let file = null;
+  let folder = null;
+  let breadcrumbs = null;
+  if (trigger) {
+    file = JSON.parse(trigger.dataset.file || null);
+    folder = JSON.parse(trigger.dataset.folder || null);
+    breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs || null);
+  }
 
   document.dispatchEvent(
-    new CustomEvent(`${modal.id}-open`, {
+    new CustomEvent(`${modalName}-open`, {
       detail: { file, folder, breadcrumbs },
     }),
   );
@@ -99,13 +102,15 @@ export function showModal(modal, trigger) {
   return false;
 }
 
-export function hideModal(modal, trigger) {
+export function hideModal(modal) {
+  const modalName = modal.id;
+
   if (modal.classList.contains('translate-y-full')) return; // already hidden
 
-  if (trigger.getAttribute('aria-expanded') === 'false') return; // already hidden as well
-
   // 1. Set aria-expanded to false on all triggers
-  trigger.setAttribute('aria-expanded', 'false');
+  document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
+    t.setAttribute('aria-expanded', 'false');
+  });
 
   // 2. Modify classList on modal to hide it
   modal.classList.add('translate-y-full');
@@ -117,7 +122,7 @@ export function hideModal(modal, trigger) {
   document.querySelector('#site-container').removeAttribute('inert');
 
   // 5. Dispatch modal hidden event
-  document.dispatchEvent(new Event(`${modal.id}-hidden`));
+  document.dispatchEvent(new Event(`${modalName}-hidden`));
 
   return true;
 }

@@ -8,7 +8,7 @@ import {
 } from './lib/constants.js';
 
 (function handleUploadModalVisibility() {
-  const triggers = document.querySelectorAll('[id^="upload-btn"]');
+  const triggers = document.querySelectorAll('.upload-modal-trigger');
   const modal = document.querySelector('#upload-modal');
   const closeButton = document.querySelector('#upload-modal .close-modal-btn');
 
@@ -16,26 +16,21 @@ import {
 
   triggers.forEach((trigger) => {
     trigger.addEventListener('click', () => {
-      showModal(modal, trigger);
+      showModal(modal);
     });
   });
 
   closeButton.addEventListener('click', () => {
-    triggers.forEach((trigger) => {
-      hideModal(modal, trigger);
-    });
+    hideModal(modal);
   });
 
   // Hide when clicking outside modal
   document.addEventListener('click', (ev) => {
     if (
       !ev.target.closest('#upload-modal > div') &&
-      !ev.target.closest('#upload-btn-for-mobile') &&
-      !ev.target.closest('#upload-btn-for-desktop')
+      !ev.target.closest('.upload-modal-trigger')
     ) {
-      triggers.forEach((trigger) => {
-        hideModal(modal, trigger);
-      });
+      hideModal(modal);
     }
   });
 })();

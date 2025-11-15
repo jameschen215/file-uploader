@@ -30,7 +30,7 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
     }
   }
 
-  await prisma.folder.create({
+  const newFolder = await prisma.folder.create({
     data: {
       name: name.trim(),
       userId,
@@ -45,6 +45,7 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Folder created',
+    data: newFolder,
   });
 });
 
@@ -109,4 +110,43 @@ export const handleDeleteFolder = asyncHandler(async (req, res) => {
   });
 });
 
-export const handleRenameFolder = asyncHandler(async (req, res) => {});
+export const handleRenameFolder = asyncHandler(async (req, res) => {
+  const { folderId } = req.params;
+  const userId = res.locals.currentUser!.id;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.mapped(),
+      oldInput: req.body,
+    });
+  }
+  const { name, parentFolderId } = req.body;
+
+  const folder = await prisma.folder.findFirst({
+    where: { id: folderId, userId, parentFolderId },
+  });
+
+  if (!folder) {
+    return res.json({
+      success: false,
+      message: 'Folder not found',
+      data: null,
+    });
+  }
+
+  const updatedFolder = await prisma.folder.update({
+    where: { id: folderId },
+    data: {
+      name,
+      parentFolderId,
+    },
+  });
+
+  res.json({
+    success: true,
+    message: 'Folder has been renamed successfully.',
+    data: updatedFolder,
+  });
+});

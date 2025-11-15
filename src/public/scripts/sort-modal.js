@@ -1,27 +1,27 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
 
 (function handleSortModalVisibility() {
-  const trigger = document.querySelector('#sort-btn-for-mobile');
+  const trigger = document.querySelector('.sort-modal-trigger');
   const modal = document.querySelector('#sort-modal');
   const closeButton = document.querySelector('#sort-modal .close-modal-btn');
 
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal, trigger);
+    showModal(modal);
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal, trigger);
+    hideModal(modal);
   });
 
   // Hide when clicking outside modal content
   document.addEventListener('click', (ev) => {
     if (
       !ev.target.closest('#sort-modal > div') &&
-      !ev.target.closest('#sort-btn-for-mobile')
+      !ev.target.closest('.sort-modal-trigger')
     ) {
-      hideModal(modal, trigger);
+      hideModal(modal);
     }
   });
 })();

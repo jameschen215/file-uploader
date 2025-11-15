@@ -54,7 +54,7 @@
         type="button"
         aria-controls="modal"
         aria-expanded="false"
-        class="fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
+        class="add-modal-trigger fixed sm:hidden bottom-5 right-5 size-10 flex items-center justify-center rounded-md bg-gray-900 dark:bg-gray-50 text-gray-50 dark:text-gray-900"
       >
         <%- icon({ name: 'Plus' }) %>
       </button>
@@ -73,7 +73,7 @@
     <%- include('partials/add-modal') %>
 
     <!-- folder modal -->
-    <%- include('partials/folder-modal', {currentFolder: locals.currentFolder || null}) %>
+    <%- include('partials/folder-form-modal', {currentFolder: locals.currentFolder || null}) %>
 
     <!-- upload modal -->
     <%- include('partials/upload-modal') %>
@@ -87,7 +87,6 @@
 
     <!-- scripts -->
     <script type="module" src="/scripts/header.js"></script>
-    <!-- <script type="module" src="/scripts/modal.js"></script> -->
     <script type="module" src="/scripts/main.js"></script>
   </body>
 </html>

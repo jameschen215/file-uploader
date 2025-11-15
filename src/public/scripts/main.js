@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Modify item className
     layoutContainer.querySelectorAll('.item').forEach((item) => {
       item.className =
-        'item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer';
+        'file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer';
     });
 
     // 4. Modify icon size of items
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 6. Modify className and icon of info button
     layoutContainer.querySelectorAll('.item .item-info-btn').forEach((btn) => {
       btn.className =
-        'item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200';
+        'folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 transition-all duration-200';
       btn.innerHTML = icon({ name: 'EllipsisVertical' });
     });
   }

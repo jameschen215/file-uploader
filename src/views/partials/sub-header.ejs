@@ -7,7 +7,7 @@
       id="upload-btn-for-desktop"
       type="button"
       aria-expanded="false"
-      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
+      class="upload-modal-trigger flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
     >
       <span><%- icon({name: 'ArrowUp'}) %></span>
       <span>Upload</span>
@@ -16,7 +16,7 @@
       id="folder-btn-for-desktop"
       type="button"
       aria-expanded="false"
-      class="flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
+      class="folder-form-modal-trigger flex items-center justify-center gap-3 py-2 px-4 rounded-md font-medium text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
     >
       <span><%- icon({name: 'FolderPlus'}) %></span>
       <span>New folder</span>
@@ -165,7 +165,7 @@
         type="button"
         aria-controls="modal"
         aria-expanded="false"
-        class="sm:hidden"
+        class="search-modal-trigger sm:hidden"
       >
         <%- icon({ name: 'Search', size: 20 }) %>
       </button>
@@ -184,7 +184,7 @@
         type="button"
         aria-controls="modal"
         aria-expanded="false"
-        class="sm:hidden"
+        class="sort-modal-trigger sm:hidden"
       >
         <%- icon({ name: 'ArrowDownUp', size: 20 }) %>
       </button>

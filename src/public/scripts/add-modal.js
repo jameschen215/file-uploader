@@ -1,27 +1,27 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
 
 (function handleAddModalVisibility() {
-  const trigger = document.querySelector('#add-btn-for-mobile');
+  const trigger = document.querySelector('.add-modal-trigger');
   const modal = document.querySelector('#add-modal');
   const closeButton = document.querySelector('#add-modal .close-modal-btn');
 
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal, trigger);
+    showModal(modal);
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal, trigger);
+    hideModal(modal);
   });
 
   // Hide when clicking outside modal content
   document.addEventListener('click', (ev) => {
     if (
       !ev.target.closest('#add-modal > div') &&
-      !ev.target.closest('#add-btn-for-mobile')
+      !ev.target.closest('.add-modal-trigger')
     ) {
-      hideModal(modal, trigger);
+      hideModal(modal);
     }
   });
 })();

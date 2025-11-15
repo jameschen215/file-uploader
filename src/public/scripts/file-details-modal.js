@@ -10,7 +10,7 @@ let currentDeleteHandler = null;
 let currentShareHandler = null;
 
 (function handleFileDetailsModalVisibility() {
-  const triggers = document.querySelectorAll('[id^="file-details-trigger"]');
+  const triggers = document.querySelectorAll('.file-details-modal-trigger');
   const modal = document.querySelector('#file-details-modal');
   const closeButton = document.querySelector(
     '#file-details-modal .close-modal-btn',
@@ -26,9 +26,7 @@ let currentShareHandler = null;
   });
 
   closeButton.addEventListener('click', () => {
-    triggers.forEach((trigger) => {
-      hideModal(modal, trigger);
-    });
+    hideModal(modal);
   });
 })();
 
