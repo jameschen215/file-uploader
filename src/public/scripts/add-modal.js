@@ -8,11 +8,11 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal);
+    showModal({ modal });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 
   // Hide when clicking outside modal content
@@ -21,7 +21,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       !ev.target.closest('#add-modal > div') &&
       !ev.target.closest('.add-modal-trigger')
     ) {
-      hideModal(modal);
+      hideModal({ modal });
     }
   });
 })();
@@ -34,10 +34,10 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
   if (!createFolderButton) return;
 
   createFolderButton.addEventListener('click', () => {
-    hideModal(addModal);
+    hideModal({ modal: addModal });
 
     setTimeout(() => {
-      showModal(folderFormModal);
+      showModal({ modal: folderFormModal });
     }, 100);
   });
 })();

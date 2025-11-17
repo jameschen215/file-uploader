@@ -13,11 +13,11 @@ import {
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal);
+    showModal({ modal });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 })();
 

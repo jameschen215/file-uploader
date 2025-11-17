@@ -16,12 +16,12 @@ import {
 
   triggers.forEach((trigger) => {
     trigger.addEventListener('click', () => {
-      showModal(modal);
+      showModal({ modal });
     });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 
   // Hide when clicking outside modal
@@ -30,7 +30,7 @@ import {
       !ev.target.closest('#upload-modal > div') &&
       !ev.target.closest('.upload-modal-trigger')
     ) {
-      hideModal(modal);
+      hideModal({ modal });
     }
   });
 })();

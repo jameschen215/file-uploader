@@ -15,12 +15,15 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       ev.preventDefault();
       ev.stopPropagation();
 
-      showModal(modal, trigger);
+      const folder = JSON.parse(trigger.dataset.folder);
+      const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs);
+
+      showModal({ modal, folder, breadcrumbs });
     });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 
   // Close when clicking outside the modal
@@ -29,7 +32,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       !ev.target.closest('#folder-details-modal > div') &&
       !ev.target.closest('[id^="folder-details-trigger"]')
     ) {
-      hideModal(modal);
+      hideModal({ modal });
     }
   });
 })();
@@ -131,14 +134,14 @@ function addFolderActionHandlers(folder) {
     console.log('Rename button is clicked');
     const detailsModal = document.querySelector('#folder-details-modal');
 
-    // // Close current modal
-    hideModal(detailsModal);
+    // Close current modal
+    hideModal({ modal: detailsModal });
 
     // Then open another folder form modal
     const formModal = document.querySelector('#folder-form-modal');
-    renameButton.dataset.folder = JSON.stringify(folder);
+
     setTimeout(() => {
-      showModal(formModal, renameButton);
+      showModal({ modal: formModal, folder });
     }, 100);
   };
 

@@ -2,7 +2,7 @@ import { icon } from './lib/icons.js';
 import { hideModal, showModal } from './lib/modal-helpers.js';
 import { formatTime } from './lib/utils.js';
 
-const BUTTON_DISABLED_DURATION = 3000;
+const BUTTON_DISABLED_DURATION = 200;
 
 // Store handler references outside the function
 let currentDownloadHandler = null;
@@ -21,12 +21,14 @@ let currentShareHandler = null;
   // Handle modal show / hide
   triggers.forEach((trigger) => {
     trigger.addEventListener('click', () => {
-      showModal(modal, trigger);
+      const file = JSON.parse(trigger.dataset.file);
+      const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs);
+      showModal({ modal, file, breadcrumbs });
     });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 })();
 
@@ -39,14 +41,13 @@ let currentShareHandler = null;
     if (!(file && breadcrumbs)) return;
 
     displayFileInfo(file, breadcrumbs);
-    addEventHandlers(file);
+    addFileActionHandlers(file);
   });
 
   function displayFileInfo(file, breadcrumbs) {
     document.querySelector('#file-name').textContent = file.originalName;
     document.querySelector('#file-size').textContent = file.fileSize;
     document.querySelector('#file-created-date').textContent = file.uploadedAt;
-    document.querySelector('#file-updated-date').textContent = file.uploadedAt;
 
     let fileType = '';
     if (file.mimeType.startsWith('image')) {
@@ -128,7 +129,7 @@ let currentShareHandler = null;
     }
   }
 
-  function addEventHandlers(file) {
+  function addFileActionHandlers(file) {
     // Handlers
     const deleteButton = document.querySelector('#delete-file-btn');
     const shareButton = document.querySelector('#share-file-btn');
@@ -157,7 +158,6 @@ let currentShareHandler = null;
 
       try {
         deleteButton.disabled = true;
-        deleteButton.textContent = 'Deleting...';
 
         const resp = await fetch(`/files/${file.id}`, {
           method: 'DELETE',
@@ -180,12 +180,25 @@ let currentShareHandler = null;
         alert('An error occurred while deleting the file');
       } finally {
         deleteButton.disabled = false;
-        deleteButton.textContent = 'Delete';
       }
     };
 
-    currentShareHandler = () => {
-      console.log(`Sharing ${file.originalName}...`);
+    currentShareHandler = async () => {
+      console.log(`Handle share link...`);
+
+      const detailsModal = document.querySelector('#file-details-modal');
+      const shareModal = document.querySelector('#share-modal');
+
+      // Get share link
+      const shareLink = await generateShareLink(file.id);
+
+      // Close current modal
+      hideModal({ modal: detailsModal });
+
+      // Then open share modal
+      setTimeout(() => {
+        showModal({ modal: shareModal, shareLink });
+      }, 100);
     };
 
     currentDownloadHandler = () => {
@@ -193,15 +206,14 @@ let currentShareHandler = null;
 
       // Disable the button and show loading text
       downloadButton.disabled = true;
-      downloadButton.textContent = 'Downloading...';
 
       // Start download
       window.location.href = `files/${file.id}/download`;
 
       // Re-enable after a short delay
       setTimeout(() => {
+        // TODO: THIS LINE IS NOT WORKING NOW
         downloadButton.disabled = true;
-        downloadButton.textContent = 'Download';
       }, BUTTON_DISABLED_DURATION);
     };
 
@@ -211,3 +223,24 @@ let currentShareHandler = null;
     downloadButton.addEventListener('click', currentDownloadHandler);
   }
 })();
+
+async function generateShareLink(fileId) {
+  try {
+    const response = await fetch(`/files/${fileId}/share`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expiresIn: 7, maxAccess: 10 }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return data.share.shareUrl;
+  } catch (error) {
+    console.error('Share error: ', error);
+    return null;
+  }
+}

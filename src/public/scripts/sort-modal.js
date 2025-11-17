@@ -8,11 +8,11 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
   if (!trigger || !modal || !closeButton) return;
 
   trigger.addEventListener('click', () => {
-    showModal(modal);
+    showModal({ modal });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 
   // Hide when clicking outside modal content
@@ -21,7 +21,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
       !ev.target.closest('#sort-modal > div') &&
       !ev.target.closest('.sort-modal-trigger')
     ) {
-      hideModal(modal);
+      hideModal({ modal });
     }
   });
 })();

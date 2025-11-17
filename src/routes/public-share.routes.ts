@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import { viewSharedFile } from '../controllers/file-sharing.controllers.js';
-import { downloadSharedFile } from '../controllers/share.controller.js';
 
-const router = Router();
+// import {
+//   downloadSharedFile,
+//   viewSharedFile,
+// } from '../controllers/share.controller.js';
 
-// No authentication required
-router.get('/:token', viewSharedFile);
-router.get('/:token/download', downloadSharedFile);
+// const router = Router();
 
-export default router;
+// // No authentication required
+// router.get('/:token', viewSharedFile);
+// router.get('/:token/download', downloadSharedFile);
+
+// export default router;

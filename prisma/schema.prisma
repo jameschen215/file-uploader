@@ -53,6 +53,9 @@ model Folder {
   // Files in this folder
   files File[]
 
+  // For folder sharing
+  shareToken String? @unique @map("share_token") // NULL - not shared, value = shared
+
   // Unique constraint: folder name must be unique within the same parent for each user
   @@unique([name, parentFolderId, userId])
   @@index([userId, parentFolderId])
@@ -82,23 +85,11 @@ model File {
   userId String @map("user_id")
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Share 
-  fileShares FileShare[]
+  // Simple sharing - just one token per file
+  shareToken String? @unique @map("share_token")
 
   //  Unique constraint: file name must be unique within the same folder for each user
   @@unique([originalName, userId, folderId])
   @@index([userId, folderId])
   @@map("files")
-}
-
-model FileShare {
-  id        String    @id @default(uuid())
-  fileId    String    @map("file_id")
-  file      File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
-  token     String    @unique @default(uuid())
-  expiresAt DateTime? @map("expires_at")
-  createdAt DateTime  @default(now()) @map("created_at")
-
-  @@index([token])
-  @@map("file_shares")
 }

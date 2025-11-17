@@ -67,7 +67,7 @@ export function handleFolderInput() {
 
         // Success — reset form and hide modal
         form.reset();
-        hideModal(modal);
+        hideModal({ modal });
         window.location.reload();
       } catch (error) {
         console.error('Error submitting folder:', error);

@@ -19,12 +19,13 @@ import {
 
   createTriggers.forEach((trigger) => {
     trigger.addEventListener('click', (ev) => {
-      showModal(modal, trigger);
+      const folder = JSON.parse(trigger.dataset.folder || null);
+      showModal({ modal, folder });
     });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal(modal);
+    hideModal({ modal });
   });
 
   // Hide when clicking outside modal content
@@ -33,7 +34,7 @@ import {
       !ev.target.closest('#folder-form-modal > div') &&
       !ev.target.closest('.folder-form-modal-trigger')
     ) {
-      hideModal(modal);
+      hideModal({ modal });
     }
   });
 })();
@@ -124,7 +125,7 @@ import {
         // Success - reset form and hide modal
         alert(data.message);
         form.reset();
-        hideModal(modal);
+        hideModal({ modal });
         window.location.reload();
       } catch (error) {
         console.error('Error submitting folder: ', error);
