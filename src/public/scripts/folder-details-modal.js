@@ -71,12 +71,12 @@ function displayFolderInfo(folder, breadcrumbs) {
 // Store handler references outside the function
 let currentDeleteHandler = null;
 let currentRenameHandler = null;
-let currentDownloadHandler = null;
+let currentShareHandler = null;
 
 function addFolderActionHandlers(folder) {
   const deleteButton = document.querySelector('#delete-folder-btn');
   const renameButton = document.querySelector('#rename-folder-btn');
-  const downloadButton = document.querySelector('#download-folder-btn');
+  const shareButton = document.querySelector('#share-folder-btn');
 
   // Remove old listeners if exist
   if (currentDeleteHandler) {
@@ -87,8 +87,8 @@ function addFolderActionHandlers(folder) {
     renameButton.removeEventListener('click', currentRenameHandler);
   }
 
-  if (currentDownloadHandler) {
-    downloadButton.removeEventListener('click', currentDownloadHandler);
+  if (currentShareHandler) {
+    shareButton.removeEventListener('click', currentShareHandler);
   }
 
   // Create new handlers with the current folder data
@@ -145,12 +145,23 @@ function addFolderActionHandlers(folder) {
     }, 100);
   };
 
-  currentDownloadHandler = async () => {
-    console.log('Download button is clicked');
+  currentShareHandler = async () => {
+    console.log(`Handle share link...`);
+
+    const detailsModal = document.querySelector('#folder-details-modal');
+    const shareModal = document.querySelector('#share-modal');
+
+    // Close current modal
+    hideModal({ modal: detailsModal });
+
+    // Then open share modal
+    setTimeout(() => {
+      showModal({ modal: shareModal, folder });
+    }, 100);
   };
 
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
   renameButton.addEventListener('click', currentRenameHandler);
-  downloadButton.addEventListener('click', currentDownloadHandler);
+  shareButton.addEventListener('click', currentShareHandler);
 }

@@ -189,15 +189,12 @@ let currentShareHandler = null;
       const detailsModal = document.querySelector('#file-details-modal');
       const shareModal = document.querySelector('#share-modal');
 
-      // Get share link
-      const shareLink = await generateShareLink(file.id);
-
       // Close current modal
       hideModal({ modal: detailsModal });
 
       // Then open share modal
       setTimeout(() => {
-        showModal({ modal: shareModal, shareLink });
+        showModal({ modal: shareModal, file });
       }, 100);
     };
 

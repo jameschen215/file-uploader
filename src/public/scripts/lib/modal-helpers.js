@@ -88,7 +88,6 @@ export function showModal({
   file = null,
   folder = null,
   breadcrumbs = null,
-  shareLink = null,
 }) {
   if (!modal.classList.contains('translate-y-full')) return; // already open
 
@@ -113,7 +112,7 @@ export function showModal({
 
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {
-      detail: { file, folder, breadcrumbs, shareLink },
+      detail: { file, folder, breadcrumbs },
     }),
   );
 
