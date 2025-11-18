@@ -4,9 +4,14 @@ import crypto from 'crypto';
 
 import prisma from '../lib/prisma.js';
 import { RequestHandler } from 'express';
-import { CustomInternalError, CustomNotFoundError } from '../errors/index.js';
+import {
+  CustomBadRequestError,
+  CustomInternalError,
+  CustomNotFoundError,
+} from '../errors/index.js';
 import { configureSupabase } from '../config/supabase.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
+import { formatFileSize } from '../lib/utils.js';
 
 const supabase = configureSupabase();
 
@@ -89,8 +94,13 @@ export const viewSharedFile: RequestHandler = async (req, res) => {
       throw new CustomNotFoundError('Shared file not found');
     }
 
+    const formattedFile = {
+      ...file,
+      fileSize: formatFileSize(file.fileSize),
+    };
+
     res.render('shared-file', {
-      file,
+      file: formattedFile,
       shareToken: token,
     });
   } catch (error) {
@@ -219,5 +229,46 @@ export const downloadFileFromSharedFolder: RequestHandler = async (
   } catch (error) {
     console.error('Download from shared folder error:', error);
     throw new CustomInternalError('Download failed');
+  }
+};
+
+export const previewSharedFile: RequestHandler = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    const file = await prisma.file.findUnique({
+      where: { shareToken: token },
+    });
+
+    if (!file) {
+      throw new CustomNotFoundError('Shared file not found');
+    }
+
+    // Only allow preview for images and videos
+    if (
+      !file.mimeType.startsWith('image/') &&
+      !file.mimeType.startsWith('video/')
+    ) {
+      throw new CustomBadRequestError(
+        'Preview not available for this file type',
+      );
+    }
+
+    // Supabase storage
+    const { data, error } = await supabase.storage
+      .from('files')
+      .download(file.filePath);
+
+    if (error) {
+      throwSupabaseError(error, 'Download file');
+    }
+
+    const buffer = Buffer.from(await data.arrayBuffer());
+
+    res.setHeader('Content-Type', file.mimeType);
+    res.send(buffer);
+  } catch (error) {
+    console.error('Preview error:', error);
+    throw new CustomInternalError('Preview failed');
   }
 };

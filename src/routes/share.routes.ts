@@ -4,6 +4,7 @@ import {
   createShareLink,
   downloadFileFromSharedFolder,
   downloadSharedFile,
+  previewSharedFile,
   viewSharedFile,
   viewSharedFolder,
 } from '../controllers/share.controller.js';
@@ -21,5 +22,8 @@ router.get(
   '/folder/:token/file/:fileId/download',
   downloadFileFromSharedFolder,
 );
+
+// Public file preview
+router.get('/file/:token/preview', previewSharedFile);
 
 export default router;
