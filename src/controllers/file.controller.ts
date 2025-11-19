@@ -1,7 +1,13 @@
+import { RequestHandler } from 'express';
+
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { configureSupabase } from '../config/supabase.js';
-import { CustomInternalError, CustomNotFoundError } from '../errors/index.js';
+import {
+  CustomBadRequestError,
+  CustomInternalError,
+  CustomNotFoundError,
+} from '../errors/index.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
 
 const supabase = configureSupabase();
@@ -159,3 +165,46 @@ export const handleDeleteFile = asyncHandler(async (req, res) => {
     file,
   });
 });
+
+// File preview
+export const handleGetFilePreview: RequestHandler = async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const userId = res.locals.currentUser!.id;
+
+    const file = await prisma.file.findUnique({
+      where: { id: fileId, userId },
+    });
+
+    if (!file) {
+      throw new CustomNotFoundError('File not found');
+    }
+
+    // Only allow preview for images and videos
+    if (
+      !file.mimeType.startsWith('image/') &&
+      !file.mimeType.startsWith('video/')
+    ) {
+      throw new CustomBadRequestError(
+        'Preview not available for this file type',
+      );
+    }
+
+    // Supabase storage
+    const { data, error } = await supabase.storage
+      .from('files')
+      .download(file.filePath);
+
+    if (error) {
+      throwSupabaseError(error, 'Download file');
+    }
+
+    const buffer = Buffer.from(await data.arrayBuffer());
+
+    res.setHeader('Content-Type', file.mimeType);
+    res.send(buffer);
+  } catch (error) {
+    console.error('Preview error: ', error);
+    throw new CustomInternalError('Preview file failed');
+  }
+};

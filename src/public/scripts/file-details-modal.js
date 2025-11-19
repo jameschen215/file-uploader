@@ -74,21 +74,40 @@ let currentShareHandler = null;
     // Show thumbnail for images and videos
     const previewDiv = document.querySelector('#file-preview');
     if (file.mimeType.startsWith('image')) {
+      // previewDiv.innerHTML = `
+      //     <div class="flex items-center justify-center">
+      //       <img src="/files/${file.id}/thumbnail" alt="File preview" />
+      //     </div>
+      //   `;
       previewDiv.innerHTML = `
-          <div class="flex items-center justify-center">
-            <img src="/files/${file.id}/thumbnail" alt="File preview" />
-          </div>
-        `;
+        <div class="flex items-center justify-center">
+          <img
+            src="/files/${file.id}/preview"
+            alt="${file.originalName}"
+          />
+        </div>
+      `;
     } else if (file.mimeType.startsWith('video')) {
+      // previewDiv.innerHTML = `
+      //     <div class="relative flex items-center justify-center">
+      //       <img src="${file.parentFolderId || ''}/files/${file.id}/thumbnail" alt="File preview" />
+      //       <div class="absolute top-0 left-0 size-full bg-gray-700 opacity-25"></div>
+      //       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-200">
+      //         ${icon({ name: 'Play', size: 32, fill: 'currentColor' })}
+      //       </div>
+      //     </div>
+      //   `;
       previewDiv.innerHTML = `
-          <div class="relative flex items-center justify-center">
-            <img src="${file.parentFolderId || ''}/files/${file.id}/thumbnail" alt="File preview" />
-            <div class="absolute top-0 left-0 size-full bg-gray-700 opacity-25"></div>
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-200">
-              ${icon({ name: 'Play', size: 32, fill: 'currentColor' })}
-            </div>
-          </div>
-        `;
+        <div class="flex items-center justify-center">
+          <video controls style="max-width: 100%; border-radius: 4px">
+            <source
+              src="/files/${file.id}/preview"
+              type="${file.mimeType}"
+            />
+            You browser does't support video playback.
+          </video>
+        </div>
+      `;
     } else {
       previewDiv.innerHTML = icon({
         name: 'File',
