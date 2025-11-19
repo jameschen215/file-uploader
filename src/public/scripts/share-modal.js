@@ -41,6 +41,10 @@ document.addEventListener('share-modal-open', async (ev) => {
       const originalButtonText = copyButton.innerHTML;
       copyButton.innerHTML = '✓ Copied!';
 
+      // Remove selection and unfocus
+      shareUrlEl.blur();
+      window.getSelection().removeAllRanges();
+
       setTimeout(() => {
         copyButton.innerHTML = originalButtonText;
       }, 2000);

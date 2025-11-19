@@ -2,7 +2,7 @@ import { icon } from './lib/icons.js';
 import { hideModal, showModal } from './lib/modal-helpers.js';
 import { formatTime } from './lib/utils.js';
 
-const BUTTON_DISABLED_DURATION = 200;
+const BUTTON_DISABLED_DURATION = 500;
 
 // Store handler references outside the function
 let currentDownloadHandler = null;
@@ -200,17 +200,15 @@ let currentShareHandler = null;
 
     currentDownloadHandler = () => {
       console.log(`Downloading ${file.originalName}...`);
+      const modal = document.querySelector('#file-details-modal');
 
-      // Disable the button and show loading text
       downloadButton.disabled = true;
 
       // Start download
-      window.location.href = `files/${file.id}/download`;
+      window.location.href = `/files/${file.id}/download`;
 
-      // Re-enable after a short delay
       setTimeout(() => {
-        // TODO: THIS LINE IS NOT WORKING NOW
-        downloadButton.disabled = true;
+        hideModal({ modal });
       }, BUTTON_DISABLED_DURATION);
     };
 
@@ -220,24 +218,3 @@ let currentShareHandler = null;
     downloadButton.addEventListener('click', currentDownloadHandler);
   }
 })();
-
-async function generateShareLink(fileId) {
-  try {
-    const response = await fetch(`/files/${fileId}/share`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ expiresIn: 7, maxAccess: 10 }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return null;
-    }
-
-    return data.share.shareUrl;
-  } catch (error) {
-    console.error('Share error: ', error);
-    return null;
-  }
-}

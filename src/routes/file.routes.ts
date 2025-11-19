@@ -22,6 +22,8 @@ router.get('/who', (_req, res) => {
 router.get('/:fileId', handleGetFile);
 router.get('/:fileId/download', handleDownloadFile);
 router.get('/:fileId/thumbnail', handleGetThumbnail);
+// preview
+
 router.delete('/:fileId', handleDeleteFile);
 
 export default router;
