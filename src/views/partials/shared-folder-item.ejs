@@ -1,0 +1,20 @@
+<div
+  class="w-full h-40 flex flex-col items-center justify-center gap-2 opacity-60 dark:opacity-40 cursor-not-allowed"
+>
+  <!-- folder icon -->
+  <div
+    class="w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800"
+    title="This is a shared folder. You can view and download files, but sub-folders cannot be opened."
+  >
+    <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+      <!-- prettier-ignore-start -->
+      <%- icon({ name: 'Folder', fill: 'currentColor', className: 'w-full h-auto'}) %>
+      <!-- prettier-ignore-end -->
+    </span>
+  </div>
+
+  <!-- folder name -->
+  <div class="w-full text-center">
+    <span class="text-sm line-clamp-1"><%= folder.name %></span>
+  </div>
+</div>

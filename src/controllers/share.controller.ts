@@ -172,10 +172,15 @@ export const viewSharedFolder: RequestHandler = async (req, res) => {
       orderBy: { originalName: 'asc' },
     });
 
+    const formattedFiles = files.map((file) => ({
+      ...file,
+      fileSize: formatFileSize(file.fileSize),
+    }));
+
     res.render('shared-folder', {
       folder,
       subfolders,
-      files,
+      files: formattedFiles,
       shareToken: token,
     });
   } catch (error) {
