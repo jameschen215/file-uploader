@@ -3,11 +3,13 @@ import { isAuthenticated } from '../auth/middlewares.js';
 import {
   handleDesktopSearch,
   handleMobileSearch,
-} from '../controllers/search.js';
+} from '../controllers/search.controller.js';
 
 const router = Router();
 
-router.get('/mobile', isAuthenticated, handleMobileSearch);
-router.get('/desktop', isAuthenticated, handleDesktopSearch);
+router.use(isAuthenticated);
+
+router.get('/', handleMobileSearch);
+router.get('/desktop', handleDesktopSearch);
 
 export default router;

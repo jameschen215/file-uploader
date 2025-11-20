@@ -1,9 +1,7 @@
-import { format } from 'date-fns';
-import { CustomNotFoundError } from '../errors/index.js';
-import { buildPath } from './build-path.js';
-import { SORT_BY_METHODS, SORT_ORDERS } from './constants.js';
 import prisma from './prisma.js';
-import { formatFileSize } from './utils.js';
+import { buildPath } from './build-path.js';
+import { CustomNotFoundError } from '../errors/index.js';
+import { SORT_BY_METHODS, SORT_ORDERS } from './constants.js';
 
 export async function getFolderData(
   userId: string,
@@ -49,22 +47,22 @@ export async function getFolderData(
     orderBy: { [sortField.file]: sortOrder },
   });
 
-  const formattedFiles = files.map((file) => ({
-    ...file,
-    fileSize: formatFileSize(file.fileSize),
-    uploadedAt: format(file.uploadedAt, 'yyyy-MM-dd, hh:mm:ss'),
-  }));
+  // const formattedFiles = files.map((file) => ({
+  //   ...file,
+  //   formattedFileSize: formatFileSize(file.fileSize),
+  //   formattedUploadedAt: format(file.uploadedAt, 'yyyy-MM-dd, hh:mm:ss'),
+  // }));
 
-  const formattedFolders = folders.map((folder) => ({
-    ...folder,
-    createdAt: format(folder.createdAt, 'yyyy-MM-dd, hh:mm:ss'),
-    updatedAt: format(folder.updatedAt, 'yyyy-MM-dd, hh:mm:ss'),
-  }));
+  // const formattedFolders = folders.map((folder) => ({
+  //   ...folder,
+  //   formattedCreatedAt: format(folder.createdAt, 'yyyy-MM-dd, hh:mm:ss'),
+  //   formattedUpdatedAt: format(folder.updatedAt, 'yyyy-MM-dd, hh:mm:ss'),
+  // }));
 
   return {
     currentFolder,
     breadcrumbs,
-    folders: formattedFolders,
-    files: formattedFiles,
+    folders,
+    files,
   };
 }

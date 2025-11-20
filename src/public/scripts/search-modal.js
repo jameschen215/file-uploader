@@ -4,37 +4,47 @@ import {
   hideClearButton,
   showClearButton,
 } from './lib/modal-helpers.js';
+import { generateSearchItem } from './lib/search-helpers.js';
+
+const fileDetailsModal = document.querySelector('#file-details-modal');
+
+const searchModalTrigger = document.querySelector('.search-modal-trigger');
+const searchModal = document.querySelector('#search-modal');
+const resultsContainer = document.querySelector('#search-results-for-mobile');
+const closeButton = document.querySelector('#search-modal .close-modal-btn');
+
+const form = document.querySelector('#search-modal .search-form');
+const input = document.querySelector('#search-modal .search-form input');
+const clearButton = document.querySelector(
+  '#search-modal .search-form button[type="button"]',
+);
+
+/** --- 1. Handle search modal show / hide --- */
 
 (function handleSearchModalVisibility() {
-  const trigger = document.querySelector('.search-modal-trigger');
-  const modal = document.querySelector('#search-modal');
-  const closeButton = document.querySelector('#search-modal .close-modal-btn');
+  if (!searchModalTrigger || !searchModal || !closeButton) return;
 
-  if (!trigger || !modal || !closeButton) return;
-
-  trigger.addEventListener('click', () => {
-    showModal({ modal });
+  searchModalTrigger.addEventListener('click', () => {
+    showModal({ modal: searchModal });
   });
 
   closeButton.addEventListener('click', () => {
-    hideModal({ modal });
+    hideModal({ modal: searchModal });
   });
 })();
 
+/** --- 2. Handle actions on search modal --- */
 (function handleSearchModalActions() {
-  const form = document.querySelector('#search-modal .search-form');
-  const input = document.querySelector('#search-modal .search-form input');
-  const clearButton = document.querySelector(
-    '#search-modal .search-form button[type="button"]',
-  );
-
   if (!form || !input || !clearButton) return;
 
   // 1. Hide clear button on load
   hideClearButton(clearButton);
 
-  // 2. Focus on search input
-  input.focus();
+  // 2. Focus on search input, and clear result container after showing
+  document.addEventListener('search-modal-open', () => {
+    input.focus();
+    resultsContainer.innerHTML = `<span class="mt-10 text-4xl">🧐</span>`;
+  });
 
   // 3. Handle clear button visibility when typing on input
   // 3.1 Show it on mousedown if the input has a value
@@ -57,6 +67,7 @@ import {
   input.addEventListener('blur', function () {
     if (this.value.trim() === '') {
       hideClearButton(clearButton);
+      resultsContainer.innerHTML = `<span class="mt-10 text-4xl">🧐</span>`;
     }
   });
 
@@ -73,7 +84,7 @@ import {
   });
 
   // 4.3 Clear it when the modal is hidden
-  document.addEventListener('modal-hide', () => {
+  document.addEventListener('search-modal-hidden', () => {
     input.value = '';
   });
 
@@ -91,17 +102,20 @@ import {
     ev.preventDefault();
 
     const query = input.value.trim();
-    const resultsContainer = document.querySelector(
-      '#search-results-for-mobile',
-    );
 
-    resultsContainer.innerHTML = '<li>🧐 Searching...</li>';
+    resultsContainer.innerHTML = `
+      <li class="mt-10 flex items-center gap-2">
+        <span class="text-4xl">🧐</span>
+        <span class="text-lg">Searching...</span>
+      </li>
+    `;
 
     try {
-      const url = form.action + `?q=${encodeURIComponent(query)}`;
+      const url = `/search?q=${encodeURIComponent(query)}`;
       const res = await fetch(url);
 
-      const files = await res.json();
+      const { files } = await res.json();
+      console.log({ files });
 
       if (files.length === 0) {
         resultsContainer.innerHTML = `<li>No results found.</li>`;
@@ -109,15 +123,30 @@ import {
       }
 
       resultsContainer.innerHTML = files
-        .map((file) => {
-          console.log('Processing file:', file);
-          return `<li class="p-2 border-b">${file.originalName || file.name || 'Unnamed'}</li>`;
-        })
+        .map((file) => generateSearchItem(file))
         .join('');
     } catch (error) {
       console.error('Error details:', error);
       resultsContainer.innerHTML =
         '<li class="text-red-500">Error searching files</li>';
     }
+  });
+})();
+
+/** --- 3. Handle actions on search result items --- */
+
+(function handleActionsOnResultItems() {
+  resultsContainer.addEventListener('click', (ev) => {
+    // Find the closest .file-details-modal-trigger that was clicked
+    const fileDetailsModalTrigger = ev.target.closest(
+      '.file-details-modal-trigger',
+    );
+
+    if (!fileDetailsModalTrigger) return;
+
+    const file = JSON.parse(fileDetailsModalTrigger.dataset.file);
+    const breadcrumbs = JSON.parse(fileDetailsModalTrigger.dataset.breadcrumbs);
+
+    showModal({ modal: fileDetailsModal, file, breadcrumbs });
   });
 })();

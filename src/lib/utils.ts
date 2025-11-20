@@ -2,13 +2,12 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import ffmpeg from 'fluent-ffmpeg';
 import { writeFile, readFile, unlink } from 'fs/promises';
-import { BreadcrumbFolderType } from '../types/path.js';
 
 export const formatFileSize = (fileSize: number) => {
   if (fileSize < 2 ** 20) {
-    return Math.ceil(fileSize / 1024) + ' KB';
+    return Math.ceil(fileSize / 1024) + 'KB';
   }
-  return (fileSize / 1024 / 1024).toFixed(1) + ' MB';
+  return (fileSize / 1024 / 1024).toFixed(1) + 'MB';
 };
 
 export async function getVideoMetadata(buffer: Buffer): Promise<any> {

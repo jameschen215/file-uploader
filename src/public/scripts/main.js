@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     layoutContainer.querySelectorAll('.item-icon-wrapper').forEach((icon) => {
       icon.className =
-        'item-icon-wrapper group-focus:bg-sky-100 group-focus:dark:bg-sky-950 w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800  hover:border-sky-200 dark:hover:border-sky-800 hover:bg-sky-50 dark:hover:bg-sky-950 transition-colors';
+        'item-icon-wrapper w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800';
     });
 
     layoutContainer

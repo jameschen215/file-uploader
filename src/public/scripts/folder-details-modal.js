@@ -1,4 +1,5 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
+import { formateDate } from './lib/utils.js';
 
 (function handleFolderDetailsModalVisibility() {
   const triggers = document.querySelectorAll('.folder-details-modal-trigger');
@@ -53,8 +54,12 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
 
 function displayFolderInfo(folder, breadcrumbs) {
   document.querySelector('#folder-name').textContent = folder.name;
-  document.querySelector('#folder-created-date').textContent = folder.createdAt;
-  document.querySelector('#folder-updated-date').textContent = folder.updatedAt;
+  document.querySelector('#folder-created-date').textContent = formateDate(
+    folder.createdAt,
+  );
+  document.querySelector('#folder-updated-date').textContent = formateDate(
+    folder.updatedAt,
+  );
 
   document.querySelector('#folder-path').innerHTML =
     breadcrumbs.length === 0

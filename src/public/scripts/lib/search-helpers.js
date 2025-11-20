@@ -1,98 +1,42 @@
-export function handleSearchInput() {
-  const form = document.querySelector('#search-form-in-modal');
-  const input = document.querySelector('#search-form-in-modal > input');
-  const clearButton = document.querySelector('#search-form-in-modal > button');
+import { icon } from './icons.js';
 
-  if (!form || !input || !clearButton) return;
+export function generateSearchItem(file) {
+  return `
+    <div
+      id="file-details-trigger-${file.id}"
+      role="button"
+      tabindex="0"
+      data-file=${JSON.stringify(file)}
+      data-breadcrumbs=${JSON.stringify(file.breadcrumbs)}
+      class="file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer group-hover:border-sky-200 dark:group-hover:border-sky-800 group-hover:bg-sky-50 dark:group-hover:bg-sky-950 transition-colors"
+    >
+      <div
+        class="item-icon-wrapper w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800"
+      >
+        <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
+          ${getIcon(file.mimeType)}
+        </span>
+      </div>
 
-  // 1. Hide clear button on load
-  hideClearButton(clearButton);
+      <div class="item-info relative w-full text-center">
+        <span class="text-sm inline-block w-[calc(100%-24px)] mx-auto line-clamp-1">
+          ${file.originalName}
+        </span>
+      </div>
+    </div>
+  `;
+}
 
-  // 2. Focus on search input
-  input.focus();
+function getIcon(type) {
+  if (type.startsWith('image')) {
+    return icon({
+      name: 'Image',
+      strokeWidth: 1,
+      className: 'w-full h-auto',
+    });
+  } else if (type.startsWith('video')) {
+    return icon({ name: 'Film', strokeWidth: 1, className: 'w-full h-auto' });
+  }
 
-  // 3. Handle clear button visibility when typing on input
-  // 3.1 Show it on mousedown if the input has a value
-  input.addEventListener('mousedown', () => {
-    if (input.value.trim() !== '') {
-      showClearButton(clearButton);
-    }
-  });
-
-  // 3.2 Show it while on input but hide it when the input value is empty
-  input.addEventListener('input', function () {
-    if (this.value.trim() === '') {
-      hideClearButton(clearButton);
-    } else {
-      showClearButton(clearButton);
-    }
-  });
-
-  // 3.2 Hide it when input loses focus
-  input.addEventListener('blur', function () {
-    if (this.value.trim() === '') {
-      hideClearButton(clearButton);
-    }
-  });
-
-  // 4. Clear input value
-  // 4.1 Prevent input form blurring when the clear button is clicked
-  //  This allows the clear button's click event to fire.
-  clearButton.addEventListener('mousedown', (ev) => ev.preventDefault());
-
-  // 4.2 Clear it when clear button is clicked
-  clearButton.addEventListener('click', function () {
-    input.value = '';
-    input.focus();
-    hideClearButton(this);
-  });
-
-  // 4.3 Clear it when the modal is hidden
-  document.addEventListener('modal-hide', () => {
-    input.value = '';
-  });
-
-  // 5. Make input blur when 'Escape' is pressed
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape') {
-      ev.preventDefault();
-
-      input.blur();
-    }
-  });
-
-  // 6. Submit search form
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-
-    const query = input.value.trim();
-    const resultsContainer = document.querySelector(
-      '#search-results-for-mobile',
-    );
-
-    resultsContainer.innerHTML = '<li>🧐 Searching...</li>';
-
-    try {
-      const url = form.action + `?q=${encodeURIComponent(query)}`;
-      const res = await fetch(url);
-
-      const files = await res.json();
-
-      if (files.length === 0) {
-        resultsContainer.innerHTML = `<li>No results found.</li>`;
-        return;
-      }
-
-      resultsContainer.innerHTML = files
-        .map((file) => {
-          console.log('Processing file:', file);
-          return `<li class="p-2 border-b">${file.originalName || file.name || 'Unnamed'}</li>`;
-        })
-        .join('');
-    } catch (error) {
-      console.error('Error details:', error);
-      resultsContainer.innerHTML =
-        '<li class="text-red-500">Error searching files</li>';
-    }
-  });
+  return icon({ name: 'File', strokeWidth: 1, className: 'w-full h-auto' });
 }

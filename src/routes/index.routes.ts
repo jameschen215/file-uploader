@@ -5,6 +5,7 @@ import fileRoutes from './file.routes.js';
 import folderRoutes from './folder.routes.js';
 import uploadRoutes from './upload.routes.js';
 import shareRoutes from './share.routes.js';
+import searchRoutes from './search.routes.js';
 
 import { isAuthenticated } from '../auth/index.js';
 import { handleGetFiles } from '../controllers/index.controller.js';
@@ -18,6 +19,8 @@ router.get('/', isAuthenticated, handleGetFiles);
 router.use('/files', fileRoutes); // /files/:fileId, /files/:fileId/download
 router.use('/folders', folderRoutes); // /folders, /folders/:folderId
 router.use('/upload', uploadRoutes); // /upload, /upload/:folderId
+
+router.use('/search', searchRoutes); // /search/, /search/desktop
 
 // Authenticated share creation
 router.use('/files', shareRoutes); // POST /files/:type/:id/share

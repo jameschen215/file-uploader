@@ -1,6 +1,6 @@
 import { icon } from './lib/icons.js';
 import { hideModal, showModal } from './lib/modal-helpers.js';
-import { formatTime } from './lib/utils.js';
+import { formateDate, formatFileSize, formatTime } from './lib/utils.js';
 
 const BUTTON_DISABLED_DURATION = 500;
 
@@ -46,8 +46,12 @@ let currentShareHandler = null;
 
   function displayFileInfo(file, breadcrumbs) {
     document.querySelector('#file-name').textContent = file.originalName;
-    document.querySelector('#file-size').textContent = file.fileSize;
-    document.querySelector('#file-created-date').textContent = file.uploadedAt;
+    document.querySelector('#file-size').textContent = formatFileSize(
+      file.fileSize,
+    );
+    document.querySelector('#file-created-date').textContent = formateDate(
+      file.uploadedAt,
+    );
 
     let fileType = '';
     if (file.mimeType.startsWith('image')) {
