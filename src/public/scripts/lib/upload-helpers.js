@@ -119,7 +119,7 @@ export function handleUploadInput() {
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs font-medium text-gray-900 dark:text-gray-50 line-clamp-1">
+                  <p class="text-xs font-medium text-gray-900 dark:text-gray-50 truncate">
                     ${file.name}
                   </p>
                   <p class="text-[10px] text-gray-500 dark:text-gray-400">

@@ -3,12 +3,17 @@
     class="w-full max-w-screen-lg h-[75vh] flex flex-col rounded-sm bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2"
   >
     <!-- File Preview -->
-    <div class="flex-grow flex items-center justify-center bg-gray-950">
+    <div
+      class="max-h-full flex-grow flex items-center justify-center bg-gray-950 p-2"
+    >
       <% if (file.mimeType.startsWith('image/')) { %>
+
       <img
         src="/share/file/<%= shareToken %>/preview"
         alt="<%= file.originalName %>"
+        class="w-full h-full object-contain"
       />
+
       <% } else if (file.mimeType.startsWith('video/')) { %>
       <video controls style="max-width: 100%; border-radius: 4px">
         <source

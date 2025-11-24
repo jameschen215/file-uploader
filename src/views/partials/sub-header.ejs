@@ -1,4 +1,4 @@
-<div class="px-5">
+<div id="sub-header" class="px-5 w-full max-w-7xl mx-auto">
   <% if (!locals.currentPath.includes('search')) { %>
 
   <!-- up (hidden on search route) -->
@@ -26,15 +26,15 @@
 
   <!-- down -->
 
-  <div class="h-12 flex items-center justify-between w-full max-w-7xl mx-auto">
-    <% if (locals.currentPath.includes('search')) { %>
-    <div>
-      <span><%= locals.files.length || 0 %></span>
-      <%= locals.files.length === 1 ? 'result' : 'results' %>
-    </div>
-    <% } else { %>
+  <div class="h-12 flex items-center justify-between">
+    <!-- Show number of search results -->
+    <div id="search-results-count" class="hidden"></div>
     <!-- breadcrumbs (hidden on search route) -->
-    <nav aria-label="breadcrumb" class="flex items-center gap-2">
+    <nav
+      id="breadcrumbs"
+      aria-label="breadcrumb"
+      class="flex items-center gap-2"
+    >
       <button
         id="breadcrumb-back-btn"
         type="button"
@@ -63,7 +63,6 @@
       <% }) %>
       <% } %>
     </nav>
-    <% } %>
 
     <!-- buttons -->
     <div class="flex items-center gap-3">

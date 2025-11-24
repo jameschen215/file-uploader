@@ -26,6 +26,7 @@
       novalidate
     >
       <div
+        id="search-indicator"
         class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
         aria-hidden="true"
       >
@@ -38,7 +39,7 @@
         id="search-desktop"
         type="text"
         name="q"
-        value="<%= typeof q !== 'undefined' ? q : '' %>"
+        value="<%= locals.searchQuery || '' %>"
         aria-label="Search input"
         autocomplete="off"
         spellcheck="false"
@@ -146,10 +147,10 @@
       </span>
 
       <div class="flex flex-col flex-grow">
-        <span class="text-lg font-semibold -mb-1 capitalize line-clamp-1">
+        <span class="text-lg font-semibold -mb-1 capitalize truncate">
           <%= currentUser.name || currentUser.email.split('@')[0] %>
         </span>
-        <span class="text-gray-400 dark:text-gray-600 line-clamp-1">
+        <span class="text-gray-400 dark:text-gray-600 truncate">
           <%= currentUser.email %>
         </span>
       </div>
@@ -236,10 +237,10 @@
       </span>
 
       <div class="flex flex-col flex-grow">
-        <span class="text-lg font-semibold -mb-1 capitalize line-clamp-1">
+        <span class="text-lg font-semibold -mb-1 capitalize truncate">
           <%= currentUser.name || currentUser.email.split('@')[0] %>
         </span>
-        <span class="text-gray-400 dark:text-gray-600 line-clamp-1">
+        <span class="text-gray-400 dark:text-gray-600 truncate">
           <%= currentUser.email %>
         </span>
       </div>

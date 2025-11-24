@@ -1,19 +1,24 @@
 import prisma from '../lib/prisma.js';
 import { RequestHandler } from 'express';
 import { buildPath } from '../lib/build-path.js';
-import { asyncHandler } from '../lib/async-handler.js';
 
 export const handleMobileSearch: RequestHandler = async (req, res) => {
   try {
-    const query = req.query;
+    const query = req.query.q as string;
     const userId = res.locals.currentUser!.id;
-    const q = typeof query.q === 'string' ? query.q : '';
 
-    if (!q) return res.json([]);
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter required' });
+    }
 
     const files = await prisma.file.findMany({
-      where: { originalName: { contains: q, mode: 'insensitive' }, userId },
+      where: { originalName: { contains: query, mode: 'insensitive' }, userId },
       orderBy: { uploadedAt: 'desc' },
+    });
+
+    const folders = await prisma.folder.findMany({
+      where: { name: { contains: query, mode: 'insensitive' }, userId },
+      orderBy: { createdAt: 'desc' },
     });
 
     // map with async returns an array of Promises, not the actual values.
@@ -30,28 +35,35 @@ export const handleMobileSearch: RequestHandler = async (req, res) => {
       })),
     );
 
-    res.json({ files: filesWithBreadcrumbs });
+    const foldersWithBreadcrumbs = await Promise.all(
+      folders.map(async (folder) => ({
+        ...folder,
+        breadcrumbs: await buildPath(userId, folder.id),
+      })),
+    );
+
+    const results = {
+      files: filesWithBreadcrumbs,
+      folders: foldersWithBreadcrumbs,
+    };
+
+    //  Check if request wants JSON or HTML
+
+    if (req.xhr || req.headers.accept?.includes('application/json')) {
+      // AJAX request - return JSON
+      return res.json(results);
+    }
+
+    // Browser refresh - render HTML page
+    res.render('index', {
+      currentFolder: null,
+      breadcrumbs: [],
+      folders: [],
+      files: [],
+      searchQuery: query,
+    });
   } catch (error) {
     console.error('Search error:', error);
-    res.status(500).json({ error: 'Failed to search files' });
+    res.status(500).json({ error: 'Search failed' });
   }
 };
-
-export const handleDesktopSearch = asyncHandler(async (req, res) => {
-  const query = req.query;
-  const q = typeof query.q === 'string' ? query.q : '';
-
-  const userId = res.locals.currentUser!.id;
-  const { folderId } = req.params;
-
-  const breadcrumbs = await buildPath(userId, folderId);
-
-  if (!q) return res.render('search', { breadcrumbs, files: [], q: '' });
-
-  const files = await prisma.file.findMany({
-    where: { originalName: { contains: q, mode: 'insensitive' } },
-    orderBy: { uploadedAt: 'desc' },
-  });
-
-  res.render('search', { breadcrumbs, files, q });
-});

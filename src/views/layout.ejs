@@ -16,7 +16,7 @@
     <title>File Uploader</title>
   </head>
   <body
-    class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 relative"
+    class="h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 relative"
   >
     <!-- Skip to main content link for keyboard navigation -->
     <a
@@ -27,7 +27,7 @@
     </a>
 
     <!-- Site wrapper -->
-    <div id="site-container" class="relative min-h-screen flex flex-col">
+    <div id="site-container" class="relative h-full flex flex-col">
       <!-- Header -->
       <header
         class="fixed top-0 left-0 w-full bg-gray-50 dark:bg-gray-900 z-40"
@@ -42,7 +42,7 @@
       <!-- page content -->
       <main
         id="main-content"
-        class="w-full max-w-7xl mx-auto flex-grow flex flex-col <%= locals.currentUser ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
+        class="w-full max-w-7xl mx-auto flex-grow min-h-0 flex flex-col <%= locals.currentUser ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
       >
         <%- body %>
       </main>
@@ -91,5 +91,6 @@
     <!-- scripts -->
     <script type="module" src="/scripts/header.js"></script>
     <script type="module" src="/scripts/main.js"></script>
+    <script type="module" src="/scripts/search-desktop.js"></script>
   </body>
 </html>

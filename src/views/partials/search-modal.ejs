@@ -3,28 +3,29 @@
   role="dialog"
   aria-modal="true"
   aria-label="Search for files on mobile"
-  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+  class="translate-y-full fixed inset-0 bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
 >
-  <div
-    class="absolute bottom-0 left-0 min-h-screen w-full flex-col p-5 bg-gray-50 dark:bg-gray-900"
-  >
-    <div class="flex flex-col flex-grow">
-      <!-- Back button -->
-      <div class="flex mb-5">
-        <button type="button" class="close-modal-btn text-xl px-1 rounded-md">
-          &#x2190;
-        </button>
-      </div>
+  <div class="flex flex-col min-h-full h-full py-5 bg-gray-50 dark:bg-gray-900">
+    <!-- Back button -->
+    <div class="flex items-center gap-2 mb-2 px-5">
+      <button type="button" class="close-modal-btn text-xl px-1 rounded-md">
+        &#x2190;
+      </button>
 
-      <!-- Search form -->
+      <div class="results-counter"></div>
+    </div>
+
+    <!-- Search form -->
+    <div class="px-5">
       <form
         action="/search"
         method="get"
-        class="search-form relative w-full"
+        class="search-form relative"
         novalidate
       >
         <div
-          class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
+          id="search-indicator-mobile"
+          class="size-5 absolute top-1/2 -translate-y-1/2 left-3 text-gray-500"
           aria-hidden="true"
         >
           <%- icon({ name: 'Search' }) %>
@@ -44,20 +45,18 @@
         <button
           type="button"
           aria-label="Clear search"
-          class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
+          class="opacity-0 absolute top-1/2 right-3 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
         >
           <%- icon({ name: 'X' }) %>
         </button>
       </form>
-
-      <!-- Search results -->
-      <ul
-        id="search-results-for-mobile"
-        class="flex-grow mt-5 border-gray-200 dark:border-gray-800 flex items-center justify-center gap-5 sm:text-[108px]"
-      >
-        <span class="text-[80px]">🧐</span>
-      </ul>
     </div>
+
+    <!-- Search results -->
+    <div
+      id="search-results-for-mobile"
+      class="grid grid-cols-2 gap-5 mt-5 px-5 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800 scrollbar-track-transparent"
+    ></div>
   </div>
 </div>
 

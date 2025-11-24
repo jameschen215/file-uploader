@@ -1,37 +1,38 @@
-<div class="w-full flex-grow flex flex-col">
-  <div class="flex-grow flex flex-col gap-4 px-5 py-5">
-    <div
-      id="layout-container"
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-5"
-    >
-      <!-- Folders -->
-      <% if (locals.folders && folders.length > 0) { %>
-      <!-- loop folders -->
-      <% folders.forEach(folder => { %>
-      <%- include('partials/layout-item-folder', { folder, breadcrumbs }) %>
-      <% }) %>
-      <% } %>
+<!-- This div is for customized scrollbar -->
+<div
+  class="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800 scrollbar-track-transparent"
+>
+  <div
+    id="layout-container"
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 grid-flow-row gap-5 p-5"
+  >
+    <!-- Folders -->
+    <% if (locals.folders && folders.length > 0) { %>
+    <!-- loop folders -->
+    <% folders.forEach(folder => { %>
+    <%- include('partials/layout-item-folder', { folder, breadcrumbs }) %>
+    <% }) %>
+    <% } %>
 
-      <!-- Files -->
-      <% if (locals.files && files.length > 0) { %>
-      <!-- loop files -->
-      <% files.forEach(file => { %>
-      <%- include('partials/layout-item-file', { file, breadcrumbs }) %>
-      <% }) %>
-      <% } %>
+    <!-- Files -->
+    <% if (locals.files && files.length > 0) { %>
+    <!-- loop files -->
+    <% files.forEach(file => { %>
+    <%- include('partials/layout-item-file', { file, breadcrumbs }) %>
+    <% }) %>
+    <% } %>
 
-      <!-- No items -->
-      <% if ((!locals.folders || folders.length ===0) && (!locals.files || files.length === 0) ) { %>
-      <div class="col-span-full row-span-full flex flex-col items-center mt-5">
-        <span aria-hidden="true">
-          <!-- icon -->
-          <%- icon({name: 'FolderOpen', size:72, strokeWidth: 1, className: 'text-gray-200 dark:text-gray-800' }) %>
-        </span>
-        <h3 class="text-lg font-semibold mt-5 mb-3">Folder is empty</h3>
-        <p>You haven't added items to this folder.</p>
-      </div>
-      <% } %>
+    <!-- No items -->
+    <% if ((!locals.folders || folders.length ===0) && (!locals.files || files.length === 0) ) { %>
+    <div class="col-span-full row-span-full flex flex-col items-center mt-5">
+      <span aria-hidden="true">
+        <!-- icon -->
+        <%- icon({name: 'FolderOpen', size:72, strokeWidth: 1, className: 'text-gray-200 dark:text-gray-800' }) %>
+      </span>
+      <h3 class="text-lg font-semibold mt-5 mb-3">Folder is empty</h3>
+      <p>You haven't added items to this folder.</p>
     </div>
+    <% } %>
   </div>
 </div>
 

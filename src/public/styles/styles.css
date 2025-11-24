@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.line-clamp-1 {
+.truncate {
   display: -webkit-box;
   -webkit-line-clamp: 1;
   line-clamp: 1;

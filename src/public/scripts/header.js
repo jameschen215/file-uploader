@@ -1,74 +1,8 @@
 import { icon } from './lib/icons.js';
-import { hideClearButton, showClearButton } from './lib/modal-helpers.js';
 
 const iconWrapper = document.querySelector('#menu-btn span');
 const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');
 const avatar = isLoggedIn ? iconWrapper.textContent : '';
-
-/** ----------------- 1. HANDLE SEARCH ON DESKTOP ----------------- */
-(function handleSearchOnDesktop() {
-  const searchForm = document.querySelector('#search-form-desktop');
-  const searchInput = document.querySelector('#search-form-desktop input');
-  const clearButton = document.querySelector('#search-form-desktop > button');
-
-  if (!searchForm || !searchInput || !clearButton) return;
-
-  // 1. hide clear button on load
-  hideClearButton(clearButton);
-
-  // 2. Handle clear button show/hide when user typing
-  // 2.1 Show the clear button on mousedown if the input has a value
-  searchInput.addEventListener('mousedown', () => {
-    if (searchInput.value.trim() !== '') {
-      showClearButton(clearButton);
-    }
-  });
-
-  // 2.2 Show the clear button while the user is typing (hide when input is empty)
-  searchInput.addEventListener('input', function () {
-    if (this.value.trim() === '') {
-      hideClearButton(clearButton);
-    } else {
-      showClearButton(clearButton);
-    }
-  });
-
-  // 2.3 Hide clear button when input loses focus and input is empty
-  searchInput.addEventListener('blur', () => {
-    if (searchInput.value.trim() === '') {
-      hideClearButton(clearButton);
-    }
-  });
-
-  // 2.4 Show clear button when input isn't empty after loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    if (searchInput.value.trim()) {
-      showClearButton(clearButton);
-    }
-  });
-
-  // 3. Clear the input when clear button is clicked
-  // 3.1 Prevent the input from blurring when the clear button is clicked.
-  // This allows the clear button's click event to fire.
-  clearButton.addEventListener('mousedown', (ev) => {
-    ev.preventDefault();
-  });
-
-  clearButton.addEventListener('click', () => {
-    searchInput.value = '';
-    searchInput.focus();
-    hideClearButton(clearButton);
-  });
-
-  // 4. Make the input blur when 'Escape' is pressed
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape') {
-      ev.preventDefault();
-
-      searchInput.blur();
-    }
-  });
-})();
 
 /** ----------------- 2. HANDLE SORT ON DESKTOP ----------------- */
 (function handleSortOnDesktop() {
