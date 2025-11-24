@@ -1,9 +1,11 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
 
+// Handle folder click
 document.querySelectorAll('a[href^="/folders/"]').forEach((folderLink) => {
   folderLink.addEventListener('click', (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
+
     window.location.href = folderLink.href;
   });
 });

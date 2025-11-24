@@ -1,19 +1,22 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
 import { formateDate } from './lib/utils.js';
 
-(function handleFolderDetailsModalActions() {
-  document.addEventListener('folder-details-modal-open', (ev) => {
-    console.log('Folder details is going to display here');
+// Store handler references outside the function
+let currentDeleteHandler = null;
+let currentRenameHandler = null;
+let currentShareHandler = null;
 
-    const { folder, breadcrumbs } = ev.detail;
+document.addEventListener('folder-details-modal-open', (ev) => {
+  console.log('Folder details is going to display here');
 
-    if (!(folder && breadcrumbs)) return;
+  const { folder, breadcrumbs } = ev.detail;
 
-    displayFolderInfo(folder, breadcrumbs);
+  if (!(folder && breadcrumbs)) return;
 
-    addFolderActionHandlers(folder);
-  });
-})();
+  displayFolderInfo(folder, breadcrumbs);
+
+  addFolderActionHandlers(folder);
+});
 
 function displayFolderInfo(folder, breadcrumbs) {
   document.querySelector('#folder-name').textContent = folder.name;
@@ -35,11 +38,6 @@ function displayFolderInfo(folder, breadcrumbs) {
           )
           .join(' &#x203A; ');
 }
-
-// Store handler references outside the function
-let currentDeleteHandler = null;
-let currentRenameHandler = null;
-let currentShareHandler = null;
 
 function addFolderActionHandlers(folder) {
   const deleteButton = document.querySelector('#delete-folder-btn');
