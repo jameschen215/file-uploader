@@ -6,9 +6,9 @@ import {
   updateSearchInfo,
 } from './lib/search-helpers.js';
 
-const desktopSearchForm = document.querySelector('#search-form-desktop');
+const form = document.querySelector('#search-form-desktop');
 const spinner = document.querySelector('#search-indicator');
-const desktopSearchInput = document.querySelector('#search-form-desktop input');
+const input = document.querySelector('#search-form-desktop input');
 const clearButton = document.querySelector('#search-form-desktop > button');
 
 const container = document.querySelector('#layout-container');
@@ -20,12 +20,13 @@ let originalContentAndStyle = null;
 let submitting = false;
 
 // 1. Save original state and register input actions on page loading
-document.addEventListener('DOMContentLoaded', () => {
-  handleOriginalStateAndInputActions();
-});
+document.addEventListener(
+  'DOMContentLoaded',
+  handleOriginalStateAndInputActions,
+);
 
 // 2. Update search form submission
-desktopSearchForm.addEventListener('submit', handleSubmission);
+form.addEventListener('submit', handleSubmission);
 
 // 3. Handle browser back/forward buttons
 window.addEventListener('popstate', handleBrowserNavigation);
@@ -39,11 +40,13 @@ if (container) {
 async function handleOriginalStateAndInputActions(ev) {
   if (!container) return;
 
-  //  No search query - we're on home page
-  const nav = performance.getEntriesByType('navigation')[0];
+  const urlParams = new URLSearchParams(window.location.search);
+  const searchQuery = urlParams.get('q');
 
-  if (nav.type !== 'reload') {
-    // Only save original state on first load, not reload
+  if (searchQuery) {
+    handleSubmission(ev, searchQuery);
+  } else {
+    // Home page - save original state
     originalContentAndStyle = {
       mainClass: mainContainer.className,
       subHeaderHTML: subHeader.innerHTML,
@@ -59,13 +62,20 @@ async function handleOriginalStateAndInputActions(ev) {
     );
   }
 
-  handleClearButtonVisibility(desktopSearchInput, clearButton);
+  handleClearButtonVisibility(input, clearButton);
 }
 
-async function handleSubmission(ev) {
+async function handleSubmission(ev, searchQuery = null) {
   ev.preventDefault();
 
-  const query = desktopSearchInput.value.trim();
+  let query = '';
+
+  if (searchQuery) {
+    query = searchQuery;
+    input.value = query;
+  } else {
+    query = input.value.trim();
+  }
 
   if (!query) return;
 
@@ -97,7 +107,7 @@ async function handleSubmission(ev) {
 
     const results = await res.json();
     submitting = false;
-    desktopSearchInput.value = query;
+    input.value = query;
 
     updateSearchInfo({
       spinner,
@@ -108,20 +118,37 @@ async function handleSubmission(ev) {
     });
 
     // Save state
-    history.pushState(
-      {
-        type: 'search',
-        query: query,
-        results: results,
-        mainClass: mainContainer.className,
-        subHeaderHTML: subHeader.innerHTML,
-        subHeaderClass: subHeader.className,
-        containerHTML: container.innerHTML,
-        containerClass: container.className,
-      },
-      '',
-      `/search?q=${encodeURIComponent(query)}`,
-    );
+    if (searchQuery) {
+      history.replaceState(
+        {
+          type: 'search',
+          query: searchQuery,
+          results: results,
+          mainClass: mainContainer.className,
+          subHeaderHTML: subHeader.innerHTML,
+          subHeaderClass: subHeader.className,
+          containerHTML: container.innerHTML,
+          containerClass: container.className,
+        },
+        '',
+        window.location.pathname + window.location.search,
+      );
+    } else {
+      history.pushState(
+        {
+          type: 'search',
+          query: query,
+          results: results,
+          mainClass: mainContainer.className,
+          subHeaderHTML: subHeader.innerHTML,
+          subHeaderClass: subHeader.className,
+          containerHTML: container.innerHTML,
+          containerClass: container.className,
+        },
+        '',
+        `/search?q=${encodeURIComponent(query)}`,
+      );
+    }
   } catch (error) {
     submitting = false;
     console.error('Search error: ', error);
@@ -145,8 +172,8 @@ function handleBrowserNavigation(ev) {
       container.innerHTML = ev.state.containerHTML;
       container.className = ev.state.containerClass;
 
-      // Clear search desktopSearchInput
-      desktopSearchInput.value = '';
+      // Clear search input
+      input.value = '';
     } else if (ev.state.type === 'search') {
       mainContainer.className = ev.state.mainClass;
       subHeader.innerHTML = ev.state.subHeaderHTML;
@@ -154,7 +181,7 @@ function handleBrowserNavigation(ev) {
       container.innerHTML = ev.state.containerHTML;
       container.className = ev.state.containerClass;
 
-      desktopSearchInput.value = ev.state.query;
+      input.value = ev.state.query;
       updateSearchInfo({
         spinner,
         container,
@@ -165,6 +192,6 @@ function handleBrowserNavigation(ev) {
     }
   } else {
     // No state - reload page
-    // window.location.reload();
+    window.location.reload();
   }
 }

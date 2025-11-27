@@ -20,6 +20,5 @@ export const handleGetFiles = asyncHandler(async (req, res) => {
     oldInput: null,
     sortBy,
     direction,
-    searchQuery: query.q as string,
   });
 });

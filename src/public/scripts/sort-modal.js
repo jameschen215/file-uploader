@@ -38,5 +38,7 @@ import { hideModal, showModal } from './lib/modal-helpers.js';
     // disable submit button
     submitButton.disabled = true;
     submitButton.textContent = 'Applying...';
+
+    form.submit();
   });
 })();

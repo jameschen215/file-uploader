@@ -64,6 +64,8 @@ export function generateSearchFolder(folder) {
   `;
 }
 
+let listenersAttached = false; // Track if listeners are already attached
+
 export function handleClearButtonVisibility(input, button) {
   if (!input.value.trim()) {
     // Hide clear if no search value
@@ -72,6 +74,13 @@ export function handleClearButtonVisibility(input, button) {
     // Show it if search value exists
     showClearButton(button);
   }
+
+  if (listenersAttached) {
+    console.log('Listeners have been attached.');
+    return;
+  }
+
+  listenersAttached = true;
 
   // Show the clear button on mousedown if the input has a value
   input.addEventListener('mousedown', () => {

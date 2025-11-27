@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (layoutToggle && layoutContainer) {
     // Load layout
-    console.log({ isGrid });
     if (isGrid) {
       changeLayoutToGrid();
     } else {

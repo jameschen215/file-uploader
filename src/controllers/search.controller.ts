@@ -7,6 +7,8 @@ export const handleMobileSearch: RequestHandler = async (req, res) => {
     const query = req.query.q as string;
     const userId = res.locals.currentUser!.id;
 
+    console.log({ query });
+
     if (!query) {
       return res.status(400).json({ error: 'Query parameter required' });
     }
@@ -55,13 +57,7 @@ export const handleMobileSearch: RequestHandler = async (req, res) => {
     }
 
     // Browser refresh - render HTML page
-    res.render('index', {
-      currentFolder: null,
-      breadcrumbs: [],
-      folders: [],
-      files: [],
-      searchQuery: query,
-    });
+    res.redirect('/');
   } catch (error) {
     console.error('Search error:', error);
     res.status(500).json({ error: 'Search failed' });
