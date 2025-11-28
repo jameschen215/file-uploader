@@ -1,0 +1,36 @@
+<!-- breadcrumbs (hidden on search route) -->
+<% if (!locals.currentPath.includes('search')) { %>
+
+<nav id="breadcrumbs" aria-label="breadcrumb" class="flex items-center gap-2">
+  <button
+    id="breadcrumb-back-btn"
+    type="button"
+    class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %>"
+  >
+    <span><%- icon({name: 'ArrowLeft', size: 20 }) %></span>
+  </button>
+
+  <a
+    href="/"
+    class="font-medium text-lg <%= locals.currentPath !== '/' ? 'hidden' : '' %> sm:block"
+  >
+    Cloud drive
+  </a>
+
+  <% if (locals.breadcrumbs && breadcrumbs.length > 0) { %>
+  <!-- loop breadcrumbs -->
+  <% breadcrumbs.forEach((bc, i) => { %>
+  <span class="text-xl font-thin hidden sm:block">&#x203A;</span>
+
+  <% if (i === breadcrumbs.length - 1) { %>
+  <span aria-current="page" class="font-semibold"> <%= bc.name %> </span>
+  <% } else { %>
+  <a href="/folders/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
+  <% } %>
+  <% }) %>
+  <% } %>
+</nav>
+
+<% } %>
+
+<script type="module" src="/scripts/components/breadcrumbs.js"></script>

@@ -740,6 +740,9 @@ video {
 .mt-auto {
   margin-top: auto;
 }
+.mr-auto {
+  margin-right: auto;
+}
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -1428,6 +1431,9 @@ video {
 }
 .font-thin {
   font-weight: 100;
+}
+.font-normal {
+  font-weight: 400;
 }
 .uppercase {
   text-transform: uppercase;
@@ -2399,6 +2405,10 @@ video {
 
   .sm\:gap-2 {
     gap: 0.5rem;
+  }
+
+  .sm\:gap-3 {
+    gap: 0.75rem;
   }
 
   .sm\:rounded-2xl {

@@ -1,0 +1,24 @@
+<!-- Create folder button and upload file button - hidden on search route -->
+
+<% if (!locals.currentPath.includes('search')) { %>
+
+<div class="hidden sm:flex items-center gap-4 h-16">
+  <button
+    type="button"
+    aria-expanded="false"
+    class="upload-modal-trigger flex items-center justify-center gap-3 py-1.5 px-3 rounded-sm font-normal text-gray-50 dark:text-gray-900 bg-gray-800 dark:bg-gray-50 hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors duration-200"
+  >
+    <span><%- icon({name: 'ArrowUp', size: 18}) %></span>
+    <span>Upload</span>
+  </button>
+  <button
+    type="button"
+    aria-expanded="false"
+    class="folder-form-modal-trigger flex items-center justify-center gap-3 py-1.5 px-3 rounded-sm font-normal text-gray-900 dark:text-gray-50 bg-gray-200/50 dark:bg-gray-700/40 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors duration-200"
+  >
+    <span><%- icon({name: 'FolderPlus', size: 18}) %></span>
+    <span>New folder</span>
+  </button>
+</div>
+
+<% } %>

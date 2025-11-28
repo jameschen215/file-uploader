@@ -1,0 +1,64 @@
+<header class="fixed top-0 left-0 w-full bg-gray-50 dark:bg-gray-900 z-40">
+  <!-- 1. Main Navbar -->
+
+  <nav
+    aria-label="Main navigation"
+    class="relative w-full border-b border-gray-200 dark:border-gray-800 z-50"
+  >
+    <!-- 1280 container -->
+    <div
+      class="h-16 w-full max-w-7xl mx-auto flex items-center justify-between px-5"
+    >
+      <!-- logo -->
+      <%- include('../components/logo') %>
+
+      <!-- Search form -->
+      <%- include('../components/search-form-on-desktop')  %>
+
+      <!-- Desktop nav links -->
+      <%- include('../components/nav-links')  %>
+    </div>
+  </nav>
+
+  <!-- Sub-header -->
+
+  <div id="sub-header" class="h-16 w-full max-w-7xl mx-auto px-5">
+    <!-- UP -->
+    <%- include('../components/add-controls') %>
+
+    <!-- DOWN -->
+    <div class="h-12 flex items-center justify-between">
+      <!-- 1. Show number of search results -->
+      <div id="search-results-count" class="hidden"></div>
+
+      <!-- 2. Breadcrumbs -->
+      <%- include('../components/breadcrumbs') %>
+
+      <!-- 3. Control area -->
+      <div class="flex items-center gap-3">
+        <button
+          id="search-btn-for-mobile"
+          type="button"
+          aria-controls="modal"
+          aria-expanded="false"
+          class="search-modal-trigger sm:hidden"
+        >
+          <%- icon({ name: 'Search', size: 20 }) %>
+        </button>
+
+        <%- include('../components/sort-controls') %>
+
+        <button
+          id="layout-toggle"
+          type="button"
+          aria-label="Toggle layout between grid and list"
+          class="p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+        >
+          <%- icon({ name: 'LayoutList', size: 20 }) %>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script type="module" src="/scripts/partials/header.js"></script>

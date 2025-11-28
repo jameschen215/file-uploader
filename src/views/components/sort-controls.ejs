@@ -1,0 +1,104 @@
+<% if (!locals.currentPath.includes('search')) { %>
+
+<!-- desktop sort -->
+<div
+  class="hidden relative sm:flex items-center justify-between gap-2 shrink-0"
+>
+  <button
+    id="sort-info"
+    type="button"
+    class="flex items-center gap-1 p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+  >
+    <span
+      id="sort-direction"
+      data-direction="<%= locals.direction || 'asc'  %>"
+    >
+      <%- locals.direction ? direction === 'asc' ? '&#x2191;' : '&#x2193;' : '&#x2191;' %>
+    </span>
+    <span
+      id="sort-by"
+      data-sort-by="<%= locals.sortBy || 'name' %>"
+      class="font-light capitalize"
+    >
+      <%- locals.sortBy ? sortBy : 'name' %>
+    </span>
+  </button>
+
+  <!-- sort-by select -->
+  <!-- 1. trigger -->
+  <button
+    id="select-trigger"
+    type="button"
+    class="hidden sm:block p-1 rounded-md hover:bg-gray-200/50 dark:hover:bg-gray-800 transition-colors duration-200"
+  >
+    <%- icon({ name: 'ChevronsUpDown', size: 20 }) %>
+  </button>
+
+  <!-- 2. select -->
+  <div
+    id="sort-select"
+    class="hidden absolute top-full translate-y-5 p-5 right-0 w-60 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-lg"
+  >
+    <h3 class="text-lg font-medium mb-2">Sort by</h3>
+
+    <ul class="flex flex-col">
+      <li>
+        <button
+          type="button"
+          class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+        >
+          <span class="font-mono font-light">Name</span>
+          <span>
+            <%- locals.sortBy === 'name' ? '&#x2713;' : '' %>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+        >
+          <span class="font-mono font-light">Size</span>
+          <span>
+            <%- locals.sortBy === 'size' ? '&#x2713;' : '' %>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+        >
+          <span class="font-mono font-light">Type</span>
+          <span>
+            <%- locals.sortBy === 'type' ? '&#x2713;' : '' %>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="py-2 font-light hover:bg-gray-50 w-full flex items-center justify-between px-2 rounded-sm"
+        >
+          <span class="font-mono font-light">Date</span>
+          <span>
+            <%- locals.sortBy === 'date' ? '&#x2713;' : '' %>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<button
+  id="sort-btn-for-mobile"
+  type="button"
+  aria-controls="modal"
+  aria-expanded="false"
+  class="sort-modal-trigger sm:hidden"
+>
+  <%- icon({ name: 'ArrowDownUp', size: 20 }) %>
+</button>
+<% } %>
+
+<script type="module" src="/scripts/components/sort-controls.js"></script>

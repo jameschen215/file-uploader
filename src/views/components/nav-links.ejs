@@ -1,0 +1,41 @@
+<ul class="flex items-center">
+  <!-- Theme toggle -->
+  <li class="hidden sm:block mr-2">
+    <button
+      type="button"
+      class="theme-toggle flex items-center justify-center size-9 p-1 hover:bg-gray-200/60 dark:hover:bg-gray-800 rounded-full transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+    >
+      <span aria-hidden="true" class="theme-icon"></span>
+      <span class="sr-only" class="theme-text"></span>
+    </button>
+  </li>
+
+  <% if (!locals.currentUser) { %>
+  <li class="hidden sm:block mr-2">
+    <a
+      href="/auth/sign-in"
+      class="border border-lime-700 text-lime-700 dark:border-lime-400 dark:text-lime-400 py-1.5 px-5 rounded-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+      >Sign in</a
+    >
+  </li>
+
+  <li class="hidden sm:block">
+    <a
+      href="/auth/sign-up"
+      class="border border-transparent bg-lime-600 hover:bg-lime-500 text-white py-1.5 px-5 rounded-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+    >
+      Sign up
+    </a>
+  </li>
+  <% } %>
+
+  <% if (locals.currentUser) { %>
+  <li>
+    <%- include('../components/dropdown') %>
+  </li>
+  <% } %>
+
+  <li>
+    <%- include('../components/hamburger-menu') %>
+  </li>
+</ul>

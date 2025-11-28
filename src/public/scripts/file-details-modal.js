@@ -1,4 +1,4 @@
-import { icon } from './lib/icons.js';
+import { icon } from './lib/get-icon.js';
 import { hideModal, showModal } from './lib/modal-helpers.js';
 import { formateDate, formatFileSize, formatTime } from './lib/utils.js';
 

@@ -1,4 +1,4 @@
-import { icon } from './icons.js';
+import { icon } from './get-icon.js';
 import {
   hideClearButton,
   showClearButton,

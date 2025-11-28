@@ -1,4 +1,4 @@
-import { icon } from './icons.js';
+import { icon } from './lib/get-icon.js';
 import {
   ALLOWED_FILE_TYPES,
   MAX_FILE_SIZE,

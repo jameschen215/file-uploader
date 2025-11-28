@@ -1,0 +1,44 @@
+<% if (locals.currentUser) { %>
+<form
+  id="search-form-on-desktop"
+  method="get"
+  class="hidden sm:block relative w-full max-w-xl"
+  novalidate
+>
+  <div
+    id="search-indicator"
+    class="size-5 absolute top-1/2 -translate-y-1/2 left-4 text-gray-500"
+    aria-hidden="true"
+  >
+    <%- icon({ name: 'Search' }) %>
+  </div>
+
+  <label for="search-desktop" class="sr-only">
+    Search for folders or files
+  </label>
+
+  <input
+    type="text"
+    name="q"
+    value="<%= locals.searchQuery || '' %>"
+    aria-label="Search input"
+    autocomplete="off"
+    spellcheck="false"
+    class="w-full pl-12 h-11 pr-8 outline-none rounded-md placeholder:text-gray-500 placeholder:font-light border border-gray-200 dark:border-gray-700 bg-gray-50 focus:border-gray-300 focus:ring-2 focus:ring-gray-50 dark:bg-gray-800 dark:focus:border-gray-600 dark:focus:ring-gray-900"
+    placeholder="Search..."
+  />
+
+  <button
+    type="button"
+    aria-label="Clear search"
+    class="opacity-0 absolute top-1/2 right-4 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all duration-200"
+  >
+    <%- icon({name: 'X'}) %>
+  </button>
+</form>
+<% } %>
+
+<script
+  type="module"
+  src="/scripts/components/search-form-on-desktop.js"
+></script>

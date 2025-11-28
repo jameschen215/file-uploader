@@ -1,4 +1,4 @@
-import { icon } from './icons.js';
+import { icon } from './lib/get-icon.js';
 import { formatTime } from './utils.js';
 
 // Store handler references outside the function

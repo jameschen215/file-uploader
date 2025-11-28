@@ -1,6 +1,5 @@
 import { hideModal, showModal } from './lib/modal-helpers.js';
-
-import { icon } from './lib/icons.js';
+import { icon } from './lib/get-icon.js';
 import {
   ALLOWED_FILE_TYPES,
   MAX_FILE_SIZE,
