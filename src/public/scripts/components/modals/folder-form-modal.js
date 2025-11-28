@@ -1,10 +1,10 @@
-import { MAX_FOLDER_NAME } from './lib/constants.js';
-import { hideModal, showModal } from './lib/modal-helpers.js';
+import { MAX_FOLDER_NAME } from '../../lib/constants.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   showErrorStylesAndMessages,
-} from './lib/validation-helpers.js';
+} from '../../lib/validation-helpers.js';
 
 (function handleAddModalVisibility() {
   const createTriggers = document.querySelectorAll(

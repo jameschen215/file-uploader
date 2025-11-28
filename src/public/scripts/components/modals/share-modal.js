@@ -1,4 +1,4 @@
-import { hideModal } from './lib/modal-helpers.js';
+import { hideModal } from '../../lib/modal-helpers.js';
 
 (function handleShareModalVisibility() {
   const modal = document.querySelector('#share-modal');

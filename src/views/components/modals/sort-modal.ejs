@@ -119,6 +119,7 @@
             >
               &#x2191;
             </span>
+            <!-- prettier-ignore-start -->
             <input
               type="radio"
               name="sortDirection"
@@ -126,6 +127,7 @@
               <%= locals.direction && direction === 'asc' ? 'checked' : ''%>
               class="sr-only peer"
             />
+            <!-- prettier-ignore-end -->
             <div
               class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
             ></div>
@@ -171,4 +173,4 @@
   </div>
 </div>
 
-<script type="module" src="/scripts/sort-modal.js"></script>
+<script type="module" src="/scripts/components/modals/sort-modal.js"></script>

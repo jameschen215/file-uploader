@@ -1,6 +1,6 @@
-import { icon } from './lib/get-icon.js';
-import { hideModal, showModal } from './lib/modal-helpers.js';
-import { formateDate, formatFileSize, formatTime } from './lib/utils.js';
+import { icon } from '../../lib/get-icon.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
+import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
 
 const BUTTON_DISABLED_DURATION = 500;
 

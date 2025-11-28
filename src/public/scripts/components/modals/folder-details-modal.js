@@ -1,5 +1,5 @@
-import { hideModal, showModal } from './lib/modal-helpers.js';
-import { formateDate } from './lib/utils.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
+import { formateDate } from '../../lib/utils.js';
 
 // Store handler references outside the function
 let currentDeleteHandler = null;

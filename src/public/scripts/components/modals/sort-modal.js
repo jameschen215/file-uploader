@@ -1,4 +1,4 @@
-import { hideModal, showModal } from './lib/modal-helpers.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
 (function handleSortModalVisibility() {
   const trigger = document.querySelector('.sort-modal-trigger');

@@ -1,10 +1,10 @@
-import { hideModal, showModal } from './lib/modal-helpers.js';
-import { icon } from './lib/get-icon.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
+import { icon } from '../../lib/get-icon.js';
 import {
   ALLOWED_FILE_TYPES,
   MAX_FILE_SIZE,
   MAX_UPLOAD_FILES,
-} from './lib/constants.js';
+} from '../../lib/constants.js';
 
 (function handleUploadModalVisibility() {
   const triggers = document.querySelectorAll('.upload-modal-trigger');

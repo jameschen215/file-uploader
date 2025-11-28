@@ -1,9 +1,9 @@
-import { hideModal, showModal } from '../lib/modal-helpers.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import {
   handleActionsOnSearchedItems,
   handleClearButtonVisibility,
   updateSearchInfo,
-} from '../lib/search-helpers.js';
+} from '../../lib/search-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchModal = document.querySelector('#search-modal');

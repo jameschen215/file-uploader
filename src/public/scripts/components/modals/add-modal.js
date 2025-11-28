@@ -1,4 +1,4 @@
-import { hideModal, showModal } from './lib/modal-helpers.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
 (function handleAddModalVisibility() {
   const trigger = document.querySelector('.add-modal-trigger');
