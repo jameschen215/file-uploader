@@ -2,7 +2,7 @@
 
 <button
   id="menu-toggle"
-  class="sm:hidden size-8 cursor-pointer"
+  class="sm:hidden size-8 flex items-center justify-center rounded-full cursor-pointer focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
   aria-label="Toggle navigation menu"
   aria-expanded="false"
   aria-controls="menu-content"
@@ -10,13 +10,13 @@
 >
   <% if (locals.currentUser) { %>
   <span
-    class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full"
+    class="bg-teal-400 size-8 flex items-center justify-center text-gray-50 text-xl rounded-full"
   >
     <%= formatAvatar(currentUser) %>
   </span>
   <% } else { %>
-  <span class="text-gray-700 dark:text-gray-50 block size-6">
-    <%- icon({name: 'Menu'}) %>
+  <span class="text-gray-700 dark:text-gray-50">
+    <%- icon({name: 'Menu', size: 20}) %>
   </span>
   <% } %>
 </button>
@@ -47,22 +47,22 @@
   </div>
 
   <ul class="w-full flex flex-col font-medium p-5">
-    <li>
+    <li class="py-5 border-y border-gray-200 dark:border-gray-800">
       <form action="/auth/sign-out" method="post">
         <button
           type="submit"
           role="menuitem"
-          class="w-full flex items-center gap-3 text-start py-5 border-y border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+          class="w-full flex items-center gap-3 p-1 rounded-sm text-start font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
         >
           <span aria-hidden="true"><%- icon({name: 'LogOut'}) %></span>
           <span>Sign out</span>
         </button>
       </form>
     </li>
-    <li>
+    <li class="py-5 border-b border-gray-200 dark:border-gray-800">
       <button
         type="button"
-        class="theme-toggle w-full flex items-center gap-2 py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        class="theme-toggle w-full flex items-center gap-2 p-1 rounded-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
       >
         <span aria-hidden="true" class="theme-icon"></span>
         <span class="theme-text">Switch to dark mode</span>
@@ -71,26 +71,28 @@
   </ul>
   <% } else { %>
   <ul class="w-full flex flex-col font-medium p-5">
-    <li>
+    <li class="py-5 border-b border-gray-200 dark:border-gray-800">
       <a
         href="/auth/sign-in"
-        class="block py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        class="block p-1 rounded-sm font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
       >
         <span>Sign in</span>
       </a>
     </li>
-    <li>
+
+    <li class="py-5 border-b border-gray-200 dark:border-gray-800">
       <a
         href="/auth/sign-up"
-        class="block py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        class="block p-1 rounded-sm font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
       >
         <span>Sign up</span>
       </a>
     </li>
-    <li>
+
+    <li class="py-5 border-b border-gray-200 dark:border-gray-800">
       <button
         type="button"
-        class="theme-toggle w-full flex items-center gap-2 py-5 border-b border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        class="theme-toggle w-full flex items-center gap-2 p-1 rounded-sm font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
       >
         <span aria-hidden="true" class="theme-icon"></span>
         <span class="theme-text">Switch to dark mode</span>

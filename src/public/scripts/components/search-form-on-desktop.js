@@ -25,7 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 2. Update search form submission
-desktopSearchForm.addEventListener('submit', handleSubmission);
+if (desktopSearchForm) {
+  desktopSearchForm.addEventListener('submit', handleSubmission);
+}
 
 // 3. Handle browser back/forward buttons
 window.addEventListener('popstate', handleBrowserNavigation);

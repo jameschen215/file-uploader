@@ -47,7 +47,7 @@ function handleThemeTransform() {
     themeIconEls.forEach((el) => {
       el.innerHTML = isDark
         ? icon({ name: 'Sun', size: 20 })
-        : icon({ name: 'MoonStar', size: 20 });
+        : icon({ name: 'MoonStar', size: 20, strokeWidth: 1.5 });
     });
 
     themeTextEls.forEach((el) => {
