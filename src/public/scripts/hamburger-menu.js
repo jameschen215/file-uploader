@@ -27,11 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function openMenu() {
-    iconWrapper.innerHTML = icon({ name: 'X', size: 20 });
-    trigger.setAttribute('aria-expanded', 'true');
+    content.classList.remove('hidden');
 
-    content.classList.remove('-translate-x-full');
-    content.setAttribute('aria-hidden', 'false');
+    // Show after 'hidden' removed
+    setTimeout(() => {
+      iconWrapper.innerHTML = icon({ name: 'X', size: 20 });
+      trigger.setAttribute('aria-expanded', 'true');
+      content.classList.remove('-translate-x-full');
+      content.setAttribute('aria-hidden', 'false');
+    }, 10);
   }
 
   function closeMenu() {
@@ -43,5 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     content.classList.add('-translate-x-full');
     content.setAttribute('aria-hidden', 'true');
+
+    // Hide after transition - hidden to prevent tab focus
+    setTimeout(() => {
+      content.classList.add('hidden');
+    }, 250);
   }
 });

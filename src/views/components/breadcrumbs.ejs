@@ -5,14 +5,14 @@
   <button
     id="breadcrumb-back-btn"
     type="button"
-    class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %>"
+    class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %> rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-gray-400 dark:focus-visible:ring-offset-gray-900"
   >
     <span><%- icon({name: 'ArrowLeft', size: 20 }) %></span>
   </button>
 
   <a
     href="/"
-    class="font-medium text-lg <%= locals.currentPath !== '/' ? 'hidden' : '' %> sm:block"
+    class="text-lg <%= locals.currentPath !== '/' ? 'hidden' : 'font-medium' %> sm:block rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-gray-400 dark:focus-visible:ring-offset-gray-900"
   >
     Cloud drive
   </a>
@@ -20,12 +20,16 @@
   <% if (locals.breadcrumbs && breadcrumbs.length > 0) { %>
   <!-- loop breadcrumbs -->
   <% breadcrumbs.forEach((bc, i) => { %>
-  <span class="text-xl font-thin hidden sm:block">&#x203A;</span>
+  <span class="text-xl hidden sm:block">&#x203A;</span>
 
   <% if (i === breadcrumbs.length - 1) { %>
   <span aria-current="page" class="font-semibold"> <%= bc.name %> </span>
   <% } else { %>
-  <a href="/folders/<%= bc.id %>" class="hidden sm:block"><%= bc.name %></a>
+  <a
+    href="/folders/<%= bc.id %>"
+    class="hidden sm:block rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+    ><%= bc.name %></a
+  >
   <% } %>
   <% }) %>
   <% } %>
