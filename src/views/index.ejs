@@ -10,7 +10,7 @@
     <% if (locals.folders && folders.length > 0) { %>
     <!-- loop folders -->
     <% folders.forEach(folder => { %>
-    <%- include('partials/layout-item-folder', { folder, breadcrumbs }) %>
+    <%- include('components/layout-item-folder', { folder, breadcrumbs }) %>
     <% }) %>
     <% } %>
 
@@ -18,7 +18,7 @@
     <% if (locals.files && files.length > 0) { %>
     <!-- loop files -->
     <% files.forEach(file => { %>
-    <%- include('partials/layout-item-file', { file, breadcrumbs }) %>
+    <%- include('components/layout-item-file', { file, breadcrumbs }) %>
     <% }) %>
     <% } %>
 
@@ -35,5 +35,3 @@
     <% } %>
   </div>
 </div>
-
-<script type="module" src="/scripts/index.js"></script>

@@ -72,7 +72,7 @@ async function handleSubmission(ev) {
   // Update UI immediately (synchronous)
   mainContainer.classList.remove('sm:mt-[176px]');
   mainContainer.classList.add('sm:mt-16');
-  subHeader.className = 'h-12 flex items-center px-5';
+  subHeader.className = 'h-12 flex items-center w-full max-w-7xl mx-auto px-5';
   container.classList.add('mt-12');
 
   try {

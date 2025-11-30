@@ -1,4 +1,4 @@
-import { hideModal, showModal } from './lib/modal-helpers.js';
+import { hideModal, showModal } from '../lib/modal-helpers.js';
 
 // Handle folder click
 document.querySelectorAll('a[href^="/folders/"]').forEach((folderLink) => {

@@ -1,6 +1,6 @@
 /** --- layout-item-file.js --- */
 
-import { hideModal, showModal } from './lib/modal-helpers.js';
+import { hideModal, showModal } from '../lib/modal-helpers.js';
 
 (function handleFileDetailsModalVisibility() {
   const triggers = document.querySelectorAll('.file-details-modal-trigger');

@@ -22,6 +22,8 @@
 
   <!-- Sub-header -->
 
+  <% if (locals.currentUser) { %>
+
   <div id="sub-header" class="h-16 w-full max-w-7xl mx-auto px-5">
     <!-- UP -->
     <%- include('../components/add-controls') %>
@@ -59,6 +61,8 @@
       </div>
     </div>
   </div>
+
+  <% } %>
 </header>
 
 <script type="module" src="/scripts/partials/header.js"></script>

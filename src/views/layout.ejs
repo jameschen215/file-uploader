@@ -40,7 +40,7 @@
       </main>
 
       <!-- Add button -->
-      <% if (locals.currentUser) { %>
+      <% if (locals.currentUser && locals.currentPath === '/') { %>
       <button
         id="add-btn-for-mobile"
         type="button"
@@ -53,37 +53,7 @@
       <% } %>
     </div>
 
-    <!-- MODALS -->
-    <% if (locals.currentUser) { %>
-    <!-- Search modal -->
-    <%- include('components/modals/search-modal') %>
-
-    <!-- Sort modal -->
-    <%- include('components/modals/sort-modal') %>
-
-    <!-- Add modal -->
-    <%- include('components/modals/add-modal') %>
-
-    <!-- folder modal -->
-    <%- include('components/modals/folder-form-modal', {currentFolder: locals.currentFolder || null}) %>
-
-    <!-- upload modal -->
-    <%- include('components/modals/upload-modal') %>
-
-    <!-- file details modal -->
-    <%- include('components/modals/file-details-modal') %>
-
-    <!-- folder details modal -->
-    <%- include('components/modals/folder-details-modal') %>
-
-    <!-- share modal -->
-    <%- include('components/modals/share-modal') %>
-
-    <% } %>
-
-    <!-- scripts -->
-    <script type="module" src="/scripts/header.js"></script>
-    <script type="module" src="/scripts/main.js"></script>
-    <script type="module" src="/scripts/search-desktop.js"></script>
+    <!-- Modals -->
+    <%- include('partials/modals') %>
   </body>
 </html>
