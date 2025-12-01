@@ -1226,6 +1226,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(12 74 110 / var(--tw-bg-opacity, 1));
 }
+.bg-sky-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 105 161 / var(--tw-bg-opacity, 1));
+}
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -1889,6 +1893,16 @@ video {
   border-color: rgb(132 204 22 / var(--tw-border-opacity, 1));
 }
 
+.focus\:border-sky-500:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity, 1));
+}
+
+.focus\:border-sky-400:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(56 189 248 / var(--tw-border-opacity, 1));
+}
+
 .focus\:bg-blue-500:focus {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
@@ -1957,6 +1971,11 @@ video {
 .focus\:ring-lime-400:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(163 230 53 / var(--tw-ring-opacity, 1));
+}
+
+.focus\:ring-sky-50:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(240 249 255 / var(--tw-ring-opacity, 1));
 }
 
 .focus\:ring-offset-2:focus {
@@ -2380,6 +2399,16 @@ video {
   border-color: rgb(239 68 68 / var(--tw-border-opacity, 1));
 }
 
+.dark\:focus\:border-sky-500:focus:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(14 165 233 / var(--tw-border-opacity, 1));
+}
+
+.dark\:focus\:border-sky-400:focus:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(56 189 248 / var(--tw-border-opacity, 1));
+}
+
 .dark\:focus\:bg-gray-900:focus:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
@@ -2398,6 +2427,16 @@ video {
 .dark\:focus\:ring-red-950:focus:is(.dark *) {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(69 10 10 / var(--tw-ring-opacity, 1));
+}
+
+.dark\:focus\:ring-sky-950:focus:is(.dark *) {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(8 47 73 / var(--tw-ring-opacity, 1));
+}
+
+.dark\:focus\:ring-sky-900:focus:is(.dark *) {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(12 74 110 / var(--tw-ring-opacity, 1));
 }
 
 .dark\:focus\:ring-offset-gray-900:focus:is(.dark *) {

@@ -10,7 +10,10 @@
     class="absolute bottom-0 left-0 min-h-[33vh] w-full flex-col bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl p-5"
   >
     <div class="flex justify-end mb-8">
-      <button type="button" class="close-modal-btn">
+      <button
+        type="button"
+        class="close-modal-btn rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+      >
         <%- icon({name: 'X'}) %>
       </button>
     </div>
@@ -20,7 +23,7 @@
         <button
           id="upload-btn-for-mobile"
           type="button"
-          class="upload-modal-trigger w-full flex items-center gap-4"
+          class="upload-modal-trigger w-full flex items-center gap-4 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
         >
           <span>
             <%- icon({name: 'ImageUp', size: 24}) %>
@@ -33,7 +36,7 @@
         <button
           id="folder-btn-for-mobile"
           type="button"
-          class="w-full flex items-center gap-4"
+          class="w-full flex items-center gap-4 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
         >
           <span>
             <%- icon({name: 'FolderPlus', size: 24}) %>

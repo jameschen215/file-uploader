@@ -12,7 +12,10 @@
     <div class="flex flex-col flex-grow relative">
       <!-- Back button -->
       <div class="absolute top-0 right-0">
-        <button type="button" class="close-modal-btn">
+        <button
+          type="button"
+          class="close-modal-btn rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+        >
           <%- icon({name: 'X'}) %>
         </button>
       </div>
@@ -40,7 +43,7 @@
             aria-describedby="name-error"
             aria-invalid="false"
             value="<%= locals.oldInput?.name || '' %>"
-            class="w-full px-5 py-2 outline-none rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:border-lime-500 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950"
+            class="w-full px-5 py-2 outline-none rounded-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus:border-sky-500 focus:ring-sky-50 dark:focus:border-sky-500 dark:focus:ring-sky-900"
           />
 
           <div
@@ -52,7 +55,7 @@
 
         <button
           type="submit"
-          class="w-full bg-lime-700 py-2 outline-none text-gray-50 font-medium rounded-md cursor-pointer focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full bg-sky-700 py-2 outline-none text-gray-50 font-medium rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
         >
           Create
         </button>

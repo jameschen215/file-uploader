@@ -29,12 +29,12 @@ function displayFolderInfo(folder, breadcrumbs) {
 
   document.querySelector('#folder-path').innerHTML =
     breadcrumbs.length === 0
-      ? `<a href="/" class="font-medium text-sky-500">Cloud drive</a>`
-      : `<a href="/" class="font-medium text-sky-500">Cloud drive</a> &#x203A; ` +
+      ? `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a>`
+      : `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a> &#x203A; ` +
         breadcrumbs
           .map(
             (bc) =>
-              `<a href="/folders/${bc.id}" class="font-medium text-sky-500">${bc.name}</a>`,
+              `<a href="/folders/${bc.id}" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">${bc.name}</a>`,
           )
           .join(' &#x203A; ');
 }

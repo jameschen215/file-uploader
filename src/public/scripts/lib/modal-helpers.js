@@ -24,15 +24,15 @@ export function showModal({
   // 4. Prevent events on pages below
   document.querySelector('#site-container').setAttribute('inert', '');
 
-  // 5. Dispatch modal open event
+  // 5. Focus on modal to be ready for user to press tab
+  modal.focus({ preventScroll: true });
+
+  // 6. Dispatch modal open event
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {
       detail: { file, folder, breadcrumbs },
     }),
   );
-
-  // 6. Focus on modal to be ready for user to press tab
-  modal.focus({ preventScroll: true });
 
   // 7. return hidden state
   return false;
