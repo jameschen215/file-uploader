@@ -10,7 +10,7 @@
   class="absolute bottom-0 left-0 min-h-[90vh] w-full flex-col bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl p-5"
   >
     <div class="flex justify-end mb-5">
-      <button type="button" class="close-modal-btn">
+      <button type="button" class="close-modal-btn rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">
         <%- icon({ name: 'X' }) %>
       </button>
     </div>
@@ -38,10 +38,10 @@
             />
             <!-- prettier-ignore-end -->
             <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
 
@@ -49,7 +49,7 @@
             class="group relative flex items-center justify-between cursor-pointer"
           >
             <span
-              class="text-gray-700 dark:text-gray-300 dark:group-hover:text-gray-200 group-hover:text-gray-800"
+              class="text-gray-700 dark:text-gray-300"
             >
               Type
             </span>
@@ -62,11 +62,11 @@
               class="sr-only peer"
             />
             <!-- prettier-ignore-end -->
-            <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+             <div
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
 
@@ -81,11 +81,12 @@
             <input type="radio" name="sortBy" value="size" class="sr-only peer" 
               <%= locals.sortBy && sortBy === 'size' ? 'checked' : ''%>
             />
-            <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+            
+             <div
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
 
@@ -100,11 +101,11 @@
             <input type="radio" name="sortBy" value="date" class="sr-only peer" 
               <%= locals.sortBy && sortBy === 'date' ? 'checked' : ''%>
             />
-            <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+             <div
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
         </section>
@@ -129,11 +130,11 @@
               class="sr-only peer"
             />
             <!-- prettier-ignore-end -->
-            <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+             <div
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
 
@@ -152,11 +153,11 @@
               class="sr-only peer"
               <%= locals.direction && direction === 'desc' ? 'checked' : ''%>
             />
-            <div
-              class="w-5 h-5 border border-gray-400 dark:border-gray-600 rounded-full peer-checked:border-gray-600 peer-focus:ring-2 peer-focus:ring-gray-500 transition-all"
+             <div
+              class="w-5 h-5 border border-gray-400 rounded-full peer-checked:border-gray-600 dark:peer-checked:border-gray-300 peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-gray-400 dark:peer-focus-visible:ring-offset-gray-900 transition-all"
             ></div>
             <div
-              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-teal-900 dark:bg-teal-300 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+              class="absolute right-[5px] top-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-sky-600 dark:bg-sky-400 rounded-full -ml-4 opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
             ></div>
           </label>
         </section>
@@ -164,7 +165,7 @@
         <div class="flex items-center justify-between mt-auto">
           <button
             type="submit"
-            class="text-gray-50 bg-gray-950 dark:bg-gray-200 dark:text-gray-950 w-full py-3 rounded-lg font-medium"
+            class="text-gray-50 bg-gray-900 dark:bg-gray-200 dark:text-gray-950 w-full py-2.5 rounded-sm font-medium focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
           >
             Apply
           </button>
