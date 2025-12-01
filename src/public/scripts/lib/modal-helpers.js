@@ -1,52 +1,45 @@
-// export function showModal(modal, trigger = null) {
-//   const modalName = modal.id;
+// Show modal
+export function showModal({
+  modal,
+  file = null,
+  folder = null,
+  breadcrumbs = null,
+}) {
+  if (!modal.classList.contains('translate-y-full')) return; // already open
 
-//   if (!modal.classList.contains('translate-y-full')) return; // already open
+  const modalName = modal.id;
+  console.log({ modalName });
 
-//   // 1. Modify the trigger attribute
-//   document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
-//     t.setAttribute('aria-expanded', 'true');
-//   });
+  // 1. Modify the trigger attribute
+  document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
+    t.setAttribute('aria-expanded', 'true');
+  });
 
-//   // 2. Modify classList on modal to show it
-//   modal.classList.remove('translate-y-full');
+  // 2. Modify classList on modal to show it
+  modal.classList.remove('translate-y-full');
 
-//   // 3. Prevent scrolling on pages below
-//   document.body.classList.add('overflow-hidden');
+  // 3. Prevent scrolling on pages below
+  document.body.classList.add('overflow-hidden');
 
-//   // 4. Prevent events on pages below
-//   document.querySelector('#site-container').setAttribute('inert', '');
+  // 4. Prevent events on pages below
+  document.querySelector('#site-container').setAttribute('inert', '');
 
-//   // 5. Dispatch modal open event
-//   let file = null;
-//   let folder = null;
-//   let breadcrumbs = null;
-//   if (trigger) {
-//     file = JSON.parse(trigger.dataset.file || null);
-//     folder = JSON.parse(trigger.dataset.folder || null);
-//     breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs || null);
-//   }
+  // 5. Dispatch modal open event
+  document.dispatchEvent(
+    new CustomEvent(`${modalName}-open`, {
+      detail: { file, folder, breadcrumbs },
+    }),
+  );
 
-//   if (folder) {
-//     console.log({ folder });
-//   }
+  // 6. Focus on modal to be ready for user to press tab
+  modal.focus({ preventScroll: true });
 
-//   document.dispatchEvent(
-//     new CustomEvent(`${modalName}-open`, {
-//       detail: { file, folder, breadcrumbs },
-//     }),
-//   );
-
-//   // 6. return hidden state
-//   return false;
-// }
+  // 7. return hidden state
+  return false;
+}
 
 export function hideModal({ modal }) {
-  if (!modal) {
-    console.log('NO MODAL');
-    console.log({ modal });
-  }
-  if (modal.classList.contains('translate-y-full')) return; // already hidden
+  if (!modal || modal.classList.contains('translate-y-full')) return; // already hidden
 
   const modalName = modal.id;
 
@@ -82,42 +75,4 @@ export function hideClearButton(button) {
   // button.classList.add('opacity-0');
   button.classList.add('hidden');
   button.classList.add('pointer-events-none');
-}
-
-// Show modal
-export function showModal({
-  modal,
-  file = null,
-  folder = null,
-  breadcrumbs = null,
-}) {
-  if (!modal.classList.contains('translate-y-full')) return; // already open
-
-  const modalName = modal.id;
-  console.log({ modalName });
-
-  // 1. Modify the trigger attribute
-  document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
-    t.setAttribute('aria-expanded', 'true');
-  });
-
-  // 2. Modify classList on modal to show it
-  modal.classList.remove('translate-y-full');
-
-  // 3. Prevent scrolling on pages below
-  document.body.classList.add('overflow-hidden');
-
-  // 4. Prevent events on pages below
-  document.querySelector('#site-container').setAttribute('inert', '');
-
-  // 5. Dispatch modal open event
-
-  document.dispatchEvent(
-    new CustomEvent(`${modalName}-open`, {
-      detail: { file, folder, breadcrumbs },
-    }),
-  );
-
-  // 6. return hidden state
-  return false;
 }

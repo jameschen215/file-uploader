@@ -33,31 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isSubmitting) return; // prevent duplicate submissions
 
-    let isValid = true;
+    try {
+      let isValid = true;
 
-    form.querySelectorAll('input').forEach((field) => {
-      if (!validateAuthField(field)) {
-        isValid = false;
+      form.querySelectorAll('input').forEach((field) => {
+        if (!validateAuthField(field)) {
+          isValid = false;
+        }
+      });
+
+      if (isValid) {
+        isSubmitting = true;
+
+        updateUIOnSubmit();
+
+        // manually submit only if valid
+        form.submit();
+      } else {
+        focusOnFirstErrorField(form);
       }
-    });
 
-    if (isValid) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Signing in...';
-      signUpLink.classList.add(
-        'pointer-events-none',
-        'text-gray-400',
-        'cursor-default',
-      );
-
-      // manually submit only if valid
-      form.submit();
-    } else {
-      focusOnFirstErrorField(form);
+      isSubmitting = false;
+    } catch (error) {
+      console.error(error);
+      isSubmitting = false;
     }
-
-    // set submit state to false after submission
-    isSubmitting = false;
   });
 
   // 5. remove error info while user typing
@@ -82,4 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
       pswToggle.setAttribute('aria-label', 'Hide password.');
     }
   });
+
+  function updateUIOnSubmit() {
+    pswToggle.disabled = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing in...';
+    signUpLink.classList.add(
+      'pointer-events-none',
+      'text-gray-400',
+      'cursor-default',
+    );
+  }
 });

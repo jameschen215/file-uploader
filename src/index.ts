@@ -11,7 +11,7 @@ import { PrismaClient } from '@prisma/client/index.js';
 import expressEjsLayouts from 'express-ejs-layouts';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 
-import authRoutes from './routes/auth.js';
+import authRoutes from './routes/auth.routes.js';
 import routes from './routes/index.routes.js';
 
 import { CustomNotFoundError } from './errors/index.js';

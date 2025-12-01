@@ -334,7 +334,34 @@ async function changeLayout(view) {
 }
 ```
 
-## TODO:
+### Accessibility & Focus Management
 
-- Improve list item - add details
-- multi-field form data of multer
+**The Problem:**
+Previously, when opening a modal, the keyboard focus remained on the trigger button (in the background). Since the background container was set to inert to prevent interaction, the browser's focus state was effectively "lost" or reset to the top of the browser window. This forced keyboard users to press Tab multiple times (cycling through the browser's address bar) just to reach the modal content.
+
+**The Solution:**
+We implemented Programmatic Focus Management to ensure a smooth user experience.
+
+1. Focus Trapping:
+   Upon opening, focus is immediately shifted to the modal container itself.
+
+2. Container Configuration:
+   The modal wrapper is given `tabindex="-1"`, allowing it to receive programmatic focus via JavaScript while remaining skipped by sequential keyboard navigation.
+
+3. Visual Polish:
+   We focus the container instead of the first input to avoid "Phantom Focus" (where the first button is focused but lacks a visible ring, causing the next `Tab` press to jump to the second button).
+
+4. Scroll Safety:
+   We use `{ preventScroll: true }` to ensure the browser doesn't attempt to scroll the background page when focus shifts.
+
+**Implementation snippet:**
+
+```JavaScript
+// In the showModal function:
+
+// 1. Ensure modal is focusable programmatically
+// (HTML: <div id="modal" tabindex="-1" ...>)
+
+// 2. Move focus to the container immediately
+modal.focus({ preventScroll: true });
+```

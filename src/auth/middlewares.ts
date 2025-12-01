@@ -10,7 +10,8 @@ export const isAuthenticated: RequestHandler = (req, res, next) => {
 export const isNotAuthenticated: RequestHandler = (req, res, next) => {
   if (!req.isAuthenticated()) return next();
 
-  throw new Error('You are already logged in');
+  // throw new Error('You are already logged in');
+  res.redirect('/');
 };
 
 export const requireRole = (roles: string[]) => {

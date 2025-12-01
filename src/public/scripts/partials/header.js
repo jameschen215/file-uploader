@@ -60,22 +60,22 @@ function handleLayoutTransform() {
   const layoutToggle = document.querySelector('#layout-toggle');
   const layoutContainer = document.querySelector('#layout-container');
 
-  let isGrid =
-    localStorage.getItem('isGrid') !== undefined
-      ? JSON.parse(localStorage.getItem('isGrid'))
-      : true;
+  const savedLayout = localStorage.getItem('layout') || 'grid';
+  let isGrid = savedLayout === 'grid';
 
   if (layoutToggle && layoutContainer) {
     // Load layout
     if (isGrid) {
+      console.log('Grid');
       changeLayoutToGrid();
     } else {
+      console.log('List');
       changeLayoutToList();
     }
 
     layoutToggle.addEventListener('click', () => {
       isGrid = !isGrid;
-      localStorage.setItem('isGrid', isGrid);
+      localStorage.setItem('layout', isGrid ? 'grid' : 'list');
 
       if (isGrid) {
         changeLayoutToGrid();
@@ -103,11 +103,10 @@ function handleLayoutTransform() {
     // 3. Modify item className
     layoutContainer.querySelectorAll('.item').forEach((item) => {
       item.className =
-        'file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 focus:border-none focus:outline-none dark:ring-offset-gray-900 rounded-md transition-colors';
+        'file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 focus-visible:border-none focus-visible:outline-none dark:ring-offset-gray-900 rounded-md transition-colors';
     });
 
     // 4. Modify icon size of items
-
     layoutContainer.querySelectorAll('.item-icon-wrapper').forEach((icon) => {
       icon.className =
         'item-icon-wrapper w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800 group-hover:bg-sky-50 group-hover:dark:bg-sky-950/25 group-hover:border-sky-300 group-hover:dark:border-sky-800 transition-colors';
@@ -127,7 +126,7 @@ function handleLayoutTransform() {
     // 6. Modify className and icon of info button
     layoutContainer.querySelectorAll('.item .item-info-btn').forEach((btn) => {
       btn.className =
-        'folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 focus:opacity-100 focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 focus:outline-none focus:border-none focus:dark:ring-offset-gray-900 transition-all';
+        'folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 focus-visible:opacity-100 focus-visible:p-0 focus-visible:ring-2 focus-visible:ring-offset-2  focus-visible:ring-gray-400 focus-visible:outline-none focus-visible:border-none focus-visible:dark:ring-offset-gray-900 transition-all';
       btn.innerHTML = icon({ name: 'EllipsisVertical' });
     });
   }
