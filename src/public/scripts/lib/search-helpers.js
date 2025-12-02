@@ -163,6 +163,8 @@ function getIcon(type) {
 }
 
 export function attackClearButtonListeners(input, button) {
+  if (!input || !button) return;
+
   // Show the clear button on mousedown if the input has a value
   input.addEventListener('mousedown', function () {
     if (this.value.trim() !== '') {
@@ -208,6 +210,8 @@ export function attackClearButtonListeners(input, button) {
 }
 
 export function updateClearButtonVisibility(input, button) {
+  if (!input || !button) return;
+
   if (input.value.trim()) {
     showClearButton(button);
   } else {

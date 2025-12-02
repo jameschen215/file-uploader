@@ -34,7 +34,7 @@
       <!-- page content -->
       <main
         id="main-content"
-        class="w-full max-w-7xl mx-auto flex-grow min-h-0 flex flex-col <%= locals.currentUser ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
+        class="w-full max-w-7xl mx-auto flex-grow min-h-0 flex flex-col <%= locals.currentUser && !locals.currentPath.includes('/share/') ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
       >
         <%- body %>
       </main>

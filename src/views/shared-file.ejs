@@ -1,10 +1,10 @@
-<div class="flex-grow flex items-center justify-center p-10">
+<div class="flex-grow flex items-center justify-center p-5">
   <div
-    class="w-full max-w-screen-lg h-[75vh] flex flex-col rounded-sm bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2"
+    class="w-full p-2 max-w-screen-lg h-[75vh] flex flex-col justify-center rounded-sm gap-2 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800"
   >
     <!-- File Preview -->
     <div
-      class="max-h-full flex-grow flex items-center justify-center bg-gray-950 p-2"
+      class="h-[calc(100%-48px)] flex items-center justify-center bg-gray-950 p-2"
     >
       <% if (file.mimeType.startsWith('image/')) { %>
 
@@ -29,7 +29,9 @@
       <% } %>
     </div>
 
-    <div class="sm:flex sm:items-center sm:justify-between sm:gap-2">
+    <div
+      class="sm:flex sm:items-center sm:justify-between sm:gap-2 shrink-0 basis-12"
+    >
       <!-- File Name and Size -->
       <div class="flex items-baseline gap-2 py-2 my-1 sm:min-w-0">
         <p class="flex items-center min-w-0 w-full">
