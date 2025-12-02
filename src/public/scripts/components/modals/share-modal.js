@@ -1,34 +1,35 @@
 import { hideModal } from '../../lib/modal-helpers.js';
 
-(function handleShareModalVisibility() {
+document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#share-modal');
   const closeButton = document.querySelector('#share-modal .close-modal-btn');
 
-  if (!modal || !closeButton) return;
-
-  closeButton.addEventListener('click', () => {
-    hideModal({ modal });
-  });
-})();
-
-document.addEventListener('share-modal-open', async (ev) => {
   const shareNameEl = document.querySelector('#share-name');
   const shareUrlEl = document.querySelector('#share-url');
   const shareErrorEl = document.querySelector('#share-error');
   const copyButton = document.querySelector('#copy-link-btn');
 
-  const { file, folder } = ev.detail;
-  const item = file ? file : folder ? folder : null;
+  if (!modal || !closeButton) return;
 
-  initializeShareModal(item);
+  // Close modal
+  closeButton.addEventListener('click', () => {
+    hideModal({ modal });
+  });
 
-  const result = await getShareUrl(item);
+  document.addEventListener('share-modal-open', async (ev) => {
+    const { file, folder } = ev.detail;
+    const item = file ? file : folder ? folder : null;
 
-  if (result.success) {
-    updateShareModalWithData(result.shareUrl);
-  } else {
-    updateShareModalWithError(result.error);
-  }
+    initializeShareModal(item);
+
+    const result = await getShareUrl(item);
+
+    if (result.success) {
+      updateShareModalWithData(result.shareUrl);
+    } else {
+      updateShareModalWithError(result.error);
+    }
+  });
 
   copyButton.addEventListener('click', () => {
     console.log('Copying...');
