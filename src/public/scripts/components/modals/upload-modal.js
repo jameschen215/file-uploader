@@ -160,7 +160,7 @@ import {
                 <button
                   type="button"
                   data-index="${index}"
-                  class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-800 rounded transition-all"
+                  class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 rounded-sm text-red-600 bg-red-100 dark:text-red-200 dark:bg-red-900 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:ring-offset-gray-700"
                 >
                   ${icon({ name: 'X', size: 16 })}
                 </button>

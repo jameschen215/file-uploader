@@ -1,6 +1,7 @@
 import {
+  attackClearButtonListeners,
   handleActionsOnSearchedItems,
-  handleClearButtonVisibility,
+  updateClearButtonVisibility,
   updateSearchInfo,
 } from '../lib/search-helpers.js';
 
@@ -21,7 +22,10 @@ let submitting = false;
 
 // 1. Save original state and register input actions on page loading
 document.addEventListener('DOMContentLoaded', () => {
-  handleOriginalStateAndInputActions();
+  handleOriginalState();
+
+  attackClearButtonListeners(desktopSearchInput, clearButton);
+  updateClearButtonVisibility(desktopSearchInput, clearButton);
 });
 
 // 2. Update search form submission
@@ -38,7 +42,7 @@ if (container) {
 }
 
 /** --- Handlers --- */
-async function handleOriginalStateAndInputActions(ev) {
+async function handleOriginalState() {
   if (!container) return;
 
   //  No search query - we're on home page
@@ -61,7 +65,7 @@ async function handleOriginalStateAndInputActions(ev) {
     );
   }
 
-  handleClearButtonVisibility(desktopSearchInput, clearButton);
+  // handleClearButtonVisibility(desktopSearchInput, clearButton);
 }
 
 async function handleSubmission(ev) {

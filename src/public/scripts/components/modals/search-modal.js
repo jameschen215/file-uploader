@@ -1,7 +1,8 @@
 import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import {
+  attackClearButtonListeners,
   handleActionsOnSearchedItems,
-  handleClearButtonVisibility,
+  updateClearButtonVisibility,
   updateSearchInfo,
 } from '../../lib/search-helpers.js';
 
@@ -22,11 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let submitting = false;
 
-  console.log('handle search on mobile');
+  /** --- 1. Attach clear button event listeners --- */
+  attackClearButtonListeners(input, clearButton);
 
-  /** --- 1. Handle search modal show / hide --- */
+  /** --- 2. Handle search modal show / hide --- */
   searchModalTrigger.addEventListener('click', () => {
-    console.log('clicked');
     showModal({ modal: searchModal });
   });
 
@@ -34,13 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
     hideModal({ modal: searchModal });
   });
 
-  /** --- 2. Initialize search state --- */
+  /** --- 3. Initialize search state --- */
   document.addEventListener('search-modal-open', () => {
-    // Register input actions
-    handleClearButtonVisibility(input, clearButton);
-
     // Focus on input
     input.focus();
+
+    updateClearButtonVisibility(input, clearButton);
 
     // Update UI
     updateSearchInfo({ spinner, counter, container, submitting });

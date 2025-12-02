@@ -16,8 +16,8 @@
 
         <button
           type="button"
-          aria-label="Close upload modal"
-          class="close-modal-btn p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          aria-label="Close share modal"
+          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
         >
           <%- icon({ name: 'X' }) %>
         </button>
@@ -41,9 +41,10 @@
           <input
             type="text"
             id="share-url"
+            tabindex="-1"
             readonly
             value="Generating share link..."
-            class="w-full border border-gray-300 text-gray-600 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm dark:focus:bg-gray-900 focus:border-lime-500 focus:ring-2 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-950 transition-colors duration-200 truncate"
+            class="w-full border border-gray-300 text-gray-600 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm transition-colors truncate"
           />
         </div>
 
@@ -61,7 +62,7 @@
           <button
             id="copy-link-btn"
             type="button"
-            class="w-full sm:w-fit px-6 bg-gray-900 text-gray-100 dark:text-gray-900 dark:bg-gray-100 hover:bg-gray-800 dark:hover:bg-gray-300 py-2 outline-none font-medium rounded-sm cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="w-full sm:w-fit px-6 bg-gray-800 text-gray-100 dark:text-gray-900 dark:bg-gray-200 hover:bg-gray-800 dark:hover:bg-gray-300 py-2 outline-none font-medium rounded-sm cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
           >
             Copy link
           </button>
