@@ -16,7 +16,7 @@
     <title>File Uploader</title>
   </head>
   <body
-    class="h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 relative"
+    class="relative h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50"
   >
     <!-- Skip to main content link for keyboard navigation -->
     <a
@@ -27,7 +27,7 @@
     </a>
 
     <!-- Site wrapper -->
-    <div id="site-container" class="relative h-full flex flex-col">
+    <div id="site-container" class="relative h-screen flex flex-col">
       <!-- Header -->
       <%- include('partials/header')  %>
 
@@ -55,5 +55,8 @@
 
     <!-- Modals -->
     <%- include('partials/modals') %>
+
+    <!-- Toast -->
+    <%- include('components/toast')  %>
   </body>
 </html>

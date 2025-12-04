@@ -44,7 +44,7 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Folder created',
-    data: newFolder,
+    folder: newFolder,
   });
 });
 
@@ -92,7 +92,7 @@ export const handleDeleteFolder = asyncHandler(async (req, res) => {
     return res.json({
       success: false,
       message: 'Failed to delete a non-empty folder.',
-      data: null,
+      folder: null,
     });
   }
 
@@ -105,7 +105,7 @@ export const handleDeleteFolder = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: `Folder ${folder.name} has been deleted successfully.`,
-    data: folder,
+    folder: folder,
   });
 });
 
@@ -114,7 +114,11 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;
   const errors = validationResult(req);
 
+  console.log(req.body);
+
   if (!errors.isEmpty()) {
+    console.log('Error');
+    console.log(errors.mapped());
     return res.status(400).json({
       success: false,
       errors: errors.mapped(),
@@ -148,6 +152,6 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Folder has been renamed successfully.',
-    data: updatedFolder,
+    folder: updatedFolder,
   });
 });

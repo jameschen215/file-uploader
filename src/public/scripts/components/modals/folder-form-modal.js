@@ -5,6 +5,7 @@ import {
   removeErrorStylesAndMessages,
   showErrorStylesAndMessages,
 } from '../../lib/validation-helpers.js';
+import { showToast } from '../toast.js';
 
 (function handleAddModalVisibility() {
   const createTriggers = document.querySelectorAll(
@@ -78,76 +79,142 @@ import {
   });
 
   // Client-side validation
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-
-    if (isSubmitting) return;
-
-    let isValid = true;
-    console.log({ nameInput });
-
-    if (!validateField(nameInput)) {
-      isValid = false;
-    }
-
-    if (!isValid) {
-      focusOnFirstErrorField(form);
-    } else {
-      const formData = new FormData(form);
-
-      // 1. Disable nameInput and submit button
-      submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
-      nameInput.disabled = true;
-      submitButton.disabled = true;
-      isSubmitting = true;
-
-      let resp = null;
-
-      try {
-        if (isCreate) {
-          resp = await fetch('/folders', {
-            method: 'POST',
-            body: formData,
-          });
-        } else {
-          resp = await fetch(`/folders/${folder.id}`, {
-            method: 'PUT',
-            body: formData,
-          });
-        }
-
-        const data = await resp.json();
-
-        if (!resp.ok) {
-          // 2. Show validation errors
-          if (data.errors?.name) {
-            showErrorStylesAndMessages(nameInput, data.errors.name.msg);
-            focusOnFirstErrorField(form);
-          }
-          return;
-        }
-
-        // Success - reset form and hide modal
-        form.reset();
-        hideModal({ modal });
-        window.location.reload();
-      } catch (error) {
-        console.error('Error submitting folder: ', error);
-      } finally {
-        // Re-enable nameInput and submit button
-        nameInput.disabled = false;
-        submitButton.disabled = false;
-        submitButton.textContent = isCreate ? 'Create' : 'Update';
-        isSubmitting = false;
-      }
-    }
-  });
+  form.addEventListener('submit', handleSubmit);
 
   // Clear the nameInput value when the modal is about to close
   document.addEventListener('folder-form-modal-hidden', () => {
     nameInput.value = '';
     removeErrorStylesAndMessages(nameInput);
   });
+
+  async function handleSubmit(ev) {
+    ev.preventDefault();
+
+    if (isSubmitting) return;
+
+    // 1. Client-side validation
+    const formData = new FormData(form);
+    const dataToSend = {
+      name: formData.get('name'),
+      parentFolderId: formData.get('parentFolderId') || null,
+    };
+
+    // (Assuming validateField checks the input element directly, which is fine)
+    if (!validateField(nameInput)) {
+      focusOnFirstErrorField(form);
+      return;
+    }
+
+    // 2. Setup UI state
+    submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
+    submitButton.disabled = true;
+    nameInput.disabled = true;
+    isSubmitting = true;
+
+    try {
+      // 3. Determine endpoint and method dynamically
+      const url = isCreate ? '/folders' : `/folders/${folder.id}`;
+      const method = isCreate ? 'POST' : 'PUT';
+
+      const res = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      const data = await res.json();
+
+      // 4. Handle server validation errors
+      if (!res.ok) {
+        if (data.errors?.name) {
+          showErrorStylesAndMessages(nameInput, data.errors.name.msg);
+          focusOnFirstErrorField(form);
+        } else {
+          showToast(data.message || 'An error occurred.');
+        }
+        return;
+      }
+
+      // SUCCESS - NO RELOADING
+      // a. reset form and modal
+      form.reset();
+      hideModal({ modal });
+
+      // b. update ui manually
+      if (isCreate) {
+        addFolderItemToUI(data.folder);
+        showToast('Folder created successfully!');
+      } else {
+        updateFolderItemInUI(data.folder);
+        showToast('Folder updated successfully!');
+      }
+    } catch (error) {
+      console.error('Network error: ', error);
+      showToast('Network error. Please try again.');
+    } finally {
+      // 5. Cleanup
+      nameInput.disabled = false;
+      submitButton.disabled = false;
+      submitButton.textContent = isCreate ? 'Create' : 'Update';
+      isSubmitting = false;
+    }
+
+    // ev.preventDefault();
+    // if (isSubmitting) return;
+    // let isValid = true;
+    // console.log({ nameInput });
+    // if (!validateField(nameInput)) {
+    //   isValid = false;
+    // }
+    // if (!isValid) {
+    //   focusOnFirstErrorField(form);
+    // } else {
+    //   const formData = new FormData(form);
+    //   // 1. Disable nameInput and submit button
+    //   submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
+    //   nameInput.disabled = true;
+    //   submitButton.disabled = true;
+    //   isSubmitting = true;
+    //   let resp = null;
+    //   try {
+    //     if (isCreate) {
+    //       resp = await fetch('/folders', {
+    //         method: 'POST',
+    //         body: formData,
+    //       });
+    //     } else {
+    //       resp = await fetch(`/folders/${folder.id}`, {
+    //         method: 'PUT',
+    //         body: formData,
+    //       });
+    //     }
+    //     const data = await resp.json();
+    //     if (!resp.ok) {
+    //       // 2. Show validation errors
+    //       if (data.errors?.name) {
+    //         showErrorStylesAndMessages(nameInput, data.errors.name.msg);
+    //         focusOnFirstErrorField(form);
+    //       }
+    //       return;
+    //     }
+    //     // Success - reset form and hide modal
+    //     form.reset();
+    //     hideModal({ modal });
+    //     window.location.reload();
+    //   } catch (error) {
+    //     console.error('Error submitting folder: ', error);
+    //   } finally {
+    //     // Re-enable nameInput and submit button
+    //     nameInput.disabled = false;
+    //     submitButton.disabled = false;
+    //     submitButton.textContent = isCreate ? 'Create' : 'Update';
+    //     isSubmitting = false;
+    //   }
+    // }
+  }
 
   function validateField(field) {
     const value = field.value.trim();
@@ -176,3 +243,34 @@ import {
     return isValid;
   }
 })();
+
+function updateFolderItemInUI(folder) {
+  console.log('Update name...');
+  const item = document.querySelector(`a[href="/folders/${folder.id}"]`);
+  if (!item) return;
+
+  // 1. update folder name
+  const nameWrapper = item.querySelector('#folder-name');
+  if (nameWrapper) {
+    nameWrapper.textContent = folder.name;
+  }
+}
+
+function addFolderItemToUI(folder) {
+  const template = document.querySelector('#folder-item-template');
+  const clone = template.content.cloneNode(true);
+
+  // 1. add href
+  clone.href = `/folders/${folder.id}`;
+
+  // 2. add folder name
+  clone.querySelector('#folder-name').textContent = folder.name;
+
+  // 3. update button attributes
+  const button = clone.querySelector('button.folder-details-modal-trigger');
+  button.id = `folder-details-trigger-${folder.id}`;
+  button.dataset.folder = JSON.stringify(folder);
+
+  // 4. Append to list
+  document.querySelector('#layout-container').prepend(clone);
+}

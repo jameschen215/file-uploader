@@ -27,6 +27,16 @@ export function showModal({
   // 5. Focus on modal to be ready for user to press tab
   modal.focus({ preventScroll: true });
 
+  // 6. Handle confirm message on confirm modal
+  const msgEl = document.querySelector('.confirm-message');
+  if (msgEl) {
+    if (file) {
+      msgEl.innerHTML = `Are you sure to delete the file?`;
+    } else if (folder) {
+      msgEl.innerHTML = `Are you sure to delete the folder?`;
+    }
+  }
+
   // 6. Dispatch modal open event
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {

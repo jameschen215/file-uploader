@@ -1,5 +1,7 @@
-import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import { formateDate } from '../../lib/utils.js';
+import { confirmDeletion } from './confirm-modal.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
+import { showToast } from '../toast.js';
 
 // Store handler references outside the function
 let currentDeleteHandler = null;
@@ -59,12 +61,12 @@ function addFolderActionHandlers(folder) {
 
   // Create new handlers with the current folder data
   currentDeleteHandler = async () => {
-    if (!confirm(`Are you sure you want to delete ${folder.name}?`)) {
-      return;
-    }
+    const confirmed = await confirmDeletion({ folder });
+
+    if (!confirmed) return;
 
     if (folder._count.subFolders > 0 || folder._count.files > 0) {
-      alert('Cannot delete a non-empty folder.');
+      showToast('Cannot delete a non-empty folder.');
       return;
     }
 
@@ -81,16 +83,31 @@ function addFolderActionHandlers(folder) {
 
       if (!res.ok) {
         const errorData = await res.json();
-        alert(errorData.message);
+        showToast(errorData.message);
         return;
       }
 
       const data = await res.json();
-      alert(data.message);
-      window.location.reload();
+
+      // 1. SHOW TOAST FIRST
+      showToast(data.message);
+      console.log(data.folder.id);
+
+      // 2. REMOVE ELEMENT FROM UI MANUALLY
+      const folderItemEl = document.querySelector(
+        `#layout-container a[href="/folders/${data.folder.id}"]`,
+      );
+
+      if (folderItemEl) {
+        console.log(folderItemEl.href);
+        // folderItemEl.remove();
+      }
+
+      // 3. DON'T RELOAD THE PAGE - it's slow and jarring
+      // window.location.reload();
     } catch (error) {
       console.error('Delete error: ', error);
-      alert(error.message);
+      showToast(error.message);
     } finally {
       deleteButton.disabled = false;
     }

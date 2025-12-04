@@ -1,6 +1,8 @@
 import { icon } from '../../lib/get-icon.js';
 import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
+import { showToast } from '../toast.js';
+import { confirmDeletion } from './confirm-modal.js';
 
 const BUTTON_DISABLED_DURATION = 500;
 
@@ -135,9 +137,9 @@ function addFileActionHandlers(file) {
 
   // Create new handlers with the current file data
   currentDeleteHandler = async () => {
-    if (!confirm(`Are you sure you want to delete ${file.originalName}?`)) {
-      return;
-    }
+    const confirmed = await confirmDeletion({ file });
+
+    if (!confirmed) return;
 
     console.log(`Deleting ${file.originalName}...`);
 
@@ -153,16 +155,19 @@ function addFileActionHandlers(file) {
         const errorData = await resp
           .json()
           .catch(() => ({ message: 'Failed to delete the file' }));
-        alert(errorData.message || 'Failed to delete the file');
+        showToast(errorData.message || 'Failed to delete the file.');
         return;
       }
 
       const data = await resp.json();
-      alert(data.message);
-      window.location.reload();
+      showToast(data.message);
+
+      // UPDATE UI MANUALLY
+
+      // window.location.reload();
     } catch (error) {
       console.error('Delete error:', error);
-      alert('An error occurred while deleting the file');
+      showToast('An error occurred while deleting the file');
     } finally {
       deleteButton.disabled = false;
     }
