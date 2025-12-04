@@ -59,28 +59,173 @@ export function handleUploadInput() {
     handleFiles(ev.target.files);
   });
 
+  clearFilesBtn.addEventListener('click', () => {
+    selectedFiles = [];
+    fileInput.value = '';
+
+    updateFileDisplay();
+  });
+
+  // Form submission with progress
+  uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
+
+  // Submit handler with real-time progress tracking
+  async function handleSubmitWithRealProgressBar(ev) {
+    ev.preventDefault();
+
+    if (selectedFiles.length === 0) return;
+
+    // Create formData with selected files
+    const formData = new FormData();
+    selectedFiles.forEach((file) => {
+      formData.append('files', file);
+    });
+
+    // Disable buttons
+    document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+      btn.disabled = true;
+    });
+    clearFilesBtn.disabled = true;
+    submitBtn.disabled = true;
+
+    // Display progress bar
+    uploadProgress.classList.remove('hidden');
+    errorDiv.classList.add('hidden');
+
+    // Fetch with XMLHttpRequest
+    const xhr = new XMLHttpRequest();
+
+    // Track upload progress
+    xhr.upload.addEventListener('progress', (ev) => {
+      if (ev.lengthComputable) {
+        const percentComplete = (ev.loaded / ev.total) * 100;
+        progressBar.style.width = percentComplete + '%';
+        progressPercent.textContent = Math.round(percentComplete) + '%';
+      }
+    });
+
+    // Handle successful upload
+    xhr.addEventListener('load', () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        // Show 100% briefly before reload
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        // Handle error response
+        try {
+          const data = JSON.parse(xhr.responseText);
+          console.log('Error: ', data.error);
+          showError(data.error || 'Upload failed');
+        } catch (error) {
+          console.log('Error: ', error.message);
+          showError(error.message || 'Upload failed');
+        }
+
+        uploadProgress.classList.add('hidden');
+
+        enableButtons();
+      }
+    });
+
+    // Handle network errors
+    xhr.addEventListener('error', () => {
+      showError('Network error during upload');
+
+      uploadProgress.classList.add('hidden');
+
+      enableButtons();
+    });
+
+    // Handle abort
+    xhr.addEventListener('abort', () => {
+      showError('Upload cancelled');
+
+      uploadProgress.classList.add('hidden');
+      enableButtons();
+    });
+
+    // Set request method and route
+    xhr.open('POST', uploadForm.action);
+
+    // Send the request
+    xhr.send(formData);
+
+    function enableButtons() {
+      document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+        btn.disabled = false;
+      });
+      clearFilesBtn.disabled = false;
+      submitBtn.disabled = false;
+    }
+  }
+
+  // Deprecated submit handler
+  async function handleSubmitWithFakeProgressBar(ev) {
+    ev.preventDefault();
+
+    if (selectedFiles.length === 0) return;
+
+    const formData = new FormData();
+    selectedFiles.forEach((file) => {
+      formData.append('files', file);
+    });
+
+    submitBtn.disabled = true;
+    uploadProgress.classList.remove('hidden');
+    errorDiv.classList.add('hidden');
+
+    try {
+      const response = await fetch(uploadForm.action, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 100); // Small delay so user sees the 100%
+      } else {
+        showError(data.error || 'Upload failed');
+        uploadProgress.classList.add('hidden');
+        submitBtn.disabled = false;
+      }
+    } catch (error) {
+      showError(error.message || 'Network error during upload');
+      uploadProgress.classList.add('hidden');
+      submitBtn.disabled = false;
+    }
+  }
+
   function handleFiles(files) {
     errorDiv.classList.add('hidden');
     selectedFiles = [];
 
     for (const file of files) {
-      console.log('Number of files: ', selectedFiles.length);
-
       if (selectedFiles.length >= MAX_UPLOAD_FILES) {
         showError(`Maximum ${MAX_UPLOAD_FILES} files allowed`);
         break;
       }
 
+      console.log('File size: ', file.size);
       if (file.size > MAX_FILE_SIZE) {
         showError(
-          `"${file.name}" exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit`,
+          `"${file.name}" exceeds ${MAX_FILE_SIZE / 1024 / 1024} MB limit`,
         );
-        continue;
+        break;
       }
 
       if (!ALLOWED_FILE_TYPES.some((type) => file.type.startsWith(type))) {
         showError(`"${file.name}" is not a supported file type`);
-        continue;
+        break;
       }
 
       selectedFiles.push(file);
@@ -122,7 +267,7 @@ export function handleUploadInput() {
               <button
                 type="button"
                 data-index="${index}"
-                class="clear-file-btn opacity-0 group-hover:opacity-100 p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-800 rounded transition-all"
+                class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 text-red-600 bg-red-100 dark:text-red-100 dark:bg-red-800 rounded transition-all"
               >
                 ${icon({ name: 'X', size: 16 })}
               </button>
@@ -152,52 +297,4 @@ export function handleUploadInput() {
     errorP.textContent = message;
     errorDiv.classList.remove('hidden');
   }
-
-  clearFilesBtn.addEventListener('click', () => {
-    selectedFiles = [];
-    fileInput.value = '';
-    updateFileDisplay();
-  });
-
-  // Form submission with progress
-  uploadForm.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-
-    if (selectedFiles.length === 0) return;
-
-    const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append('files', file);
-    });
-
-    submitBtn.disabled = true;
-    uploadProgress.classList.remove('hidden');
-    errorDiv.classList.add('hidden');
-
-    try {
-      const response = await fetch(uploadForm.action, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        progressBar.style.width = '100%';
-        progressPercent.textContent = '100%';
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 100); // Small delay so user sees the 100%
-      } else {
-        showError(data.error || 'Upload failed');
-        uploadProgress.classList.add('hidden');
-        submitBtn.disabled = false;
-      }
-    } catch (error) {
-      showError(error.message || 'Network error during upload');
-      uploadProgress.classList.add('hidden');
-      submitBtn.disabled = false;
-    }
-  });
 }

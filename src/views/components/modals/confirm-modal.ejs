@@ -1,0 +1,19 @@
+<div
+  id="confirm-modal"
+  role="dialog"
+  tabindex="-1"
+  aria-modal="true"
+  aria-label="Confirm deletion of files or folders"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+>
+  <div
+    class="absolute bottom-0 left-0 min-h-[33vh] w-full flex-col bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl p-5"
+  >
+    <p>Do you really want to delete this file/folder?</p>
+  </div>
+</div>
+
+<script
+  type="module"
+  src="/scripts/components/modals/confirm-modal.js"
+></script>

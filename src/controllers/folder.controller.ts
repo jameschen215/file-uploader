@@ -1,10 +1,9 @@
-import prisma from '../lib/prisma.js';
-import { buildPath } from '../lib/build-path.js';
 import { validationResult } from 'express-validator';
+
+import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { CustomNotFoundError } from '../errors/index.js';
 import { getFolderData } from '../lib/get-folder-data.js';
-import { configureSupabase } from '../config/supabase.js';
 
 export const handleCreateFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;

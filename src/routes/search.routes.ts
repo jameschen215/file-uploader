@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { isAuthenticated } from '../auth/middlewares.js';
-import { handleMobileSearch } from '../controllers/search.controller.js';
+import { handleSearch } from '../controllers/search.controller.js';
 
 const router = Router();
 
-router.get('/', isAuthenticated, handleMobileSearch);
+router.get('/', isAuthenticated, handleSearch);
 
 export default router;

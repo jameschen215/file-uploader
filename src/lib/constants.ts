@@ -17,14 +17,6 @@ export const ALLOWED_FILE_TYPES = [
 
   // Documents
   'application/pdf',
-  // 'application/msword',
-  // 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  // 'application/vnd.ms-excel',
-  // 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-
-  // Archives
-  // 'application/zip',
-  // 'application/x-rar-compressed',
 ];
 
 export const MAX_FILES = 3;

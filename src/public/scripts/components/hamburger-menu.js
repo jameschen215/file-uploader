@@ -1,4 +1,4 @@
-import { icon } from './lib/get-icon.js';
+import { icon } from '../lib/get-icon.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const iconWrapper = document.querySelector('#menu-toggle span');

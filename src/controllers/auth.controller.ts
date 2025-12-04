@@ -1,12 +1,12 @@
 import bcrypt from 'bcrypt';
-import { RequestHandler } from 'express';
-
-import { SALT_ROUND } from '../lib/constants.js';
-import prisma from '../lib/prisma.js';
-import { CreateUserType, PublicUserType } from '../types/user.js';
 import passport from 'passport';
+import { RequestHandler } from 'express';
 import { validationResult } from 'express-validator';
+
+import prisma from '../lib/prisma.js';
+import { SALT_ROUND } from '../lib/constants.js';
 import { asyncHandler } from '../lib/async-handler.js';
+import { CreateUserType, PublicUserType } from '../types/user.js';
 
 export const signUpNewUser = asyncHandler(async (req, res, next) => {
   // THIS IS CRUCIAL - check for validation errors
@@ -72,8 +72,6 @@ export const signInUser: RequestHandler = async (req, res, next) => {
   )(req, res, next);
 };
 
-export const upgradeUser: RequestHandler = async (req, res, next) => {};
-
 export const signOutUser: RequestHandler = async (req, res, next) => {
   req.logOut((error) => {
     if (error) return next(error);
@@ -82,16 +80,16 @@ export const signOutUser: RequestHandler = async (req, res, next) => {
   });
 };
 
-export const getLandingPage: RequestHandler = (req, res) => {
+export const getLandingPage: RequestHandler = (_req, res) => {
   res.render('landing-page');
 };
 
 // sign up page
-export const getSignUpPage: RequestHandler = (req, res) => {
+export const getSignUpPage: RequestHandler = (_req, res) => {
   res.render('sign-up', { oldInput: null, errors: null });
 };
 
 // sign up page
-export const getSignIpPage: RequestHandler = (req, res) => {
+export const getSignIpPage: RequestHandler = (_req, res) => {
   res.render('sign-in', { oldInput: null, errors: null });
 };

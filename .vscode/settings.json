@@ -10,5 +10,6 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "cSpell.words": ["describedby", "ffprobe", "openxmlformats"]
+  "cSpell.words": ["describedby", "ffprobe", "openxmlformats"],
+  "prisma.pinToPrisma6": true
 }

@@ -8,12 +8,12 @@ import shareRoutes from './share.routes.js';
 import searchRoutes from './search.routes.js';
 
 import { isAuthenticated } from '../auth/index.js';
-import { handleGetFiles } from '../controllers/index.controller.js';
+import { handleGetFolderContent } from '../controllers/index.controller.js';
 
 const router = Router();
 
 // Homepage and file browser
-router.get('/', isAuthenticated, handleGetFiles);
+router.get('/', isAuthenticated, handleGetFolderContent);
 
 // Mount sub-routers
 router.use('/files', fileRoutes); // /files/:fileId, /files/:fileId/download

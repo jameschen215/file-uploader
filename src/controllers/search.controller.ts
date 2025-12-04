@@ -2,7 +2,7 @@ import prisma from '../lib/prisma.js';
 import { RequestHandler } from 'express';
 import { buildPath } from '../lib/build-path.js';
 
-export const handleMobileSearch: RequestHandler = async (req, res) => {
+export const handleSearch: RequestHandler = async (req, res) => {
   try {
     const query = req.query.q as string;
     const userId = res.locals.currentUser!.id;

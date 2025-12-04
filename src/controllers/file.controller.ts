@@ -1,13 +1,13 @@
 import { RequestHandler } from 'express';
 
-import prisma from '../lib/prisma.js';
-import { asyncHandler } from '../lib/async-handler.js';
-import { configureSupabase } from '../config/supabase.js';
 import {
   CustomBadRequestError,
   CustomInternalError,
   CustomNotFoundError,
 } from '../errors/index.js';
+import prisma from '../lib/prisma.js';
+import { asyncHandler } from '../lib/async-handler.js';
+import { configureSupabase } from '../config/supabase.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
 
 const supabase = configureSupabase();

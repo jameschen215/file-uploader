@@ -72,6 +72,11 @@ import {
     nameInput.focus();
   });
 
+  // Remove error info while user typing
+  nameInput.addEventListener('input', () => {
+    removeErrorStylesAndMessages(nameInput);
+  });
+
   // Client-side validation
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
@@ -123,7 +128,6 @@ import {
         }
 
         // Success - reset form and hide modal
-        alert(data.message);
         form.reset();
         hideModal({ modal });
         window.location.reload();
@@ -139,14 +143,10 @@ import {
     }
   });
 
-  // Remove error info while user typing
-  nameInput.addEventListener('input', () =>
-    removeErrorStylesAndMessages(nameInput),
-  );
-
   // Clear the nameInput value when the modal is about to close
   document.addEventListener('folder-form-modal-hidden', () => {
     nameInput.value = '';
+    removeErrorStylesAndMessages(nameInput);
   });
 
   function validateField(field) {

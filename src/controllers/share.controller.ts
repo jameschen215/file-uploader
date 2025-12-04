@@ -1,17 +1,15 @@
 // share.controller.ts
-
 import crypto from 'crypto';
 
-import prisma from '../lib/prisma.js';
-import { RequestHandler } from 'express';
 import {
   CustomBadRequestError,
   CustomInternalError,
   CustomNotFoundError,
 } from '../errors/index.js';
+import prisma from '../lib/prisma.js';
+import { RequestHandler } from 'express';
 import { configureSupabase } from '../config/supabase.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
-import { formatFileSize } from '../lib/utils.js';
 
 const supabase = configureSupabase();
 
@@ -94,15 +92,7 @@ export const viewSharedFile: RequestHandler = async (req, res) => {
       throw new CustomNotFoundError('Shared file not found');
     }
 
-    const formattedFile = {
-      ...file,
-      fileSize: formatFileSize(file.fileSize),
-    };
-
-    res.render('shared-file', {
-      file: formattedFile,
-      shareToken: token,
-    });
+    res.render('shared-file', { file, shareToken: token });
   } catch (error) {
     console.error('View shared file error: ', error);
     throw new CustomInternalError('Failed to access shared file');
@@ -172,15 +162,10 @@ export const viewSharedFolder: RequestHandler = async (req, res) => {
       orderBy: { originalName: 'asc' },
     });
 
-    const formattedFiles = files.map((file) => ({
-      ...file,
-      fileSize: formatFileSize(file.fileSize),
-    }));
-
     res.render('shared-folder', {
       folder,
       subfolders,
-      files: formattedFiles,
+      files,
       shareToken: token,
     });
   } catch (error) {
