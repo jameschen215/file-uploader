@@ -7,6 +7,8 @@ import {
 } from '../../lib/validation-helpers.js';
 import { showToast } from '../toast.js';
 
+import { getFolderCard } from '../../partials/template.js';
+
 (function handleAddModalVisibility() {
   const createTriggers = document.querySelectorAll(
     '.folder-form-modal-trigger',
@@ -147,6 +149,7 @@ import { showToast } from '../toast.js';
       if (isCreate) {
         addFolderItemToUI(data.folder);
         showToast('Folder created successfully!');
+        console.log('New folder added: ', data.folder.id);
       } else {
         updateFolderItemInUI(data.folder);
         showToast('Folder updated successfully!');
@@ -245,7 +248,6 @@ import { showToast } from '../toast.js';
 })();
 
 function updateFolderItemInUI(folder) {
-  console.log('Update name...');
   const item = document.querySelector(`a[href="/folders/${folder.id}"]`);
   if (!item) return;
 
@@ -257,20 +259,18 @@ function updateFolderItemInUI(folder) {
 }
 
 function addFolderItemToUI(folder) {
-  const template = document.querySelector('#folder-item-template');
-  const clone = template.content.cloneNode(true);
+  const newItem = getFolderCard(folder);
+  const button = newItem.querySelector('button');
 
-  // 1. add href
-  clone.href = `/folders/${folder.id}`;
+  button.addEventListener('click', (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
 
-  // 2. add folder name
-  clone.querySelector('#folder-name').textContent = folder.name;
+    const modal = document.querySelector('#folder-details-modal');
+    const breadcrumbs = JSON.parse(button.dataset.breadcrumbs);
 
-  // 3. update button attributes
-  const button = clone.querySelector('button.folder-details-modal-trigger');
-  button.id = `folder-details-trigger-${folder.id}`;
-  button.dataset.folder = JSON.stringify(folder);
+    showModal({ modal, folder, breadcrumbs });
+  });
 
-  // 4. Append to list
-  document.querySelector('#layout-container').prepend(clone);
+  document.querySelector('#layout-container').prepend(newItem);
 }

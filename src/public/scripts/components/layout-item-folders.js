@@ -37,12 +37,12 @@ document.querySelectorAll('a[href^="/folders/"]').forEach((folderLink) => {
   });
 
   // Close when clicking outside the modal
-  document.addEventListener('click', (ev) => {
-    if (
-      !ev.target.closest('#folder-details-modal > div') &&
-      !ev.target.closest('[id^="folder-details-trigger"]')
-    ) {
-      hideModal({ modal });
-    }
-  });
+  // document.addEventListener('click', (ev) => {
+  //   if (
+  //     !ev.target.closest('#folder-details-modal > div') &&
+  //     !ev.target.closest('[id^="folder-details-trigger"]')
+  //   ) {
+  //     hideModal({ modal });
+  //   }
+  // });
 })();

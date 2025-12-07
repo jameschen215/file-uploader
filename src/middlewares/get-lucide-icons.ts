@@ -26,6 +26,7 @@ import {
   Trash2,
   FolderPen,
   Info,
+  EllipsisVertical,
 } from 'lucide-static';
 
 interface IconParams {
@@ -64,6 +65,7 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     Trash2,
     FolderPen,
     Info,
+    EllipsisVertical,
   };
 
   // Helper function to modify svg string

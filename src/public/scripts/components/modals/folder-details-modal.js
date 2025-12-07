@@ -61,6 +61,8 @@ function addFolderActionHandlers(folder) {
 
   // Create new handlers with the current folder data
   currentDeleteHandler = async () => {
+    const folderDetailsModal = document.querySelector('#folder-details-modal');
+
     const confirmed = await confirmDeletion({ folder });
 
     if (!confirmed) return;
@@ -71,11 +73,30 @@ function addFolderActionHandlers(folder) {
     }
 
     // Handle deletion
-    console.log(`Deleting folder ${folder.name}...`);
+    console.log(`Deleting folder ${folder.id}...`);
+
+    // Store reference to the element ant its position BEFORE removing
+    const folderItemEl = document.querySelector(
+      `#layout-container a[href="/folders/${folder.id}"]`,
+    );
+    let previousEl = null;
+    let parentEl = null;
+
+    if (folderItemEl) {
+      // Store the parent and previous sibling for restoration
+      parentEl = folderItemEl.parentElement;
+      previousEl = folderItemEl.previousElementSibling;
+    }
 
     try {
       deleteButton.disabled = true;
 
+      // 1. Remove element from UI optimistically
+      if (folderItemEl) {
+        folderItemEl.remove();
+      }
+
+      // 2. Request the server to remove the folder
       const res = await fetch(`/folders/${folder.id}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -83,31 +104,48 @@ function addFolderActionHandlers(folder) {
 
       if (!res.ok) {
         const errorData = await res.json();
+
+        // RESTORE THE ELEMENT on failure
+        if (folderItemEl && parentEl) {
+          if (previousEl) {
+            // Insert after the previous sibling
+            previousEl.after(folderItemEl);
+          } else {
+            // It was the first child, prepend it
+            parentEl.prepend(folderItemEl);
+          }
+        }
+
         showToast(errorData.message);
         return;
       }
 
-      const data = await res.json();
+      const result = await res.json();
 
-      // 1. SHOW TOAST FIRST
-      showToast(data.message);
-      console.log(data.folder.id);
+      // 1. Hide folder details modal
+      hideModal({ modal: folderDetailsModal });
 
-      // 2. REMOVE ELEMENT FROM UI MANUALLY
-      const folderItemEl = document.querySelector(
-        `#layout-container a[href="/folders/${data.folder.id}"]`,
-      );
-
-      if (folderItemEl) {
-        console.log(folderItemEl.href);
-        // folderItemEl.remove();
-      }
+      // 2. SHOW TOAST FIRST
+      showToast(result.message);
+      console.log(result.data.id, result.data.name);
 
       // 3. DON'T RELOAD THE PAGE - it's slow and jarring
       // window.location.reload();
     } catch (error) {
       console.error('Delete error: ', error);
-      showToast(error.message);
+
+      // RESTORE THE ELEMENT on failure
+      if (folderItemEl && parentEl) {
+        if (previousEl) {
+          // Insert after the previous sibling
+          previousEl.after(folderItemEl);
+        } else {
+          // It was the first child, prepend it
+          parentEl.prepend(folderItemEl);
+        }
+      }
+
+      showToast(error.message || 'Failed to delete the folder');
     } finally {
       deleteButton.disabled = false;
     }

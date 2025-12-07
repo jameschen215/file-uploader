@@ -61,11 +61,23 @@ export function hideModal({ modal }) {
   // 2. Modify classList on modal to hide it
   modal.classList.add('translate-y-full');
 
-  // 3. Enable scrolling on pages
-  document.body.classList.remove('overflow-hidden');
+  // FIX HIDE ALL MODAL AT ONCE
+  const openModals = document.querySelectorAll(
+    '[id$="modal"]:not(.translate-y-full)',
+  );
+  const hiddenModals = document.querySelectorAll(
+    '[id$="modal"].translate-y-full',
+  );
 
-  // 4. Enable events on pages below
-  document.querySelector('#site-container').removeAttribute('inert');
+  console.log(openModals, openModals.length);
+
+  if (openModals.length === 0) {
+    // 3. Enable scrolling on pages
+    document.body.classList.remove('overflow-hidden');
+
+    // 4. Enable events on pages below
+    document.querySelector('#site-container').removeAttribute('inert');
+  }
 
   // 5. Dispatch modal hidden event
   document.dispatchEvent(new Event(`${modalName}-hidden`));

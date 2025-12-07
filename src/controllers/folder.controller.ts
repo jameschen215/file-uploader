@@ -4,6 +4,7 @@ import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { CustomNotFoundError } from '../errors/index.js';
 import { getFolderData } from '../lib/get-folder-data.js';
+import { RequestHandler } from 'express';
 
 export const handleCreateFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;
@@ -70,44 +71,73 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
   });
 });
 
-export const handleDeleteFolder = asyncHandler(async (req, res) => {
+export const handleDeleteFolder: RequestHandler = async (req, res) => {
   const { folderId } = req.params;
   const userId = res.locals.currentUser!.id;
 
-  const folder = await prisma.folder.findFirst({
-    where: { id: folderId, userId },
-    include: { _count: { select: { files: true, subFolders: true } } },
-  });
-
-  if (!folder) {
-    // throw new CustomNotFoundError('Folder not found');
-    return res.json({
+  // TEST: Force error for testing
+  if (req.query.testError === 'true') {
+    return res.status(500).json({
       success: false,
-      message: 'Folder not found',
+      message: 'Simulated error for testing',
       data: null,
     });
   }
 
-  if (folder._count.files > 0 || folder._count.subFolders > 0) {
-    return res.json({
+  try {
+    // Validate folderId format (if using uuid or similar)
+    if (!folderId || typeof folderId !== 'string') {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid folder ID',
+        data: null,
+      });
+    }
+
+    const folder = await prisma.folder.findFirst({
+      where: { id: folderId, userId },
+      include: { _count: { select: { files: true, subFolders: true } } },
+    });
+
+    console.log({ folder });
+
+    if (!folder) {
+      return res.status(404).json({
+        success: false,
+        message: 'Folder not found',
+        data: null,
+      });
+    }
+
+    if (folder._count.files > 0 || folder._count.subFolders > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Failed to delete a non-empty folder.',
+        data: folder,
+      });
+    }
+
+    // Since Supabase don't create empty folder, so you don't need to delete it
+    // Just delete it from local database
+    await prisma.folder.delete({
+      where: { id: folderId, userId },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Folder ${folder.name} has been deleted successfully.`,
+      data: folder,
+    });
+  } catch (error) {
+    console.error('Error deleting folder:', error);
+
+    res.status(500).json({
       success: false,
-      message: 'Failed to delete a non-empty folder.',
-      folder: null,
+      message: 'An error occurred while deleting the folder',
+      data: null,
     });
   }
-
-  // Since Supabase don't create empty folder, so you don't need to delete it
-  // Just delete it from local database
-  await prisma.folder.delete({
-    where: { id: folderId },
-  });
-
-  res.json({
-    success: true,
-    message: `Folder ${folder.name} has been deleted successfully.`,
-    folder: folder,
-  });
-});
+};
 
 export const handleRenameFolder = asyncHandler(async (req, res) => {
   const { folderId } = req.params;

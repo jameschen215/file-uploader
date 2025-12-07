@@ -1,0 +1,37 @@
+<!-- File Card Template -->
+
+<!-- 1. button id (file-details-trigger-:id) -->
+<!-- 2. dataset.file on button -->
+<!-- 3. card icon -->
+<!-- 4. card name -->
+<template id="file-card-template">
+  <div
+    id=""
+    role="button"
+    tabindex="0"
+    data-breadcrumbs="<%= JSON.stringify(locals.breadcrumbs || null) %>"
+    class="file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 focus-visible:border-none focus-visible:outline-none dark:ring-offset-gray-900 rounded-md transition-colors"
+  >
+    <!-- file icon -->
+    <div
+      class="w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800 group-hover:bg-sky-50 group-hover:dark:bg-sky-950/25 group-hover:border-sky-300 group-hover:dark:border-sky-800 transition-colors"
+    >
+      <span
+        id="file-thumbnail"
+        aria-hidden="true"
+        class="block size-14 text-sky-400"
+      >
+        <!-- file thumbnail -->
+      </span>
+    </div>
+
+    <!-- file name -->
+    <div class="relative w-full text-center">
+      <span
+        class="file-name text-sm inline-block w-[calc(100%-24px)] mx-auto truncate"
+      >
+        <!-- file original name -->
+      </span>
+    </div>
+  </div>
+</template>

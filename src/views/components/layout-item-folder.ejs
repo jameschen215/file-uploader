@@ -15,10 +15,7 @@
 
   <!-- folder name -->
   <div class="item-info relative w-full text-center">
-    <span
-      id="folder-name"
-      class="text-sm inline-block w-[calc(100%-24px)] mx-auto truncate"
-    >
+    <span class="text-sm inline-block w-[calc(100%-24px)] mx-auto truncate">
       <%= folder.name %>
     </span>
     <button
@@ -28,7 +25,9 @@
       data-folder="<%= JSON.stringify(folder) %>"
       data-breadcrumbs="<%= JSON.stringify(breadcrumbs || null) %>"
       class="folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm sm:opacity-0 opacity-100"
-    ></button>
+    >
+      <%- icon({name: 'EllipsisVertical'}) %>
+    </button>
   </div>
 </a>
 

@@ -36,38 +36,9 @@
   </div>
 </div>
 
-<!-- folder item template -->
+<!-- TEMPLATE FOR LIST CARD -->
 
-<template id="folder-item-template">
-  <a
-    href=""
-    class="item group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer"
-  >
-    <!-- folder icon -->
-    <div
-      class="item-icon-wrapper w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800"
-    >
-      <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
-        <!-- prettier-ignore-start -->
-        <%- icon({ name: 'Folder', fill: 'currentColor', className: 'w-full h-auto'}) %>
-        <!-- prettier-ignore-end -->
-      </span>
-    </div>
+<%- include('partials/file-card-template', {breadcrumbs: locals.breadcrumbs || []})  %>
+<%- include('partials/folder-card-template', { breadcrumbs: locals.breadcrumbs || []})  %>
 
-    <!-- folder name -->
-    <div class="item-info relative w-full text-center">
-      <span
-        id="folder-name"
-        class="text-sm inline-block w-[calc(100%-24px)] mx-auto truncate"
-      >
-        <!-- folder name -->
-      </span>
-      <button
-        id=""
-        type="button"
-        aria-expanded="false"
-        class="folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm sm:opacity-0 opacity-100"
-      ></button>
-    </div>
-  </a>
-</template>
+<script type="module" src="/scripts/index.js"></script>

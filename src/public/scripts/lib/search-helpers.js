@@ -1,13 +1,10 @@
 import {
-  generateFileItem,
-  generateFolderItem,
-} from '../components/layout-item.js';
-import {
   hideClearButton,
   showClearButton,
   showModal,
 } from './modal-helpers.js';
 import { icon } from './get-icon.js';
+import { getFileCard, getFolderCard } from '../partials/template.js';
 
 export function handleActionsOnSearchedItems(ev) {
   const fileDetailsModal = document.querySelector('#file-details-modal');
@@ -130,16 +127,17 @@ export function updateSearchInfo({
       counter.innerHTML = '0 results';
       container.innerHTML = `<div class="mt-10 col-span-full text-center">No results found.</div>`;
     } else {
-      const foldersHTML = results.folders
-        .map((folder) => generateFolderItem(folder))
-        .join('');
+      container.innerHTML = '';
 
-      const filesHTML = results.files
-        .map((file) => generateFileItem(file))
-        .join('');
+      results.folders.forEach((folder) => {
+        container.appendChild(getFolderCard(folder));
+      });
+
+      results.files.forEach((file) => {
+        container.appendChild(getFileCard(file));
+      });
 
       counter.innerHTML = getResultsCount(results);
-      container.innerHTML = foldersHTML + filesHTML;
     }
   }
 }
@@ -150,16 +148,16 @@ function getResultsCount(results) {
   return `${count} ${count === 1 ? 'result' : 'results'}`;
 }
 
-function getIcon(type) {
-  if (type.startsWith('image')) {
-    return icon({
-      name: 'Image',
-      strokeWidth: 1,
-      className: 'w-full h-auto',
-    });
-  } else if (type.startsWith('video')) {
-    return icon({ name: 'Film', strokeWidth: 1, className: 'w-full h-auto' });
-  }
+// function getIcon(type) {
+//   if (type.startsWith('image')) {
+//     return icon({
+//       name: 'Image',
+//       strokeWidth: 1,
+//       className: 'w-full h-auto',
+//     });
+//   } else if (type.startsWith('video')) {
+//     return icon({ name: 'Film', strokeWidth: 1, className: 'w-full h-auto' });
+//   }
 
-  return icon({ name: 'File', strokeWidth: 1, className: 'w-full h-auto' });
-}
+//   return icon({ name: 'File', strokeWidth: 1, className: 'w-full h-auto' });
+// }
