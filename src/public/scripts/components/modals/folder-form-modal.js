@@ -8,6 +8,7 @@ import {
 import { showToast } from '../toast.js';
 
 import { getFolderCard } from '../../partials/template.js';
+import { formateDate } from '../../lib/utils.js';
 
 (function handleAddModalVisibility() {
   const createTriggers = document.querySelectorAll(
@@ -95,42 +96,71 @@ import { getFolderCard } from '../../partials/template.js';
     if (isSubmitting) return;
 
     // 1. Client-side validation
-    const formData = new FormData(form);
-    const dataToSend = {
-      name: formData.get('name'),
-      parentFolderId: formData.get('parentFolderId') || null,
-    };
-
-    // (Assuming validateField checks the input element directly, which is fine)
     if (!validateField(nameInput)) {
       focusOnFirstErrorField(form);
       return;
     }
 
-    // 2. Setup UI state
+    const formData = new FormData(form);
+    const payload = {
+      name: formData.get('name'),
+      parentFolderId: formData.get('parentFolderId'),
+    };
+
+    // 2. Store original state for rollback (UPDATE only)
+    let folderDetailsModal = null;
+    let nameElementInModal = null;
+    let originalName = null;
+
+    if (!isCreate) {
+      folderDetailsModal = document.querySelector('#folder-details-modal');
+
+      if (folderDetailsModal) {
+        nameElementInModal = folderDetailsModal.querySelector('.folder-name');
+        if (nameElementInModal) {
+          originalName = folder.name;
+
+          // OPTIMISTIC UPDATE - Update UI immediately
+          nameElementInModal.textContent = payload.name;
+          console.log('Optimistically updated modal to:', payload.name);
+        }
+      }
+    }
+
+    // 3. Setup UI state
+    const originalButtonText = isCreate ? 'Create' : 'Update';
     submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
     submitButton.disabled = true;
     nameInput.disabled = true;
     isSubmitting = true;
 
     try {
-      // 3. Determine endpoint and method dynamically
+      // 4. Determine endpoint and method dynamically
       const url = isCreate ? '/folders' : `/folders/${folder.id}`;
       const method = isCreate ? 'POST' : 'PUT';
 
       const res = await fetch(url, {
-        method: method,
+        method,
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
-      // 4. Handle server validation errors
+      // 5. Handle errors
       if (!res.ok) {
+        console.log('Request failed - rolling back modal...');
+
+        // ROLLBACK optimistic update on error
+        if (!isCreate && nameElementInModal && originalName) {
+          nameElementInModal.textContent = originalName;
+          console.log('Rolled back modal to:', originalName);
+        }
+
+        // Show error message
         if (data.errors?.name) {
           showErrorStylesAndMessages(nameInput, data.errors.name.msg);
           focusOnFirstErrorField(form);
@@ -140,88 +170,43 @@ import { getFolderCard } from '../../partials/template.js';
         return;
       }
 
-      // SUCCESS - NO RELOADING
-      // a. reset form and modal
+      // 6. SUCCESS - NO RELOADING
       form.reset();
       hideModal({ modal });
 
-      // b. update ui manually
       if (isCreate) {
+        // For creation, add new element
         addFolderItemToUI(data.folder);
         showToast('Folder created successfully!');
         console.log('New folder added: ', data.folder.id);
       } else {
+        // For update, optimistic UI already done, just confirm
+        // Update any other fields if needed (like updatedAt, etc.)
         updateFolderItemInUI(data.folder);
         showToast('Folder updated successfully!');
+        console.log('Folder updated:', data.folder.id);
       }
     } catch (error) {
       console.error('Network error: ', error);
+
+      // ROLLBACK optimistic update on network error
+      if (!isCreate && nameElementInModal && originalName) {
+        nameElementInModal.textContent = originalName;
+        console.log('Rolled back modal to:', originalName);
+      }
+
       showToast('Network error. Please try again.');
     } finally {
-      // 5. Cleanup
+      // 7. Cleanup
+      isSubmitting = false;
       nameInput.disabled = false;
       submitButton.disabled = false;
-      submitButton.textContent = isCreate ? 'Create' : 'Update';
-      isSubmitting = false;
+      submitButton.textContent = originalButtonText;
     }
-
-    // ev.preventDefault();
-    // if (isSubmitting) return;
-    // let isValid = true;
-    // console.log({ nameInput });
-    // if (!validateField(nameInput)) {
-    //   isValid = false;
-    // }
-    // if (!isValid) {
-    //   focusOnFirstErrorField(form);
-    // } else {
-    //   const formData = new FormData(form);
-    //   // 1. Disable nameInput and submit button
-    //   submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
-    //   nameInput.disabled = true;
-    //   submitButton.disabled = true;
-    //   isSubmitting = true;
-    //   let resp = null;
-    //   try {
-    //     if (isCreate) {
-    //       resp = await fetch('/folders', {
-    //         method: 'POST',
-    //         body: formData,
-    //       });
-    //     } else {
-    //       resp = await fetch(`/folders/${folder.id}`, {
-    //         method: 'PUT',
-    //         body: formData,
-    //       });
-    //     }
-    //     const data = await resp.json();
-    //     if (!resp.ok) {
-    //       // 2. Show validation errors
-    //       if (data.errors?.name) {
-    //         showErrorStylesAndMessages(nameInput, data.errors.name.msg);
-    //         focusOnFirstErrorField(form);
-    //       }
-    //       return;
-    //     }
-    //     // Success - reset form and hide modal
-    //     form.reset();
-    //     hideModal({ modal });
-    //     window.location.reload();
-    //   } catch (error) {
-    //     console.error('Error submitting folder: ', error);
-    //   } finally {
-    //     // Re-enable nameInput and submit button
-    //     nameInput.disabled = false;
-    //     submitButton.disabled = false;
-    //     submitButton.textContent = isCreate ? 'Create' : 'Update';
-    //     isSubmitting = false;
-    //   }
-    // }
   }
 
   function validateField(field) {
     const value = field.value.trim();
-    console.log({ value });
 
     let isValid = true;
     let errorMessage = '';
@@ -249,12 +234,17 @@ import { getFolderCard } from '../../partials/template.js';
 
 function updateFolderItemInUI(folder) {
   const item = document.querySelector(`a[href="/folders/${folder.id}"]`);
-  if (!item) return;
+  const folderDetailsModal = document.querySelector('#folder-details-modal');
 
   // 1. update folder name
-  const nameWrapper = item.querySelector('#folder-name');
-  if (nameWrapper) {
-    nameWrapper.textContent = folder.name;
+  if (item) {
+    item.querySelector('.folder-name').textContent = folder.name;
+  }
+
+  // 2. update folder details modal
+  if (folderDetailsModal) {
+    folderDetailsModal.querySelector('.folder-updated-date').textContent =
+      formateDate(folder.updatedAt);
   }
 }
 
