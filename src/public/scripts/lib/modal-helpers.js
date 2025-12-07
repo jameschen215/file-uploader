@@ -5,6 +5,10 @@ export function showModal({
   folder = null,
   breadcrumbs = null,
 }) {
+  if (folder) {
+    console.log('folder ID: ', folder.id);
+    console.log('folder name: ', folder.name);
+  }
   if (!modal.classList.contains('translate-y-full')) return; // already open
 
   const modalName = modal.id;

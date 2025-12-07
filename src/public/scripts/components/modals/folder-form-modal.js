@@ -236,9 +236,14 @@ function updateFolderItemInUI(folder) {
   const item = document.querySelector(`a[href="/folders/${folder.id}"]`);
   const folderDetailsModal = document.querySelector('#folder-details-modal');
 
-  // 1. update folder name
+  // 1. update folder name and button dataset
   if (item) {
     item.querySelector('.folder-name').textContent = folder.name;
+
+    const button = item.querySelector('button.folder-details-modal-trigger');
+    if (button) {
+      button.dataset.folder = JSON.stringify(folder);
+    }
   }
 
   // 2. update folder details modal

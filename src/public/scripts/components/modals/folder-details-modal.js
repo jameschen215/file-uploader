@@ -23,15 +23,16 @@ document.addEventListener('folder-details-modal-open', (ev) => {
 });
 
 function displayFolderInfo(folder, breadcrumbs) {
-  document.querySelector('.folder-name').textContent = folder.name;
-  document.querySelector('.folder-created-date').textContent = formateDate(
+  const modal = document.querySelector('#folder-details-modal');
+  modal.querySelector(' .folder-name').textContent = folder.name;
+  modal.querySelector('.folder-created-date').textContent = formateDate(
     folder.createdAt,
   );
-  document.querySelector('.folder-updated-date').textContent = formateDate(
+  modal.querySelector('.folder-updated-date').textContent = formateDate(
     folder.updatedAt,
   );
 
-  document.querySelector('.folder-path').innerHTML =
+  modal.querySelector('.folder-path').innerHTML =
     breadcrumbs.length === 0
       ? `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a>`
       : `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a> &#x203A; ` +
