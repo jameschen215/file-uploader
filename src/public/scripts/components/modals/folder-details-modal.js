@@ -92,9 +92,10 @@ function addFolderActionHandlers(folder) {
     try {
       deleteButton.disabled = true;
 
-      // 1. Remove element from UI optimistically
+      // 1. Remove element from UI optimistically and hide folder details modal
       if (folderItemEl) {
         folderItemEl.remove();
+        hideModal({ modal: folderDetailsModal });
       }
 
       // 2. Request the server to remove the folder
@@ -106,7 +107,7 @@ function addFolderActionHandlers(folder) {
       if (!res.ok) {
         const errorData = await res.json();
 
-        // RESTORE THE ELEMENT on failure
+        // RESTORE THE ELEMENT and re-open folder details modal on failure
         if (folderItemEl && parentEl) {
           if (previousEl) {
             // Insert after the previous sibling
@@ -115,6 +116,8 @@ function addFolderActionHandlers(folder) {
             // It was the first child, prepend it
             parentEl.prepend(folderItemEl);
           }
+
+          showModal({ modal: folderDetailsModal, folder });
         }
 
         showToast(errorData.message);
@@ -124,7 +127,7 @@ function addFolderActionHandlers(folder) {
       const result = await res.json();
 
       // 1. Hide folder details modal
-      hideModal({ modal: folderDetailsModal });
+      // hideModal({ modal: folderDetailsModal });
 
       // 2. SHOW TOAST FIRST
       showToast(result.message);
@@ -135,7 +138,7 @@ function addFolderActionHandlers(folder) {
     } catch (error) {
       console.error('Delete error: ', error);
 
-      // RESTORE THE ELEMENT on failure
+      // RESTORE THE ELEMENT and re-open folder details modal on failure
       if (folderItemEl && parentEl) {
         if (previousEl) {
           // Insert after the previous sibling
@@ -144,6 +147,8 @@ function addFolderActionHandlers(folder) {
           // It was the first child, prepend it
           parentEl.prepend(folderItemEl);
         }
+
+        showModal({ modal: folderDetailsModal, folder });
       }
 
       showToast(error.message || 'Failed to delete the folder');
@@ -153,8 +158,6 @@ function addFolderActionHandlers(folder) {
   };
 
   currentRenameHandler = async () => {
-    console.log('Rename button is clicked');
-
     setTimeout(() => {
       const formModal = document.querySelector('#folder-form-modal');
       showModal({ modal: formModal, folder });
@@ -162,18 +165,13 @@ function addFolderActionHandlers(folder) {
   };
 
   currentShareHandler = async () => {
-    console.log(`Handle share link...`);
-
-    const detailsModal = document.querySelector('#folder-details-modal');
+    // const detailsModal = document.querySelector('#folder-details-modal');
     const shareModal = document.querySelector('#share-modal');
-
-    // Close current modal
-    hideModal({ modal: detailsModal });
 
     // Then open share modal
     setTimeout(() => {
       showModal({ modal: shareModal, folder });
-    }, 100);
+    }, 50);
   };
 
   // Add new listeners

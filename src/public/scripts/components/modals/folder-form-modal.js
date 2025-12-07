@@ -243,6 +243,8 @@ function updateFolderItemInUI(folder) {
     const button = item.querySelector('button.folder-details-modal-trigger');
     if (button) {
       button.dataset.folder = JSON.stringify(folder);
+    } else {
+      console.log('No button');
     }
   }
 

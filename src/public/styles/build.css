@@ -628,17 +628,11 @@ video {
 .top-16 {
   top: 4rem;
 }
-.top-20 {
-  top: 5rem;
+.top-5 {
+  top: 1.25rem;
 }
 .top-full {
   top: 100%;
-}
-.top-10 {
-  top: 2.5rem;
-}
-.top-5 {
-  top: 1.25rem;
 }
 .-z-10 {
   z-index: -10;

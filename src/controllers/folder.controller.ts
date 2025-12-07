@@ -146,14 +146,6 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
 
   console.log(req.body);
 
-  // if (req.query.testError === 'true') {
-  //   return res.status(500).json({
-  //     success: false,
-  //     message: 'Test error',
-  //     data: null,
-  //   });
-  // }
-
   if (!errors.isEmpty()) {
     console.log('Error');
     console.log(errors.mapped());
