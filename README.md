@@ -365,3 +365,21 @@ We implemented Programmatic Focus Management to ensure a smooth user experience.
 // 2. Move focus to the container immediately
 modal.focus({ preventScroll: true });
 ```
+
+### Handling Trigger Buttons Inside Anchor Tags with Event Delegation
+
+While implementing the folder details modal, I ran into an issue where the trigger button was placed inside an anchor tag. Initially, each trigger had its own event listener, which caused the modal logic to use stale dataset values whenever the UI was updated optimistically.
+
+By switching to event delegation, I learned that:
+
+1. I only need one event listener on a parent container, instead of attaching listeners to each trigger.
+
+2. Delegated handlers always read the latest dataset values, so UI updates stay in sync.
+
+3. When a trigger is nested inside an `<a>`, the anchor’s default navigation can fire before bubbling-phase handlers.
+
+4. Using the capturing phase (`addEventListener(..., true)`) lets me intercept the click **before** the anchor navigates.
+
+5. `preventDefault()` and `stopPropagation()` must run **only** when the click originates from the trigger—otherwise normal navigation breaks.
+
+This pattern gives me a stable, predictable solution without removing or reattaching listeners, even as the UI updates dynamically.

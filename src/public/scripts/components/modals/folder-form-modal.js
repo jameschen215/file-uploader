@@ -22,7 +22,7 @@ import { formateDate } from '../../lib/utils.js';
   if (!createTriggers || !modal || !closeButton) return;
 
   createTriggers.forEach((trigger) => {
-    trigger.addEventListener('click', (ev) => {
+    trigger.addEventListener('click', () => {
       const folder = JSON.parse(trigger.dataset.folder || null);
       showModal({ modal, folder });
     });
@@ -30,16 +30,6 @@ import { formateDate } from '../../lib/utils.js';
 
   closeButton.addEventListener('click', () => {
     hideModal({ modal });
-  });
-
-  // Hide when clicking outside modal content
-  document.addEventListener('click', (ev) => {
-    if (
-      !ev.target.closest('#folder-form-modal > div') &&
-      !ev.target.closest('.folder-form-modal-trigger')
-    ) {
-      hideModal({ modal });
-    }
   });
 })();
 
@@ -65,12 +55,21 @@ import { formateDate } from '../../lib/utils.js';
 
   document.addEventListener('folder-form-modal-open', (ev) => {
     if (ev.detail.folder) {
+      console.log('Has folder');
       isCreate = false;
       folder = ev.detail.folder;
       formTitle.textContent = 'Rename folder';
       submitButton.textContent = 'Update';
       parentFolderIdInput.value = folder.parentFolderId || '';
       nameInput.value = folder.name;
+    } else {
+      console.log('No folder');
+      isCreate = true;
+      folder = null;
+      formTitle.textContent = 'Create folder';
+      submitButton.textContent = 'Create';
+      parentFolderIdInput.value = '';
+      nameInput.value = '';
     }
 
     nameInput.focus();
@@ -178,7 +177,7 @@ import { formateDate } from '../../lib/utils.js';
         // For creation, add new element
         addFolderItemToUI(data.folder);
         showToast('Folder created successfully!');
-        console.log('New folder added: ', data.folder.id);
+        console.log('New folder added: ', data.folder.id, data.folder.name);
       } else {
         // For update, optimistic UI already done, just confirm
         // Update any other fields if needed (like updatedAt, etc.)
@@ -250,8 +249,18 @@ function updateFolderItemInUI(folder) {
 
   // 2. update folder details modal
   if (folderDetailsModal) {
-    folderDetailsModal.querySelector('.folder-updated-date').textContent =
-      formateDate(folder.updatedAt);
+    const updatedDateEl = folderDetailsModal.querySelector(
+      '.folder-updated-date',
+    );
+    const renameButton = folderDetailsModal.querySelector(
+      '.folder-form-modal-trigger',
+    );
+    const shareButton = folderDetailsModal.querySelector(
+      '.share-modal-trigger',
+    );
+    updatedDateEl.textContent = formateDate(folder.updatedAt);
+    renameButton.dataset.folder = JSON.stringify(folder);
+    shareButton.dataset.folder = JSON.stringify(folder);
   }
 }
 

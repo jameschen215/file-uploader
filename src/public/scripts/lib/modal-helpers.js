@@ -12,7 +12,6 @@ export function showModal({
   if (!modal.classList.contains('translate-y-full')) return; // already open
 
   const modalName = modal.id;
-  console.log({ modalName });
 
   // 1. Modify the trigger attribute
   document.querySelectorAll(`.${modalName}-trigger`).forEach((t) => {
@@ -72,8 +71,6 @@ export function hideModal({ modal }) {
   const hiddenModals = document.querySelectorAll(
     '[id$="modal"].translate-y-full',
   );
-
-  console.log(openModals, openModals.length);
 
   if (openModals.length === 0) {
     // 3. Enable scrolling on pages

@@ -1,4 +1,4 @@
-import { hideModal } from '../../lib/modal-helpers.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#share-modal');
@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyButton = document.querySelector('#copy-link-btn');
 
   if (!modal || !closeButton) return;
+
+  document.querySelectorAll('.share-modal-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', function () {
+      const folder = JSON.parse(this.dataset.folder);
+      showModal({ modal, folder });
+    });
+  });
 
   // Close modal
   closeButton.addEventListener('click', () => {

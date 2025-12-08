@@ -7,32 +7,30 @@ const folderDetailsModal = document.querySelector('#folder-details-modal');
 
 // Store handler references outside the function
 let currentDeleteHandler = null;
-let currentRenameHandler = null;
-let currentShareHandler = null;
 
 document.addEventListener('folder-details-modal-open', (ev) => {
-  console.log('Folder details is going to display here');
-
   const { folder, breadcrumbs } = ev.detail;
 
   if (!(folder && breadcrumbs)) return;
 
   displayFolderInfo(folder, breadcrumbs);
 
-  addFolderActionHandlers(folder);
+  addFolderDeleteHandler(folder);
 });
 
 function displayFolderInfo(folder, breadcrumbs) {
-  const modal = document.querySelector('#folder-details-modal');
-  modal.querySelector(' .folder-name').textContent = folder.name;
-  modal.querySelector('.folder-created-date').textContent = formateDate(
-    folder.createdAt,
+  const renameButton = folderDetailsModal.querySelector(
+    '.folder-form-modal-trigger',
   );
-  modal.querySelector('.folder-updated-date').textContent = formateDate(
-    folder.updatedAt,
-  );
+  const shareButton = folderDetailsModal.querySelector('.share-modal-trigger');
 
-  modal.querySelector('.folder-path').innerHTML =
+  folderDetailsModal.querySelector(' .folder-name').textContent = folder.name;
+  folderDetailsModal.querySelector('.folder-created-date').textContent =
+    formateDate(folder.createdAt);
+  folderDetailsModal.querySelector('.folder-updated-date').textContent =
+    formateDate(folder.updatedAt);
+
+  folderDetailsModal.querySelector('.folder-path').innerHTML =
     breadcrumbs.length === 0
       ? `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a>`
       : `<a href="/" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">Cloud drive</a> &#x203A; ` +
@@ -42,24 +40,20 @@ function displayFolderInfo(folder, breadcrumbs) {
               `<a href="/folders/${bc.id}" class="font-medium text-sky-500 rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900">${bc.name}</a>`,
           )
           .join(' &#x203A; ');
+
+  // Attach folder to rename modal trigger - folder-form-modal
+  renameButton.dataset.folder = JSON.stringify(folder);
+
+  // Attach folder to share modal trigger
+  shareButton.dataset.folder = JSON.stringify(folder);
 }
 
-function addFolderActionHandlers(folder) {
+function addFolderDeleteHandler(folder) {
   const deleteButton = document.querySelector('.delete-folder-btn');
-  const renameButton = document.querySelector('.rename-folder-btn');
-  const shareButton = document.querySelector('.share-folder-btn');
 
   // Remove old listeners if exist
   if (currentDeleteHandler) {
     deleteButton.removeEventListener('click', currentDeleteHandler);
-  }
-
-  if (currentRenameHandler) {
-    renameButton.removeEventListener('click', currentRenameHandler);
-  }
-
-  if (currentShareHandler) {
-    shareButton.removeEventListener('click', currentShareHandler);
   }
 
   // Create new handlers with the current folder data
@@ -126,14 +120,11 @@ function addFolderActionHandlers(folder) {
 
       const result = await res.json();
 
-      // 1. Hide folder details modal
-      // hideModal({ modal: folderDetailsModal });
-
-      // 2. SHOW TOAST FIRST
+      // SHOW TOAST FIRST
       showToast(result.message);
       console.log(result.data.id, result.data.name);
 
-      // 3. DON'T RELOAD THE PAGE - it's slow and jarring
+      // DON'T RELOAD THE PAGE - it's slow and jarring
       // window.location.reload();
     } catch (error) {
       console.error('Delete error: ', error);
@@ -157,25 +148,6 @@ function addFolderActionHandlers(folder) {
     }
   };
 
-  currentRenameHandler = async () => {
-    setTimeout(() => {
-      const formModal = document.querySelector('#folder-form-modal');
-      showModal({ modal: formModal, folder });
-    }, 50);
-  };
-
-  currentShareHandler = async () => {
-    // const detailsModal = document.querySelector('#folder-details-modal');
-    const shareModal = document.querySelector('#share-modal');
-
-    // Then open share modal
-    setTimeout(() => {
-      showModal({ modal: shareModal, folder });
-    }, 50);
-  };
-
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
-  renameButton.addEventListener('click', currentRenameHandler);
-  shareButton.addEventListener('click', currentShareHandler);
 }
