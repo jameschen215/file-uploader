@@ -1,8 +1,10 @@
+import { showToast } from '../toast.js';
 import { icon } from '../../lib/get-icon.js';
+import { confirmDeletion } from './confirm-modal.js';
 import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
-import { showToast } from '../toast.js';
-import { confirmDeletion } from './confirm-modal.js';
+
+import { loadImageWithSpinner } from '../../lib/dom-helpers.js';
 
 const BUTTON_DISABLED_DURATION = 500;
 
@@ -55,17 +57,24 @@ function displayFileInfo(file, breadcrumbs) {
           )
           .join(' &#x203A; ');
 
-  // Show thumbnail for images and videos
+  // Show preview for images and videos
   const previewDiv = document.querySelector('#file-preview');
   if (file.mimeType.startsWith('image')) {
-    previewDiv.innerHTML = `
-        <div class="flex items-center justify-center">
-          <img
-            src="/files/${file.id}/preview"
-            alt="${file.originalName}"
-          />
-        </div>
-      `;
+    loadImageWithSpinner(
+      previewDiv,
+      `/files/${file.id}/preview`,
+      file.originalName,
+    ).catch((err) => {
+      console.error('Failed to load image preview: ', err);
+    });
+    // previewDiv.innerHTML = `
+    //     <div class="flex items-center justify-center">
+    //       <img
+    //         src="/files/${file.id}/preview"
+    //         alt="${file.originalName}"
+    //       />
+    //     </div>
+    //   `;
   } else if (file.mimeType.startsWith('video')) {
     previewDiv.innerHTML = `
         <div class="flex items-center justify-center">
