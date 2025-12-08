@@ -62,7 +62,7 @@ function displayFileInfo(file, breadcrumbs) {
   if (file.mimeType.startsWith('image')) {
     loadImageWithSpinner(
       previewDiv,
-      `/files/${file.id}/preview`,
+      `/files/${file.id}/previews`,
       file.originalName,
     ).catch((err) => {
       console.error('Failed to load image preview: ', err);

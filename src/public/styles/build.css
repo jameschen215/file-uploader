@@ -764,6 +764,15 @@ video {
 .aspect-square {
   aspect-ratio: 1 / 1;
 }
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+.aspect-\[5\/7\] {
+  aspect-ratio: 5/7;
+}
+.aspect-\[7\/5\] {
+  aspect-ratio: 7/5;
+}
 .size-10 {
   width: 2.5rem;
   height: 2.5rem;
@@ -1263,6 +1272,15 @@ video {
 }
 .p-6 {
   padding: 1.5rem;
+}
+.p-10 {
+  padding: 2.5rem;
+}
+.p-20 {
+  padding: 5rem;
+}
+.p-12 {
+  padding: 3rem;
 }
 .px-0\.5 {
   padding-left: 0.125rem;
