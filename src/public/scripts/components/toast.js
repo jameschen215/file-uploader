@@ -39,7 +39,7 @@ export function showToast(message, type = 'info', duration = 3000) {
 
   // 1. Create the element
   const toast = document.createElement('div');
-  toast.className = `${style.bg} ${style.text} px-4 py-3 rounded-md border shadow-md ${style.border} flex items-center gap-3 toast-enter`;
+  toast.className = `${style.bg} ${style.text} px-4 py-3 rounded-md border shadow-md ${style.border} flex items-center gap-4 toast-enter`;
   toast.innerHTML = `
     <span class="flex-shrink-0">${icon({ name: style.icon, size: 16 })}</span>
     <p class="flex-1 text-sm">${message}</p>

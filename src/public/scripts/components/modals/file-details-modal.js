@@ -164,7 +164,7 @@ function addFileActions(file) {
       // 1. Remove element from UI optimistically and hide file details modal
       if (fileItemEl) {
         // Show toast first
-        showToast('Deleting file...');
+        showToast('Deleting file...', 'info');
         fileItemEl.remove();
         hideModal({ modal: fileDetailsModal });
       }
@@ -191,14 +191,14 @@ function addFileActions(file) {
           showModal({ modal: fileDetailsModal, file });
         }
 
-        showToast(errorData.message);
+        showToast(errorData.message, 'error');
         return;
       }
 
       const result = await res.json();
 
       // Show toast first
-      showToast(result.message);
+      showToast(result.message, 'success');
     } catch (error) {
       console.error('Delete error:', error);
 
@@ -213,7 +213,7 @@ function addFileActions(file) {
         showModal({ modal: fileDetailsModal, file });
       }
 
-      showToast(error.message || 'Failed to delete the file');
+      showToast(error.message || 'Failed to delete the file', 'error');
     } finally {
       deleteButton.disabled = false;
     }

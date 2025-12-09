@@ -63,7 +63,7 @@ function addFolderDeleteHandler(folder) {
     if (!confirmed) return;
 
     if (folder._count.subFolders > 0 || folder._count.files > 0) {
-      showToast('Cannot delete a non-empty folder.');
+      showToast("Can't delete folder - it's not empty.", 'warning');
       return;
     }
 
@@ -90,6 +90,7 @@ function addFolderDeleteHandler(folder) {
       if (folderItemEl) {
         folderItemEl.remove();
         hideModal({ modal: folderDetailsModal });
+        showToast('Deleting folder...', 'info');
       }
 
       // 2. Request the server to remove the folder
@@ -114,14 +115,14 @@ function addFolderDeleteHandler(folder) {
           showModal({ modal: folderDetailsModal, folder });
         }
 
-        showToast(errorData.message || 'Failed to delete the folder.');
+        showToast(errorData.message || 'Failed to delete folder.', 'error');
         return;
       }
 
       const result = await res.json();
 
       // SHOW TOAST FIRST
-      showToast(result.message);
+      showToast(result.message, 'success');
       console.log(result.data.id, result.data.name);
 
       // DON'T RELOAD THE PAGE - it's slow and jarring
@@ -142,7 +143,7 @@ function addFolderDeleteHandler(folder) {
         showModal({ modal: folderDetailsModal, folder });
       }
 
-      showToast(error.message || 'Failed to delete the folder');
+      showToast(error.message || 'Failed to delete folder', 'error');
     } finally {
       deleteButton.disabled = false;
     }

@@ -1,6 +1,7 @@
 /** --- lib/dom-helpers.js --- */
 
 import { icon } from './get-icon.js';
+import { getFileCard } from '../partials/template.js';
 
 /**
  * Loads an image with a spinner and handles error
@@ -64,4 +65,21 @@ export function showError(container, message = 'An error occurred') {
       <p>${message}</p>
     </div>
   `;
+}
+
+/**
+ * Add files to list of file items in UI
+ * @param {HTMLElement} container
+ * @param {array} files
+ */
+export function addFilesToListInUI(container, files) {
+  // Check if container is empty
+  const emptyTitle = container.querySelector('h3');
+  if (emptyTitle && files.length > 0) {
+    container.innerHTML = '';
+  }
+
+  files.forEach((file) => {
+    container.appendChild(getFileCard(file));
+  });
 }

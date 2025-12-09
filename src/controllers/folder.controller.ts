@@ -79,7 +79,7 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
   if (req.query.testError === 'true') {
     return res.status(500).json({
       success: false,
-      message: 'Simulated error for testing',
+      message: 'Simulated error for testing.',
       data: null,
     });
   }
@@ -89,7 +89,7 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
     if (!folderId || typeof folderId !== 'string') {
       return res.status(400).json({
         success: false,
-        message: 'Invalid folder ID',
+        message: 'Invalid folder ID.',
         data: null,
       });
     }
@@ -104,7 +104,7 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
     if (!folder) {
       return res.status(404).json({
         success: false,
-        message: 'Folder not found',
+        message: 'Folder not found.',
         data: null,
       });
     }
@@ -112,7 +112,7 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
     if (folder._count.files > 0 || folder._count.subFolders > 0) {
       return res.status(400).json({
         success: false,
-        message: 'Failed to delete a non-empty folder.',
+        message: "Can't delete folder - it isn't empty.",
         data: folder,
       });
     }
@@ -125,15 +125,15 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `Folder ${folder.name} has been deleted successfully.`,
+      message: `Folder deleted.`,
       data: folder,
     });
   } catch (error) {
     console.error('Error deleting folder:', error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: 'An error occurred while deleting the folder',
+      message: 'Error deleting folder.',
       data: null,
     });
   }
@@ -166,7 +166,7 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
   if (!folder || folder.userId !== userId) {
     return res.json({
       success: false,
-      message: 'Folder not found',
+      message: 'Folder not found.',
       data: null,
     });
   }
@@ -181,7 +181,7 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Folder has been renamed successfully.',
+    message: 'Folder renamed.',
     folder: updatedFolder,
   });
 });

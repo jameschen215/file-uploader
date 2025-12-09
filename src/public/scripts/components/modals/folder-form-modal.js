@@ -164,7 +164,7 @@ import { formateDate } from '../../lib/utils.js';
           showErrorStylesAndMessages(nameInput, data.errors.name.msg);
           focusOnFirstErrorField(form);
         } else {
-          showToast(data.message || 'An error occurred.');
+          showToast(data.message || 'An error occurred.', 'error');
         }
         return;
       }
@@ -176,13 +176,13 @@ import { formateDate } from '../../lib/utils.js';
       if (isCreate) {
         // For creation, add new element
         addFolderItemToUI(data.folder);
-        showToast('Folder created successfully!');
+        showToast('Folder created.', 'success');
         console.log('New folder added: ', data.folder.id, data.folder.name);
       } else {
         // For update, optimistic UI already done, just confirm
         // Update any other fields if needed (like updatedAt, etc.)
         updateFolderItemInUI(data.folder);
-        showToast('Folder updated successfully!');
+        showToast('Folder renamed.', 'success');
         console.log('Folder updated:', data.folder.id);
       }
     } catch (error) {
@@ -194,7 +194,7 @@ import { formateDate } from '../../lib/utils.js';
         console.log('Rolled back modal to:', originalName);
       }
 
-      showToast('Network error. Please try again.');
+      showToast('Network error. Please try again.', 'error');
     } finally {
       // 7. Cleanup
       isSubmitting = false;

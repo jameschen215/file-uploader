@@ -5,12 +5,15 @@ import {
   MAX_FILE_SIZE,
   MAX_UPLOAD_FILES,
 } from '../../lib/constants.js';
+import { showToast } from '../toast.js';
+import { addFilesToListInUI } from '../../lib/dom-helpers.js';
+
+const layoutContainer = document.querySelector('#layout-container');
+const modal = document.querySelector('#upload-modal');
+const triggers = document.querySelectorAll('.upload-modal-trigger');
+const closeButton = document.querySelector('#upload-modal .close-modal-btn');
 
 (function handleUploadModalVisibility() {
-  const triggers = document.querySelectorAll('.upload-modal-trigger');
-  const modal = document.querySelector('#upload-modal');
-  const closeButton = document.querySelector('#upload-modal .close-modal-btn');
-
   if (!triggers || !modal || !closeButton) return;
 
   triggers.forEach((trigger) => {
@@ -141,9 +144,23 @@ import {
         progressBar.style.width = '100%';
         progressPercent.textContent = '100%';
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // Hide form modal
+        hideModal({ modal });
+
+        // Parse response and update UI
+        const result = JSON.parse(xhr.responseText);
+
+        addFilesToListInUI(layoutContainer, result.data.files);
+
+        // Show toast after UI updates
+        showToast(result.message, 'success');
+
+        // Reset form
+        selectedFiles = [];
+        uploadProgress.classList.add('hidden');
+
+        updateFileDisplay();
+        enableButtons();
       } else {
         // Handle error response
         try {
