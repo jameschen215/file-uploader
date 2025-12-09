@@ -70,7 +70,7 @@ function addFolderDeleteHandler(folder) {
     // Handle deletion
     console.log(`Deleting folder ${folder.id}...`);
 
-    // Store reference to the element ant its position BEFORE removing
+    // Store reference to the element and its position BEFORE removing
     const folderItemEl = document.querySelector(
       `#layout-container a[href="/folders/${folder.id}"]`,
     );
@@ -114,7 +114,7 @@ function addFolderDeleteHandler(folder) {
           showModal({ modal: folderDetailsModal, folder });
         }
 
-        showToast(errorData.message);
+        showToast(errorData.message || 'Failed to delete the folder.');
         return;
       }
 

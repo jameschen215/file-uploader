@@ -13,8 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.share-modal-trigger').forEach((trigger) => {
     trigger.addEventListener('click', function () {
-      const folder = JSON.parse(this.dataset.folder);
-      showModal({ modal, folder });
+      const folder = JSON.parse(this.dataset.folder || null);
+      const file = JSON.parse(this.dataset.file || null);
+
+      showModal({ modal, folder, file });
     });
   });
 

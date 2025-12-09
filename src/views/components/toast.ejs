@@ -1,10 +1,6 @@
 <div
-  class="toast hidden opacity-0 absolute top-5 left-1/2 -translate-x-1/2 z-[100] text-lime-600 border border-lime-200 dark:border-lime-700/50 rounded-md bg-lime-100 dark:bg-lime-800/30 px-5 py-2 shadow-md transition-all duration-500 ease-in-out"
->
-  <p class="flex items-center gap-2">
-    <span><%- icon({name: 'Info', size: 16}) %></span>
-    <span class="toast-message"></span>
-  </p>
-</div>
+  id="toast-container"
+  class="fixed top-4 right-4 z-[80] space-y-3 w-80"
+></div>
 
 <script type="module" src="/scripts/components/toast.js"></script>

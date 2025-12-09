@@ -1,17 +1,17 @@
 import { showToast } from '../toast.js';
 import { icon } from '../../lib/get-icon.js';
 import { confirmDeletion } from './confirm-modal.js';
-import { hideModal, showModal } from '../../lib/modal-helpers.js';
-import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
-
 import { loadImageWithSpinner } from '../../lib/dom-helpers.js';
+import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
-const BUTTON_DISABLED_DURATION = 500;
+const BUTTON_DISABLED_DURATION = 1000;
 
 // Store handler references outside the function
 let currentDownloadHandler = null;
 let currentDeleteHandler = null;
-let currentShareHandler = null;
+
+const fileDetailsModal = document.querySelector('#file-details-modal');
 
 console.log('file details modal');
 
@@ -23,7 +23,7 @@ document.addEventListener('file-details-modal-open', (ev) => {
   if (!(file && breadcrumbs)) return;
 
   displayFileInfo(file, breadcrumbs);
-  addFileActionHandlers(file);
+  addFileActions(file);
 });
 
 function displayFileInfo(file, breadcrumbs) {
@@ -62,19 +62,11 @@ function displayFileInfo(file, breadcrumbs) {
   if (file.mimeType.startsWith('image')) {
     loadImageWithSpinner(
       previewDiv,
-      `/files/${file.id}/previews`,
+      `/files/${file.id}/preview`,
       file.originalName,
     ).catch((err) => {
       console.error('Failed to load image preview: ', err);
     });
-    // previewDiv.innerHTML = `
-    //     <div class="flex items-center justify-center">
-    //       <img
-    //         src="/files/${file.id}/preview"
-    //         alt="${file.originalName}"
-    //       />
-    //     </div>
-    //   `;
   } else if (file.mimeType.startsWith('video')) {
     previewDiv.innerHTML = `
         <div class="flex items-center justify-center">
@@ -123,21 +115,22 @@ function displayFileInfo(file, breadcrumbs) {
     durationWrapper.classList.remove('flex');
     durationWrapper.classList.add('hidden');
   }
+
+  // Attach file to button dataset
 }
 
-function addFileActionHandlers(file) {
+function addFileActions(file) {
   // Handlers
-  const deleteButton = document.querySelector('#delete-file-btn');
   const shareButton = document.querySelector('#share-file-btn');
   const downloadButton = document.querySelector('#download-file-btn');
+  const deleteButton = document.querySelector('#delete-file-btn');
+
+  // Attach file to share button dataset
+  shareButton.dataset.file = JSON.stringify(file);
 
   // Remove old listeners if they exist
   if (currentDeleteHandler) {
     deleteButton.removeEventListener('click', currentDeleteHandler);
-  }
-
-  if (currentShareHandler) {
-    shareButton.removeEventListener('click', currentShareHandler);
   }
 
   if (currentDownloadHandler) {
@@ -152,54 +145,82 @@ function addFileActionHandlers(file) {
 
     console.log(`Deleting ${file.originalName}...`);
 
+    // Store reference to the element and its position BEFORE removing
+    const fileItemEl = document.querySelector(
+      `#file-details-trigger-${file.id}`,
+    );
+    let parentEl = null;
+    let previousEl = null;
+
+    if (fileItemEl) {
+      // Store the parent and previous sibling for restoration
+      parentEl = fileItemEl.parentElement;
+      previousEl = fileItemEl.previousElementSibling;
+    }
+
     try {
       deleteButton.disabled = true;
 
-      const resp = await fetch(`/files/${file.id}`, {
+      // 1. Remove element from UI optimistically and hide file details modal
+      if (fileItemEl) {
+        // Show toast first
+        showToast('Deleting file...');
+        fileItemEl.remove();
+        hideModal({ modal: fileDetailsModal });
+      }
+
+      // 2. Request the server to remove the file
+      const res = await fetch(`/files/${file.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
 
-      if (!resp.ok) {
-        const errorData = await resp
-          .json()
-          .catch(() => ({ message: 'Failed to delete the file' }));
-        showToast(errorData.message || 'Failed to delete the file.');
+      if (!res.ok) {
+        const errorData = await res.json();
+
+        // RESTORE THE ELEMENT and re-open file details modal on failure
+        if (fileItemEl && parentEl) {
+          if (previousEl) {
+            // Insert after the previous sibling
+            previousEl.after(fileItemEl);
+          } else {
+            // It was the first child, prepend it
+            parentEl.prepend(fileItemEl);
+          }
+
+          showModal({ modal: fileDetailsModal, file });
+        }
+
+        showToast(errorData.message);
         return;
       }
 
-      const data = await resp.json();
-      showToast(data.message);
+      const result = await res.json();
 
-      // UPDATE UI MANUALLY
-
-      // window.location.reload();
+      // Show toast first
+      showToast(result.message);
     } catch (error) {
       console.error('Delete error:', error);
-      showToast('An error occurred while deleting the file');
+
+      // RESTORE THE ELEMENT and re-open file details modal on failure
+      if (fileItemEl && parentEl) {
+        if (previousEl) {
+          previousEl.after(fileItemEl);
+        } else {
+          parentEl.prepend(fileItemEl);
+        }
+
+        showModal({ modal: fileDetailsModal, file });
+      }
+
+      showToast(error.message || 'Failed to delete the file');
     } finally {
       deleteButton.disabled = false;
     }
   };
 
-  currentShareHandler = async () => {
-    console.log(`Handle share link...`);
-
-    const detailsModal = document.querySelector('#file-details-modal');
-    const shareModal = document.querySelector('#share-modal');
-
-    // Close current modal
-    hideModal({ modal: detailsModal });
-
-    // Then open share modal
-    setTimeout(() => {
-      showModal({ modal: shareModal, file });
-    }, 100);
-  };
-
   currentDownloadHandler = () => {
     console.log(`Downloading ${file.originalName}...`);
-    const modal = document.querySelector('#file-details-modal');
 
     downloadButton.disabled = true;
 
@@ -207,12 +228,11 @@ function addFileActionHandlers(file) {
     window.location.href = `/files/${file.id}/download`;
 
     setTimeout(() => {
-      hideModal({ modal });
+      downloadButton.disabled = false;
     }, BUTTON_DISABLED_DURATION);
   };
 
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
-  shareButton.addEventListener('click', currentShareHandler);
   downloadButton.addEventListener('click', currentDownloadHandler);
 }
