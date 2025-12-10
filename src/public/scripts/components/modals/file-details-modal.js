@@ -1,9 +1,14 @@
 import { showToast } from '../toast.js';
 import { icon } from '../../lib/get-icon.js';
 import { confirmDeletion } from './confirm-modal.js';
-import { loadImageWithSpinner } from '../../lib/dom-helpers.js';
+import {
+  cleanUpDeletingState,
+  loadImageWithSpinner,
+  removeElementFromDOM,
+  setupDeletingState,
+} from '../../lib/dom-helpers.js';
 import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
-import { hideModal, showModal } from '../../lib/modal-helpers.js';
+import { hideModal } from '../../lib/modal-helpers.js';
 
 const BUTTON_DISABLED_DURATION = 1000;
 
@@ -143,79 +148,32 @@ function addFileActions(file) {
 
     if (!confirmed) return;
 
-    console.log(`Deleting ${file.originalName}...`);
-
-    // Store reference to the element and its position BEFORE removing
-    const fileItemEl = document.querySelector(
-      `#file-details-trigger-${file.id}`,
-    );
-    let parentEl = null;
-    let previousEl = null;
-
-    if (fileItemEl) {
-      // Store the parent and previous sibling for restoration
-      parentEl = fileItemEl.parentElement;
-      previousEl = fileItemEl.previousElementSibling;
-    }
+    // Show loading state
+    const originalButtonHTML = deleteButton.innerHTML;
+    setupDeletingState(deleteButton);
 
     try {
-      deleteButton.disabled = true;
-
-      // 1. Remove element from UI optimistically and hide file details modal
-      if (fileItemEl) {
-        // Show toast first
-        showToast('Deleting file...', 'info');
-        fileItemEl.remove();
-        hideModal({ modal: fileDetailsModal });
-      }
-
-      // 2. Request the server to remove the file
+      // 1. Request the server to remove the file
       const res = await fetch(`/files/${file.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-
-        // RESTORE THE ELEMENT and re-open file details modal on failure
-        if (fileItemEl && parentEl) {
-          if (previousEl) {
-            // Insert after the previous sibling
-            previousEl.after(fileItemEl);
-          } else {
-            // It was the first child, prepend it
-            parentEl.prepend(fileItemEl);
-          }
-
-          showModal({ modal: fileDetailsModal, file });
-        }
-
-        showToast(errorData.message, 'error');
-        return;
+        throw new Error('Failed to delete file.');
       }
 
       const result = await res.json();
 
-      // Show toast first
+      hideModal({ modal: fileDetailsModal });
+      removeElementFromDOM(result.data.id);
       showToast(result.message, 'success');
     } catch (error) {
       console.error('Delete error:', error);
 
-      // RESTORE THE ELEMENT and re-open file details modal on failure
-      if (fileItemEl && parentEl) {
-        if (previousEl) {
-          previousEl.after(fileItemEl);
-        } else {
-          parentEl.prepend(fileItemEl);
-        }
-
-        showModal({ modal: fileDetailsModal, file });
-      }
-
       showToast(error.message || 'Failed to delete the file', 'error');
     } finally {
-      deleteButton.disabled = false;
+      cleanUpDeletingState(deleteButton, originalButtonHTML);
     }
   };
 

@@ -1,10 +1,10 @@
 import { validationResult } from 'express-validator';
 
 import prisma from '../lib/prisma.js';
+import { RequestHandler } from 'express';
 import { asyncHandler } from '../lib/async-handler.js';
 import { CustomNotFoundError } from '../errors/index.js';
 import { getFolderData } from '../lib/get-folder-data.js';
-import { RequestHandler } from 'express';
 
 export const handleCreateFolder = asyncHandler(async (req, res) => {
   const userId = res.locals.currentUser!.id;
@@ -26,7 +26,7 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
     });
 
     if (!parentFolder) {
-      throw new CustomNotFoundError('Parent folder not found');
+      throw new CustomNotFoundError('Parent folder not found.');
     }
   }
 
@@ -44,7 +44,7 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
 
   res.json({
     success: true,
-    message: 'Folder created',
+    message: 'Folder created successfully.',
     folder: newFolder,
   });
 });
@@ -125,7 +125,7 @@ export const handleDeleteFolder: RequestHandler = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: `Folder deleted.`,
+      message: `Folder deleted successfully.`,
       data: folder,
     });
   } catch (error) {

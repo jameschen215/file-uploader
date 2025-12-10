@@ -1,5 +1,9 @@
+import {
+  cleanUpDeletingState,
+  removeElementFromDOM,
+  setupDeletingState,
+} from '../../lib/dom-helpers.js';
 import { showToast } from '../toast.js';
-import { icon } from '../../lib/get-icon.js';
 import { formateDate } from '../../lib/utils.js';
 import { confirmDeletion } from './confirm-modal.js';
 import { hideModal } from '../../lib/modal-helpers.js';
@@ -64,8 +68,6 @@ function addFolderDeleteHandler() {
 
   // Create new handlers with the current folder data
   currentDeleteHandler = async () => {
-    const originalButtonHTML = deleteButton.innerHTML;
-
     const confirmed = await confirmDeletion({ folder });
 
     if (!confirmed) return;
@@ -76,7 +78,8 @@ function addFolderDeleteHandler() {
     }
 
     // Show loading state
-    showDeletingState(deleteButton);
+    const originalButtonHTML = deleteButton.innerHTML;
+    setupDeletingState(deleteButton);
 
     try {
       const res = await fetch(`/folders/${folder.id}`, {
@@ -91,7 +94,7 @@ function addFolderDeleteHandler() {
       const result = await res.json();
 
       hideModal({ modal: folderDetailsModal });
-      removeFolderItemFromUI(result.data.id);
+      removeElementFromDOM(result.data.id);
 
       showToast(result.message, 'success');
     } catch (error) {
@@ -99,38 +102,10 @@ function addFolderDeleteHandler() {
 
       showToast(error.message || 'Failed to delete folder', 'error');
     } finally {
-      restoreNormalState(deleteButton, originalButtonHTML);
+      cleanUpDeletingState(deleteButton, originalButtonHTML);
     }
   };
 
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
-}
-
-function showDeletingState(button) {
-  // Disable all buttons
-  [...button.parentElement.children].forEach((btn) => {
-    btn.disabled = true;
-  });
-
-  // Visual feedbacks
-  button.parentElement.previousElementSibling.classList.add('opacity-50');
-  button.innerHTML = `
-      <span>${icon({ name: 'LoaderCircle', className: 'animate-spin' })}</span>
-    `;
-}
-
-function restoreNormalState(button, btnHTML) {
-  [...button.parentElement.children].forEach((btn) => {
-    btn.disabled = false;
-  });
-  button.parentElement.previousElementSibling.classList.remove('opacity-50');
-  button.innerHTML = btnHTML;
-}
-
-function removeFolderItemFromUI(folderId) {
-  const folderItemEl = document.querySelector(`a[href="/folders/${folderId}"]`);
-  if (folderItemEl) {
-    folderItemEl.remove();
-  }
 }

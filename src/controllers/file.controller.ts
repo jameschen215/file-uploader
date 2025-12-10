@@ -130,6 +130,15 @@ export const handleDeleteFile: RequestHandler = async (req, res) => {
   const { fileId } = req.params;
   const userId = res.locals.currentUser!.id;
 
+  // TEST: Force error for testing
+  if (req.query.testError === 'true') {
+    return res.status(500).json({
+      success: false,
+      message: 'Simulated error for testing.',
+      data: null,
+    });
+  }
+
   try {
     const file = await prisma.file.findFirst({
       where: { id: fileId, userId },
@@ -174,7 +183,7 @@ export const handleDeleteFile: RequestHandler = async (req, res) => {
 
     res.json({
       success: true,
-      message: 'File deleted.',
+      message: 'File deleted successfully.',
       data: file,
     });
   } catch (error) {

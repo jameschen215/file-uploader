@@ -83,3 +83,45 @@ export function addFilesToListInUI(container, files) {
     container.appendChild(getFileCard(file));
   });
 }
+
+/**
+ * Show deleting state
+ * @param {HTMLElement} button
+ */
+export function setupDeletingState(button) {
+  // Disable all buttons
+  [...button.parentElement.children].forEach((btn) => {
+    btn.disabled = true;
+  });
+
+  // Show visual feedbacks
+  button.parentElement.previousElementSibling.classList.add('opacity-50');
+  button.innerHTML = `<span>${icon({ name: 'LoaderCircle' })}</span>`;
+  button.classList.add('animate-spin');
+}
+
+/**
+ * Clean up the deleting state
+ * @param {HTMLElement} button
+ * @param {HTMLElement} originalButtonHTML
+ */
+export function cleanUpDeletingState(button, originalButtonHTML) {
+  [...button.parentElement.children].forEach((btn) => {
+    btn.disabled = false;
+  });
+
+  button.parentElement.previousElementSibling.classList.remove('opacity-50');
+  button.innerHTML = originalButtonHTML;
+  button.classList.remove('animate-spin');
+}
+
+/**
+ * Remove an element from DOM by id
+ * @param {*} id
+ */
+export function removeElementFromDOM(id) {
+  const el = document.querySelector(`[id$="-${id}"]`);
+  if (el) {
+    el.remove();
+  }
+}
