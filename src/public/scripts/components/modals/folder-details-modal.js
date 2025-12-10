@@ -1,7 +1,8 @@
+import { showToast } from '../toast.js';
+import { icon } from '../../lib/get-icon.js';
 import { formateDate } from '../../lib/utils.js';
 import { confirmDeletion } from './confirm-modal.js';
-import { hideModal, showModal } from '../../lib/modal-helpers.js';
-import { showToast } from '../toast.js';
+import { hideModal } from '../../lib/modal-helpers.js';
 
 const folderDetailsModal = document.querySelector('#folder-details-modal');
 
@@ -58,6 +59,8 @@ function addFolderDeleteHandler(folder) {
 
   // Create new handlers with the current folder data
   currentDeleteHandler = async () => {
+    const originalButtonHTML = deleteButton.innerHTML;
+
     const confirmed = await confirmDeletion({ folder });
 
     if (!confirmed) return;
@@ -67,88 +70,62 @@ function addFolderDeleteHandler(folder) {
       return;
     }
 
-    // Handle deletion
-    console.log(`Deleting folder ${folder.id}...`);
-
-    // Store reference to the element and its position BEFORE removing
-    const folderItemEl = document.querySelector(
-      `#layout-container a[href="/folders/${folder.id}"]`,
-    );
-    let previousEl = null;
-    let parentEl = null;
-
-    if (folderItemEl) {
-      // Store the parent and previous sibling for restoration
-      parentEl = folderItemEl.parentElement;
-      previousEl = folderItemEl.previousElementSibling;
-    }
+    // Show loading state
+    showDeletingState(deleteButton);
 
     try {
-      deleteButton.disabled = true;
-
-      // 1. Remove element from UI optimistically and hide folder details modal
-      if (folderItemEl) {
-        folderItemEl.remove();
-        hideModal({ modal: folderDetailsModal });
-        showToast('Deleting folder...', 'info');
-      }
-
-      // 2. Request the server to remove the folder
       const res = await fetch(`/folders/${folder.id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-
-        // RESTORE THE ELEMENT and re-open folder details modal on failure
-        if (folderItemEl && parentEl) {
-          if (previousEl) {
-            // Insert after the previous sibling
-            previousEl.after(folderItemEl);
-          } else {
-            // It was the first child, prepend it
-            parentEl.prepend(folderItemEl);
-          }
-
-          showModal({ modal: folderDetailsModal, folder });
-        }
-
-        showToast(errorData.message || 'Failed to delete folder.', 'error');
-        return;
+        throw new Error('Failed to delete folder.');
       }
 
       const result = await res.json();
 
-      // SHOW TOAST FIRST
-      showToast(result.message, 'success');
-      console.log(result.data.id, result.data.name);
+      hideModal({ modal: folderDetailsModal });
+      removeFolderItemFromUI(result.data.id);
 
-      // DON'T RELOAD THE PAGE - it's slow and jarring
-      // window.location.reload();
+      showToast(result.message, 'success');
     } catch (error) {
       console.error('Delete error: ', error);
 
-      // RESTORE THE ELEMENT and re-open folder details modal on failure
-      if (folderItemEl && parentEl) {
-        if (previousEl) {
-          // Insert after the previous sibling
-          previousEl.after(folderItemEl);
-        } else {
-          // It was the first child, prepend it
-          parentEl.prepend(folderItemEl);
-        }
-
-        showModal({ modal: folderDetailsModal, folder });
-      }
-
       showToast(error.message || 'Failed to delete folder', 'error');
     } finally {
-      deleteButton.disabled = false;
+      restoreNormalState(deleteButton, originalButtonHTML);
     }
   };
 
   // Add new listeners
   deleteButton.addEventListener('click', currentDeleteHandler);
+}
+
+function showDeletingState(button) {
+  // Disable all buttons
+  [...button.parentElement.children].forEach((btn) => {
+    btn.disabled = true;
+  });
+
+  // Visual feedbacks
+  button.parentElement.previousElementSibling.classList.add('opacity-50');
+  button.innerHTML = `
+      <span>${icon({ name: 'LoaderCircle', className: 'animate-spin' })}</span>
+    `;
+}
+
+function restoreNormalState(button, btnHTML) {
+  [...button.parentElement.children].forEach((btn) => {
+    btn.disabled = false;
+  });
+  button.parentElement.previousElementSibling.classList.remove('opacity-50');
+  button.innerHTML = btnHTML;
+}
+
+function removeFolderItemFromUI(folderId) {
+  const folderItemEl = document.querySelector(`a[href="/folders/${folderId}"]`);
+  if (folderItemEl) {
+    folderItemEl.remove();
+  }
 }
