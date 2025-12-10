@@ -6,7 +6,7 @@ import {
   MAX_UPLOAD_FILES,
 } from '../../lib/constants.js';
 import { showToast } from '../toast.js';
-import { addFilesToListInUI } from '../../lib/dom-helpers.js';
+import { addFileItemsToUI } from '../../lib/dom-helpers.js';
 
 const layoutContainer = document.querySelector('#layout-container');
 const modal = document.querySelector('#upload-modal');
@@ -150,7 +150,7 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
         // Parse response and update UI
         const result = JSON.parse(xhr.responseText);
 
-        addFilesToListInUI(layoutContainer, result.data.files);
+        addFileItemsToUI(layoutContainer, result.data.files);
 
         // Show toast after UI updates
         showToast(result.message, 'success');

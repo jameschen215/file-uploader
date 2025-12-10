@@ -7,7 +7,7 @@ import {
 } from '../../lib/validation-helpers.js';
 import { showToast } from '../toast.js';
 
-import { getFolderCard } from '../../partials/template.js';
+import { getFolderItem } from '../../partials/template.js';
 import { formateDate } from '../../lib/utils.js';
 
 (function handleAddModalVisibility() {
@@ -231,7 +231,7 @@ function updateFolderUI(folder) {
 }
 
 function addFolderItemToUI(folder) {
-  const newItem = getFolderCard(folder);
+  const newItem = getFolderItem(folder);
   const button = newItem.querySelector('button');
 
   button.addEventListener('click', (ev) => {

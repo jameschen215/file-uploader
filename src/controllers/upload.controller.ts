@@ -102,11 +102,6 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
           });
 
         if (uploadError) {
-          // throwSupabaseError(error, 'upload file');
-          // return res.status(500).json({
-          //   success: false,
-          //   message: 'Error uploading files to storage.',
-          // });
           throwSupabaseError(uploadError, 'upload file(s)');
         }
 

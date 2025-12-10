@@ -1,22 +1,25 @@
-import { showToast } from '../toast.js';
-import { icon } from '../../lib/get-icon.js';
-import { confirmDeletion } from './confirm-modal.js';
 import {
   cleanUpDeletingState,
   loadImageWithSpinner,
   removeElementFromDOM,
   setupDeletingState,
 } from '../../lib/dom-helpers.js';
+import { showToast } from '../toast.js';
+import { icon } from '../../lib/get-icon.js';
+import { confirmDeletion } from './confirm-modal.js';
 import { formateDate, formatFileSize, formatTime } from '../../lib/utils.js';
 import { hideModal } from '../../lib/modal-helpers.js';
 
 const BUTTON_DISABLED_DURATION = 1000;
 
+const fileDetailsModal = document.querySelector('#file-details-modal');
+const deleteButton = document.querySelector('#delete-file-btn');
+const shareButton = document.querySelector('#share-file-btn');
+const downloadButton = document.querySelector('#download-file-btn');
+
 // Store handler references outside the function
 let currentDownloadHandler = null;
 let currentDeleteHandler = null;
-
-const fileDetailsModal = document.querySelector('#file-details-modal');
 
 console.log('file details modal');
 
@@ -28,7 +31,7 @@ document.addEventListener('file-details-modal-open', (ev) => {
   if (!(file && breadcrumbs)) return;
 
   displayFileInfo(file, breadcrumbs);
-  addFileActions(file);
+  addFileActions();
 });
 
 function displayFileInfo(file, breadcrumbs) {
@@ -122,17 +125,12 @@ function displayFileInfo(file, breadcrumbs) {
   }
 
   // Attach file to button dataset
+  shareButton.dataset.file = JSON.stringify(file);
+  deleteButton.dataset.file = JSON.stringify(file);
+  downloadButton.dataset.file = JSON.stringify(file);
 }
 
-function addFileActions(file) {
-  // Handlers
-  const shareButton = document.querySelector('#share-file-btn');
-  const downloadButton = document.querySelector('#download-file-btn');
-  const deleteButton = document.querySelector('#delete-file-btn');
-
-  // Attach file to share button dataset
-  shareButton.dataset.file = JSON.stringify(file);
-
+function addFileActions() {
   // Remove old listeners if they exist
   if (currentDeleteHandler) {
     deleteButton.removeEventListener('click', currentDeleteHandler);
@@ -144,6 +142,9 @@ function addFileActions(file) {
 
   // Create new handlers with the current file data
   currentDeleteHandler = async () => {
+    const file = JSON.parse(deleteButton.dataset.file);
+    console.log('Delete file: ', file.originalName, file.id);
+
     const confirmed = await confirmDeletion({ file });
 
     if (!confirmed) return;
@@ -159,11 +160,11 @@ function addFileActions(file) {
         credentials: 'include',
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to delete file.');
-      }
-
       const result = await res.json();
+
+      if (!res.ok) {
+        throw new Error(result.message || 'Failed to delete file.');
+      }
 
       hideModal({ modal: fileDetailsModal });
       removeElementFromDOM(result.data.id);
@@ -178,7 +179,7 @@ function addFileActions(file) {
   };
 
   currentDownloadHandler = () => {
-    console.log(`Downloading ${file.originalName}...`);
+    const file = JSON.parse(downloadButton.dataset.file);
 
     downloadButton.disabled = true;
 

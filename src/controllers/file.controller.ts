@@ -166,9 +166,7 @@ export const handleDeleteFile: RequestHandler = async (req, res) => {
 
     if (storageError) {
       console.error('Storage deletion failed:', storageError);
-      // throw new CustomInternalError(
-      //   'Failed to delete the file from the storage',
-      // );
+
       return res.status(500).json({
         success: false,
         message: 'Error deleting file from storage.',

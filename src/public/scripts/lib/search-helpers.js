@@ -4,7 +4,7 @@ import {
   showModal,
 } from './modal-helpers.js';
 import { icon } from './get-icon.js';
-import { getFileCard, getFolderCard } from '../partials/template.js';
+import { getFileItem, getFolderItem } from '../partials/template.js';
 
 export function handleActionsOnSearchedItems(ev) {
   const fileDetailsModal = document.querySelector('#file-details-modal');
@@ -130,11 +130,11 @@ export function updateSearchInfo({
       container.innerHTML = '';
 
       results.folders.forEach((folder) => {
-        container.appendChild(getFolderCard(folder));
+        container.appendChild(getFolderItem(folder));
       });
 
       results.files.forEach((file) => {
-        container.appendChild(getFileCard(file));
+        container.appendChild(getFileItem(file));
       });
 
       counter.innerHTML = getResultsCount(results);

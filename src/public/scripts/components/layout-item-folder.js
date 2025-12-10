@@ -20,6 +20,7 @@ document.querySelectorAll('a[href^="/folders/"]').forEach((folderLink) => {
   if (!(layoutContainer && modal && closeButton)) return;
 
   // Handle modal show / hide
+  // Use click on parent to ensure dataset on buttons to be updated automatically
   layoutContainer.addEventListener(
     'click',
     (ev) => {
@@ -33,7 +34,7 @@ document.querySelectorAll('a[href^="/folders/"]').forEach((folderLink) => {
       ev.stopPropagation();
 
       const folder = JSON.parse(trigger.dataset.folder);
-      const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs);
+      const breadcrumbs = JSON.parse(trigger.dataset.breadcrumbs) || [];
 
       showModal({ modal, folder, breadcrumbs });
     },

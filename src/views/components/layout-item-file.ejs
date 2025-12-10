@@ -1,9 +1,9 @@
 <div
-  id="file-details-trigger-<%= file.id %>"
+  id="file-<%= file.id %>"
   role="button"
   tabindex="0"
   data-file="<%= JSON.stringify(file) %>"
-  data-breadcrumbs="<%= JSON.stringify(breadcrumbs || null) %>"
+  data-breadcrumbs="<%= JSON.stringify(breadcrumbs || []) %>"
   class="file-details-modal-trigger item group w-full h-40 flex flex-col items-center justify-center gap-2"
 >
   <!-- file icon -->
@@ -32,4 +32,4 @@
   </div>
 </div>
 
-<script type="module" src="/scripts/components/layout-item-file.js"></script>
+<!-- <script type="module" src="/scripts/components/layout-item-file.js"></script> -->

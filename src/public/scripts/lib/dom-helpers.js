@@ -1,7 +1,7 @@
 /** --- lib/dom-helpers.js --- */
 
 import { icon } from './get-icon.js';
-import { getFileCard } from '../partials/template.js';
+import { getFileItem } from '../partials/template.js';
 
 /**
  * Loads an image with a spinner and handles error
@@ -72,7 +72,7 @@ export function showError(container, message = 'An error occurred') {
  * @param {HTMLElement} container
  * @param {array} files
  */
-export function addFilesToListInUI(container, files) {
+export function addFileItemsToUI(container, files) {
   // Check if container is empty
   const emptyTitle = container.querySelector('h3');
   if (emptyTitle && files.length > 0) {
@@ -80,7 +80,8 @@ export function addFilesToListInUI(container, files) {
   }
 
   files.forEach((file) => {
-    container.appendChild(getFileCard(file));
+    console.log('File: ', file.originalName, file.id);
+    container.appendChild(getFileItem(file));
   });
 }
 

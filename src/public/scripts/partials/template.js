@@ -1,11 +1,17 @@
 import { icon } from '../lib/get-icon.js';
 
-export function getFileCard(file) {
-  const template = document.querySelector('#file-card-template');
+export function getFileItem(file) {
+  const template = document.querySelector('#file-item-template');
+
+  if (!template) {
+    console.log('No template!');
+    return;
+  }
+
   const clone = template.content.firstElementChild.cloneNode(true);
 
   // 1. add button id
-  clone.id = `file-details-trigger-${file.id}`;
+  clone.id = `file-${file.id}`;
 
   // 2. attach file to card
   clone.dataset.file = JSON.stringify(file);
@@ -13,7 +19,7 @@ export function getFileCard(file) {
   // 3. add card name
   clone.querySelector('.file-name').textContent = file.originalName;
 
-  // 4. add file thumbnail
+  // 4. add file icon
   const imageIcon = icon({
     name: 'Image',
     strokeWidth: 1,
@@ -30,8 +36,8 @@ export function getFileCard(file) {
     className: 'w-full h-auto',
   });
 
-  const thumbnailEl = clone.querySelector('#file-thumbnail');
-  thumbnailEl.innerHTML = file.mimeType.startsWith('image')
+  const iconEl = clone.querySelector('.item-icon');
+  iconEl.innerHTML = file.mimeType.startsWith('image')
     ? imageIcon
     : file.mimeType.startsWith('video')
       ? videoIcon
@@ -40,9 +46,12 @@ export function getFileCard(file) {
   return clone;
 }
 
-export function getFolderCard(folder) {
-  const template = document.querySelector('#folder-card-template');
+export function getFolderItem(folder) {
+  const template = document.querySelector('#folder-item-template');
   const clone = template.content.firstElementChild.cloneNode(true);
+
+  // 1. Add ID
+  clone.id = `folder-${folder.id}`;
 
   // 1. add href
   clone.href = `/folders/${folder.id}`;
