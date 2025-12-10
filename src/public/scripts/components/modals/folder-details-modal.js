@@ -16,7 +16,7 @@ document.addEventListener('folder-details-modal-open', (ev) => {
 
   displayFolderInfo(folder, breadcrumbs);
 
-  addFolderDeleteHandler(folder);
+  addFolderDeleteHandler();
 });
 
 function displayFolderInfo(folder, breadcrumbs) {
@@ -24,6 +24,7 @@ function displayFolderInfo(folder, breadcrumbs) {
     '.folder-form-modal-trigger',
   );
   const shareButton = folderDetailsModal.querySelector('.share-modal-trigger');
+  const deleteButton = folderDetailsModal.querySelector('.delete-folder-btn');
 
   folderDetailsModal.querySelector(' .folder-name').textContent = folder.name;
   folderDetailsModal.querySelector('.folder-created-date').textContent =
@@ -47,10 +48,14 @@ function displayFolderInfo(folder, breadcrumbs) {
 
   // Attach folder to share modal trigger
   shareButton.dataset.folder = JSON.stringify(folder);
+
+  // Attach folder to share modal trigger
+  deleteButton.dataset.folder = JSON.stringify(folder);
 }
 
-function addFolderDeleteHandler(folder) {
-  const deleteButton = document.querySelector('.delete-folder-btn');
+function addFolderDeleteHandler() {
+  const deleteButton = folderDetailsModal.querySelector('.delete-folder-btn');
+  const folder = JSON.parse(deleteButton.dataset.folder);
 
   // Remove old listeners if exist
   if (currentDeleteHandler) {

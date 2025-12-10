@@ -177,11 +177,15 @@ export const handleRenameFolder = asyncHandler(async (req, res) => {
       name,
       parentFolderId: parentFolderId || null,
     },
+    include: {
+      parentFolder: { select: { name: true } },
+      _count: { select: { files: true, subFolders: true } },
+    },
   });
 
   res.json({
     success: true,
-    message: 'Folder renamed.',
+    message: 'Folder renamed successfully.',
     folder: updatedFolder,
   });
 });

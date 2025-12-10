@@ -106,27 +106,7 @@ import { formateDate } from '../../lib/utils.js';
       parentFolderId: formData.get('parentFolderId'),
     };
 
-    // 2. Store original state for rollback (UPDATE only)
-    let folderDetailsModal = null;
-    let nameElementInModal = null;
-    let originalName = null;
-
-    if (!isCreate) {
-      folderDetailsModal = document.querySelector('#folder-details-modal');
-
-      if (folderDetailsModal) {
-        nameElementInModal = folderDetailsModal.querySelector('.folder-name');
-        if (nameElementInModal) {
-          originalName = folder.name;
-
-          // OPTIMISTIC UPDATE - Update UI immediately
-          nameElementInModal.textContent = payload.name;
-          console.log('Optimistically updated modal to:', payload.name);
-        }
-      }
-    }
-
-    // 3. Setup UI state
+    // 2. Setup UI state
     const originalButtonText = isCreate ? 'Create' : 'Update';
     submitButton.textContent = isCreate ? 'Creating...' : 'Updating...';
     submitButton.disabled = true;
@@ -134,7 +114,7 @@ import { formateDate } from '../../lib/utils.js';
     isSubmitting = true;
 
     try {
-      // 4. Determine endpoint and method dynamically
+      // 3. Determine endpoint and method dynamically
       const url = isCreate ? '/folders' : `/folders/${folder.id}`;
       const method = isCreate ? 'POST' : 'PUT';
 
@@ -149,54 +129,40 @@ import { formateDate } from '../../lib/utils.js';
 
       const data = await res.json();
 
-      // 5. Handle errors
+      // 4. Handle errors
       if (!res.ok) {
-        console.log('Request failed - rolling back modal...');
-
-        // ROLLBACK optimistic update on error
-        if (!isCreate && nameElementInModal && originalName) {
-          nameElementInModal.textContent = originalName;
-          console.log('Rolled back modal to:', originalName);
-        }
-
-        // Show error message
+        // Show validation error
         if (data.errors?.name) {
           showErrorStylesAndMessages(nameInput, data.errors.name.msg);
           focusOnFirstErrorField(form);
-        } else {
-          showToast(data.message || 'An error occurred.', 'error');
+          return;
         }
-        return;
+
+        // Other server errors
+        throw new Error(data.message || 'An error occurred');
       }
 
-      // 6. SUCCESS - NO RELOADING
-      form.reset();
-      hideModal({ modal });
-
+      // 5. SUCCESS - NO RELOADING
       if (isCreate) {
-        // For creation, add new element
         addFolderItemToUI(data.folder);
-        showToast('Folder created.', 'success');
         console.log('New folder added: ', data.folder.id, data.folder.name);
       } else {
-        // For update, optimistic UI already done, just confirm
-        // Update any other fields if needed (like updatedAt, etc.)
-        updateFolderItemInUI(data.folder);
-        showToast('Folder renamed.', 'success');
+        updateFolderUI(data.folder);
         console.log('Folder updated:', data.folder.id);
       }
+
+      hideModal({ modal });
+      form.reset(); // Reset form only on success
+      showToast(data.message, 'success');
     } catch (error) {
-      console.error('Network error: ', error);
-
-      // ROLLBACK optimistic update on network error
-      if (!isCreate && nameElementInModal && originalName) {
-        nameElementInModal.textContent = originalName;
-        console.log('Rolled back modal to:', originalName);
-      }
-
-      showToast('Network error. Please try again.', 'error');
+      console.error('Error: ', error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Network error. Please try again.';
+      showToast(errorMessage, 'error');
     } finally {
-      // 7. Cleanup
+      // 6. Cleanup
       isSubmitting = false;
       nameInput.disabled = false;
       submitButton.disabled = false;
@@ -231,9 +197,9 @@ import { formateDate } from '../../lib/utils.js';
   }
 })();
 
-function updateFolderItemInUI(folder) {
+function updateFolderUI(folder) {
   const item = document.querySelector(`a[href="/folders/${folder.id}"]`);
-  const folderDetailsModal = document.querySelector('#folder-details-modal');
+  const modal = document.querySelector('#folder-details-modal');
 
   // 1. update folder name and button dataset
   if (item) {
@@ -248,19 +214,19 @@ function updateFolderItemInUI(folder) {
   }
 
   // 2. update folder details modal
-  if (folderDetailsModal) {
-    const updatedDateEl = folderDetailsModal.querySelector(
-      '.folder-updated-date',
+  if (modal) {
+    modal.querySelector('.folder-updated-date').textContent = formateDate(
+      folder.updatedAt,
     );
-    const renameButton = folderDetailsModal.querySelector(
-      '.folder-form-modal-trigger',
-    );
-    const shareButton = folderDetailsModal.querySelector(
-      '.share-modal-trigger',
-    );
-    updatedDateEl.textContent = formateDate(folder.updatedAt);
-    renameButton.dataset.folder = JSON.stringify(folder);
-    shareButton.dataset.folder = JSON.stringify(folder);
+
+    modal.querySelector('.folder-form-modal-trigger').dataset.folder =
+      JSON.stringify(folder);
+
+    modal.querySelector('.share-modal-trigger').dataset.folder =
+      JSON.stringify(folder);
+
+    modal.querySelector('.delete-folder-btn').dataset.folder =
+      JSON.stringify(folder);
   }
 }
 
