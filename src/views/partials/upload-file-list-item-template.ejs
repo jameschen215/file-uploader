@@ -1,0 +1,35 @@
+<template id="upload-file-list-item-template">
+  <div
+    class="flex items-center justify-between gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-600 group"
+  >
+    <div class="flex items-center gap-2 flex-1 min-w-0">
+      <div class="file-icon text-xl">
+        <!-- File icon -->
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <p
+          class="file-name text-xs font-medium text-gray-900 dark:text-gray-50 truncate"
+        >
+          <!-- File original name -->
+        </p>
+        <p class="file-size text-[10px] text-gray-500 dark:text-gray-400">
+          <!-- File size -->
+        </p>
+      </div>
+    </div>
+
+    <!-- add data-index to button -->
+    <button
+      type="button"
+      class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 rounded-sm text-red-600 bg-red-100 hover:bg-red-200 dark:text-red-200 dark:hover:text-red-50 dark:bg-red-900 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:ring-offset-gray-700"
+    >
+      <%- icon({name: 'X', size: 16}) %>
+    </button>
+  </div>
+</template>
+
+<script
+  type="module"
+  src="/scripts/partials/upload-file-list-item-template.js"
+></script>

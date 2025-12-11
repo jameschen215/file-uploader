@@ -27,10 +27,10 @@ export function formatTime(timeInSeconds) {
 
 export function formatFileSize(size) {
   if (size < 2 ** 20) {
-    return Math.ceil(size / 1024) + 'KB';
+    return Math.ceil(size / 1024).toFixed(1) + 'KB';
   }
 
-  return (size / 1024 / 1024).toFixed(1) + 'MB';
+  return (size / 1024 / 1024).toFixed(2) + 'MB';
 }
 
 export function formateDate(date) {

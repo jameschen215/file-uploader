@@ -7,6 +7,7 @@ import {
 } from '../../lib/constants.js';
 import { showToast } from '../toast.js';
 import { addFileItemsToUI } from '../../lib/dom-helpers.js';
+import { getUploadFileListItem } from '../../partials/upload-file-list-item-template.js';
 
 const layoutContainer = document.querySelector('#layout-container');
 const modal = document.querySelector('#upload-modal');
@@ -27,14 +28,14 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
   });
 
   // Hide when clicking outside modal
-  document.addEventListener('click', (ev) => {
-    if (
-      !ev.target.closest('#upload-modal > div') &&
-      !ev.target.closest('.upload-modal-trigger')
-    ) {
-      hideModal({ modal });
-    }
-  });
+  // document.addEventListener('click', (ev) => {
+  //   if (
+  //     !ev.target.closest('#upload-modal > div') &&
+  //     !ev.target.closest('.upload-modal-trigger')
+  //   ) {
+  //     hideModal({ modal });
+  //   }
+  // });
 })();
 
 (function handleUploadModalActions() {
@@ -239,6 +240,7 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
   }
 
   function updateFileDisplay() {
+    // 1. file count
     fileCountSpan.textContent = selectedFiles.length;
 
     if (selectedFiles.length === 0) {
@@ -246,36 +248,40 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
       selectedFilesDiv.innerHTML = '';
     } else {
       fileList.classList.remove('hidden');
-      selectedFilesDiv.innerHTML = selectedFiles
-        .map(
-          (file, index) => `
-          <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-600 group">
-                <div class="flex items-center gap-2 flex-1 min-w-0">
-                  <div class="text-xl">
-                    ${file.type.startsWith('image/') ? icon({ name: 'Image', size: 28, strokeWidth: 1.5 }) : file.type.startsWith('video/') ? icon({ name: 'Film', size: 28, strokeWidth: 1.5 }) : icon({ name: 'File', size: 28, strokeWidth: 1.5 })}
-                  </div>
-  
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-gray-900 dark:text-gray-50 truncate">
-                      ${file.name}
-                    </p>
-                    <p class="text-[10px] text-gray-500 dark:text-gray-400">
-                      ${(file.size / 1024).toFixed(1)} KB
-                    </p>
-                  </div>
-                </div>
-  
-                <button
-                  type="button"
-                  data-index="${index}"
-                  class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 rounded-sm text-red-600 bg-red-100 dark:text-red-200 dark:bg-red-900 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:ring-offset-gray-700"
-                >
-                  ${icon({ name: 'X', size: 16 })}
-                </button>
-              </div>
-        `,
-        )
-        .join('');
+      selectedFilesDiv.innerHTML = '';
+      selectedFiles.forEach((file, index) =>
+        selectedFilesDiv.appendChild(getUploadFileListItem(file, index)),
+      );
+      // selectedFilesDiv.innerHTML = selectedFiles
+      //   .map(
+      //     (file, index) => `
+      //     <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-600 group">
+      //           <div class="flex items-center gap-2 flex-1 min-w-0">
+      //             <div class="text-xl">
+      //               ${file.type.startsWith('image/') ? icon({ name: 'Image', size: 28, strokeWidth: 1.5 }) : file.type.startsWith('video/') ? icon({ name: 'Film', size: 28, strokeWidth: 1.5 }) : icon({ name: 'File', size: 28, strokeWidth: 1.5 })}
+      //             </div>
+
+      //             <div class="flex-1 min-w-0">
+      //               <p class="text-xs font-medium text-gray-900 dark:text-gray-50 truncate">
+      //                 ${file.name}
+      //               </p>
+      //               <p class="text-[10px] text-gray-500 dark:text-gray-400">
+      //                 ${(file.size / 1024).toFixed(1)} KB
+      //               </p>
+      //             </div>
+      //           </div>
+
+      //           <button
+      //             type="button"
+      //             data-index="${index}"
+      //             class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 rounded-sm text-red-600 bg-red-100 hover:bg-red-200 dark:text-red-200 dark:hover:text-red-50 dark:bg-red-900 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:ring-offset-gray-700"
+      //           >
+      //             ${icon({ name: 'X', size: 16 })}
+      //           </button>
+      //         </div>
+      //   `,
+      //   )
+      //   .join('');
 
       // Remove single file
       document.querySelectorAll('.clear-file-btn').forEach((btn) => {
