@@ -14,6 +14,20 @@ const modal = document.querySelector('#upload-modal');
 const triggers = document.querySelectorAll('.upload-modal-trigger');
 const closeButton = document.querySelector('#upload-modal .close-modal-btn');
 
+const dropzone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const fileList = document.getElementById('file-list');
+const selectedFilesDiv = document.getElementById('selected-files');
+const fileCountSpan = document.getElementById('file-count');
+
+const clearFilesBtn = document.getElementById('clear-files-btn');
+const uploadForm = document.getElementById('upload-form');
+const errorDiv = document.getElementById('upload-error');
+const uploadProgress = document.getElementById('upload-progress');
+const progressBar = document.getElementById('progress-bar');
+const progressPercent = document.getElementById('progress-percent');
+const submitButton = document.querySelector('#upload-form button[type=submit]');
+
 (function handleUploadModalVisibility() {
   if (!triggers || !modal || !closeButton) return;
 
@@ -26,66 +40,12 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
   closeButton.addEventListener('click', () => {
     hideModal({ modal });
   });
-
-  // Hide when clicking outside modal
-  // document.addEventListener('click', (ev) => {
-  //   if (
-  //     !ev.target.closest('#upload-modal > div') &&
-  //     !ev.target.closest('.upload-modal-trigger')
-  //   ) {
-  //     hideModal({ modal });
-  //   }
-  // });
 })();
 
 (function handleUploadModalActions() {
-  const dropzone = document.getElementById('drop-zone');
-  const fileInput = document.getElementById('file-input');
-  const fileList = document.getElementById('file-list');
-  const selectedFilesDiv = document.getElementById('selected-files');
-  const fileCountSpan = document.getElementById('file-count');
-
-  const clearFilesBtn = document.getElementById('clear-files-btn');
-  const uploadForm = document.getElementById('upload-form');
-  const errorDiv = document.getElementById('upload-error');
-  const uploadProgress = document.getElementById('upload-progress');
-  const progressBar = document.getElementById('progress-bar');
-  const progressPercent = document.getElementById('progress-percent');
-
   let selectedFiles = [];
 
-  // Drag and drop
-  dropzone.addEventListener('dragover', (ev) => {
-    ev.preventDefault();
-
-    dropzone.classList.add(
-      'border-blue-400',
-      'bg-blue-50',
-      'dark:border-blue-600',
-      'dark:bg-blue-950',
-    );
-  });
-
-  dropzone.addEventListener('dragleave', () => {
-    dropzone.classList.remove(
-      'border-blue-400',
-      'bg-blue-50',
-      'dark:border-blue-600',
-      'dark:bg-blue-950',
-    );
-  });
-
-  dropzone.addEventListener('drop', (ev) => {
-    ev.preventDefault();
-
-    dropzone.classList.remove(
-      'border-blue-400',
-      'bg-blue-50',
-      'dark:border-blue-600',
-      'dark:bg-blue-950',
-    );
-    handleFiles(ev.dataTransfer.files);
-  });
+  handleDropzoneActions();
 
   fileInput.addEventListener('change', (ev) => {
     handleFiles(ev.target.files);
@@ -94,14 +54,15 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
   clearFilesBtn.addEventListener('click', () => {
     selectedFiles = [];
     fileInput.value = '';
+    errorDiv.innerHTML = '';
+    errorDiv.classList.add('hidden');
 
-    updateFileDisplay();
+    updateFilesDisplay();
   });
 
-  // Form submission with progress
   uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
 
-  // Submit handler with real-time progress tracking
+  /** =============== Upload Handler =============== */
   async function handleSubmitWithRealProgressBar(ev) {
     ev.preventDefault();
 
@@ -110,26 +71,19 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
       return;
     }
 
-    // Create formData with selected files
+    // 1. Set up submitting state
+    setupSubmittingState();
+
+    // 2. Create formData with selected files
     const formData = new FormData();
     selectedFiles.forEach((file) => {
       formData.append('files', file);
     });
 
-    // Disable buttons
-    document.querySelectorAll('.clear-file-btn').forEach((btn) => {
-      btn.disabled = true;
-    });
-    clearFilesBtn.disabled = true;
-
-    // Display progress bar
-    uploadProgress.classList.remove('hidden');
-    errorDiv.classList.add('hidden');
-
-    // Fetch with XMLHttpRequest
+    // 3. Fetch with XMLHttpRequest
     const xhr = new XMLHttpRequest();
 
-    // Track upload progress
+    // 4. Track upload progress
     xhr.upload.addEventListener('progress', (ev) => {
       if (ev.lengthComputable) {
         const percentComplete = (ev.loaded / ev.total) * 100;
@@ -138,76 +92,61 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
       }
     });
 
-    // Handle successful upload
+    // 5. Handle successful upload
     xhr.addEventListener('load', () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        // Show 100% briefly before reload
-        progressBar.style.width = '100%';
-        progressPercent.textContent = '100%';
+      const res = handleXHRResponse(xhr);
 
-        // Hide form modal
-        hideModal({ modal });
+      if (res.ok && res.parsed) {
+        // HTTP status is OK AND JSON parsed successfully
+        // Now check if the operation itself was successful
+        if (res.data.success) {
+          // Everything succeeded
+          progressBar.style.width = '100%';
+          progressPercent.textContent = '100%';
+          hideModal({ modal });
 
-        // Parse response and update UI
-        const result = JSON.parse(xhr.responseText);
+          addFileItemsToUI(layoutContainer, res.data.data.files);
+          showToast(res.data.message, 'success');
 
-        addFileItemsToUI(layoutContainer, result.data.files);
-
-        // Show toast after UI updates
-        showToast(result.message, 'success');
-
-        // Reset form
-        selectedFiles = [];
-        uploadProgress.classList.add('hidden');
-
-        updateFileDisplay();
-        enableButtons();
-      } else {
-        // Handle error response
-        try {
-          const data = JSON.parse(xhr.responseText);
-          console.log('Error: ', data.error);
-          showError(data.error || 'Upload failed');
-        } catch (error) {
-          console.log('Error: ', error.message);
-          showError(error.message || 'Upload failed');
+          selectedFiles = [];
+          updateFilesDisplay();
+        } else {
+          // HTTP OK, JSON valid, but operation failed
+          showError(res.data.message || 'Upload failed');
         }
 
-        uploadProgress.classList.add('hidden');
+        cleanUpSubmittingState();
+      } else if (res.ok && !res.parsed) {
+        // HTTP OK but invalid JSON
 
-        enableButtons();
+        showError(res.error);
+        cleanUpSubmittingState();
+      } else {
+        // HTTP error status
+        const errorMessage = res.parsed
+          ? res.data.message || res.data.error || 'Upload failed'
+          : 'Upload failed';
+
+        showError(errorMessage);
+        cleanUpSubmittingState();
       }
     });
 
-    // Handle network errors
+    // 6. Handle network errors
     xhr.addEventListener('error', () => {
       showError('Network error during upload');
-
-      uploadProgress.classList.add('hidden');
-
-      enableButtons();
+      cleanUpSubmittingState();
     });
 
-    // Handle abort
+    // 7. Handle abort
     xhr.addEventListener('abort', () => {
       showError('Upload cancelled');
-
-      uploadProgress.classList.add('hidden');
-      enableButtons();
+      cleanUpSubmittingState();
     });
 
-    // Set request method and route
+    // 8. Set request method and route, and then send form data
     xhr.open('POST', uploadForm.action);
-
-    // Send the request
     xhr.send(formData);
-
-    function enableButtons() {
-      document.querySelectorAll('.clear-file-btn').forEach((btn) => {
-        btn.disabled = false;
-      });
-      clearFilesBtn.disabled = false;
-    }
   }
 
   function handleFiles(files) {
@@ -236,13 +175,14 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
       selectedFiles.push(file);
     }
 
-    updateFileDisplay();
+    updateFilesDisplay();
   }
 
-  function updateFileDisplay() {
-    // 1. file count
+  function updateFilesDisplay() {
+    // 1. update file count
     fileCountSpan.textContent = selectedFiles.length;
 
+    // 2. update file list
     if (selectedFiles.length === 0) {
       fileList.classList.add('hidden');
       selectedFilesDiv.innerHTML = '';
@@ -252,51 +192,24 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
       selectedFiles.forEach((file, index) =>
         selectedFilesDiv.appendChild(getUploadFileListItem(file, index)),
       );
-      // selectedFilesDiv.innerHTML = selectedFiles
-      //   .map(
-      //     (file, index) => `
-      //     <div class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-600 group">
-      //           <div class="flex items-center gap-2 flex-1 min-w-0">
-      //             <div class="text-xl">
-      //               ${file.type.startsWith('image/') ? icon({ name: 'Image', size: 28, strokeWidth: 1.5 }) : file.type.startsWith('video/') ? icon({ name: 'Film', size: 28, strokeWidth: 1.5 }) : icon({ name: 'File', size: 28, strokeWidth: 1.5 })}
-      //             </div>
 
-      //             <div class="flex-1 min-w-0">
-      //               <p class="text-xs font-medium text-gray-900 dark:text-gray-50 truncate">
-      //                 ${file.name}
-      //               </p>
-      //               <p class="text-[10px] text-gray-500 dark:text-gray-400">
-      //                 ${(file.size / 1024).toFixed(1)} KB
-      //               </p>
-      //             </div>
-      //           </div>
-
-      //           <button
-      //             type="button"
-      //             data-index="${index}"
-      //             class="clear-file-btn opacity-100 sm:opacity-0 group-hover:opacity-100 p-1 rounded-sm text-red-600 bg-red-100 hover:bg-red-200 dark:text-red-200 dark:hover:text-red-50 dark:bg-red-900 transition-all focus-visible:opacity-100 focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:ring-offset-gray-700"
-      //           >
-      //             ${icon({ name: 'X', size: 16 })}
-      //           </button>
-      //         </div>
-      //   `,
-      //   )
-      //   .join('');
-
-      // Remove single file
+      // 3. Attach event listener to clear buttons
       document.querySelectorAll('.clear-file-btn').forEach((btn) => {
-        btn.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-
-          removeFile(btn.dataset.index);
-        });
+        btn.addEventListener(
+          'click',
+          (ev) => {
+            ev.stopPropagation();
+            removeFile(btn.dataset.index);
+          },
+          { once: true },
+        );
       });
     }
   }
 
   function removeFile(index) {
     selectedFiles.splice(index, 1);
-    updateFileDisplay();
+    updateFilesDisplay();
   }
 
   function showError(message) {
@@ -304,4 +217,118 @@ const closeButton = document.querySelector('#upload-modal .close-modal-btn');
     errorP.textContent = message;
     errorDiv.classList.remove('hidden');
   }
+
+  function setupSubmittingState() {
+    // Disable drop zone
+    dropzone.classList.add(
+      'opacity-50',
+      'cursor-not-allowed',
+      'pointer-events-none',
+    );
+
+    // Disable clear buttons
+    clearFilesBtn.disabled = true;
+    document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+      btn.disabled = true;
+    });
+
+    // Display progress bar
+    uploadProgress.classList.remove('hidden');
+
+    // Hide error message
+    errorDiv.classList.add('hidden');
+
+    // Update submit button
+    submitButton.textContent = 'Uploading...';
+    submitButton.disabled = true;
+  }
+
+  function cleanUpSubmittingState() {
+    // Enable drop zone
+    dropzone.classList.remove(
+      'opacity-50',
+      'cursor-not-allowed',
+      'pointer-events-none',
+    );
+
+    // Enable clear buttons
+    clearFilesBtn.disabled = false;
+    document.querySelectorAll('.clear-file-btn').forEach((btn) => {
+      btn.disabled = false;
+    });
+
+    // Show progress bar
+    uploadProgress.classList.add('hidden');
+
+    // Update submit button
+    submitButton.textContent = 'Upload';
+    submitButton.disabled = false;
+  }
+
+  function handleDropzoneActions() {
+    // Drag and drop
+    dropzone.addEventListener('dragover', (ev) => {
+      ev.preventDefault();
+
+      dropzone.classList.add(
+        'border-blue-400',
+        'bg-blue-50',
+        'dark:border-blue-600',
+        'dark:bg-blue-950',
+      );
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.classList.remove(
+        'border-blue-400',
+        'bg-blue-50',
+        'dark:border-blue-600',
+        'dark:bg-blue-950',
+      );
+    });
+
+    dropzone.addEventListener('drop', (ev) => {
+      ev.preventDefault();
+
+      dropzone.classList.remove(
+        'border-blue-400',
+        'bg-blue-50',
+        'dark:border-blue-600',
+        'dark:bg-blue-950',
+      );
+      handleFiles(ev.dataTransfer.files);
+    });
+  }
 })();
+
+/** ======================== XHR Utilities ======================== */
+
+function parseXHRResponse(xhr) {
+  // Check if there's response text
+  if (!xhr.responseText) {
+    return { parsed: false, error: 'Empty response from server.' };
+  }
+
+  try {
+    const data = JSON.parse(xhr.responseText);
+    return { parsed: true, data };
+  } catch (error) {
+    console.log('Caught');
+    return {
+      parsed: false,
+      error: 'Invalid JSON response.',
+    };
+  }
+}
+
+function handleXHRResponse(xhr) {
+  const result = parseXHRResponse(xhr);
+
+  return {
+    ok: xhr.status >= 200 && xhr.status < 300,
+    status: xhr.status,
+    parsed: result.parsed,
+    data: result.data || null,
+    error: result.error || null,
+  };
+}

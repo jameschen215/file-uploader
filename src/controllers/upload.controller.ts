@@ -17,6 +17,15 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
   const userId = res.locals.currentUser!.id;
   const folderId = req.params.folderId || null;
 
+  // TEST: Force error for testing
+  if (req.query.testError === 'true') {
+    return res.status(500).json({
+      success: false,
+      message: 'Simulated error for testing.',
+      data: null,
+    });
+  }
+
   try {
     // Verify folder ownership if specified
     if (folderId) {
