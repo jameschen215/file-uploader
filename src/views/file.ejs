@@ -9,7 +9,7 @@
       <!-- Main content (2/3 width) -->
       <div class="md:col-span-2">
         <!-- Large preview -->
-        <div class="bg-gray-100 rounded-lg p-4">
+        <div class="bg-zinc-100 rounded-lg p-4">
           <!-- Image/Video/PDF preview here -->
         </div>
       </div>
@@ -21,20 +21,20 @@
           <h3 class="font-semibold mb-3">File Information</h3>
           <dl class="space-y-2 text-sm">
             <div>
-              <dt class="text-gray-500">Type</dt>
+              <dt class="text-zinc-500">Type</dt>
               <dd><%= file.mimeType %></dd>
             </div>
             <div>
-              <dt class="text-gray-500">Size</dt>
+              <dt class="text-zinc-500">Size</dt>
               <dd><%= formatSize(file.fileSize) %></dd>
             </div>
             <div>
-              <dt class="text-gray-500">Uploaded</dt>
+              <dt class="text-zinc-500">Uploaded</dt>
               <dd><%= locals.formatDate(file.uploadedAt, 'yyyy-MM-dd') %></dd>
             </div>
             <% if (file.width && file.height) { %>
             <div>
-              <dt class="text-gray-500">Dimensions</dt>
+              <dt class="text-zinc-500">Dimensions</dt>
               <dd>
                 <%= file.width %>
                 ×

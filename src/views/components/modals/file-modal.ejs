@@ -1,13 +1,13 @@
 <div
   id="file-in-modal"
-  class="hidden w-full max-w-md mx-auto bg-gray-50 dark:bg-gray-900 flex-grow"
+  class="hidden w-full max-w-md mx-auto bg-zinc-50 dark:bg-zinc-900 flex-grow"
 >
   <div class="w-full flex flex-col max-h-screen">
     <!--  close button -->
     <button
       type="button"
       aria-label="Close file modal"
-      class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+      class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
     >
       <%- icon({ name: 'X' }) %>
     </button>
@@ -31,7 +31,7 @@
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Path:</span>
-          <span id="modal-file-path" class="text-gray-700 dark:text-gray-300">
+          <span id="modal-file-path" class="text-zinc-700 dark:text-zinc-300">
             <!-- prettier-ignore-start -->
             <%= breadcrumbs.length > 0 ? 'Cloud drive/' + breadcrumbs.map(bc =>
             bc.name).join('/') : 'Cloud drive' %>
@@ -40,7 +40,7 @@
         </div>
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Size:</span>
-          <span id="modal-file-size" class="text-gray-700 dark:text-gray-300">
+          <span id="modal-file-size" class="text-zinc-700 dark:text-zinc-300">
             938 KB
           </span>
         </div>
@@ -48,7 +48,7 @@
           <span class="font-semibold">Type:</span>
           <span
             id="modal-file-type"
-            class="text-gray-700 dark:text-gray-300 uppercase"
+            class="text-zinc-700 dark:text-zinc-300 uppercase"
           >
             PDF document
           </span>
@@ -58,7 +58,7 @@
           <span class="font-semibold">Resolution:</span>
           <span
             id="modal-file-resolution"
-            class="text-gray-700 dark:text-gray-300"
+            class="text-zinc-700 dark:text-zinc-300"
           >
           </span>
         </div>
@@ -66,14 +66,14 @@
           <span class="font-semibold">Duration:</span>
           <span
             id="modal-file-duration"
-            class="text-gray-700 dark:text-gray-300"
+            class="text-zinc-700 dark:text-zinc-300"
           >
           </span>
         </div>
 
         <div class="flex flex-col gap-1">
           <span class="font-semibold">Date added:</span>
-          <span id="modal-file-date" class="text-gray-700 dark:text-gray-300">
+          <span id="modal-file-date" class="text-zinc-700 dark:text-zinc-300">
             2025-11-03
           </span>
         </div>
@@ -82,13 +82,13 @@
 
     <!-- footer -->
     <div
-      class="h-16 px-5 flex items-center justify-between border-t border-gray-200 dark:border-gray-800"
+      class="h-16 px-5 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800"
     >
       <button
         id="delete-file-btn"
         title="Delete"
         aria-label="Delete the file"
-        class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
+        class="bg-zinc-200 dark:bg-zinc-800 p-2.5 rounded-md"
       >
         <span><%- icon({name: 'Trash2'}) %></span>
       </button>
@@ -96,7 +96,7 @@
         id="share-file-btn"
         title="Share"
         aria-label="Share the file"
-        class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
+        class="bg-zinc-200 dark:bg-zinc-800 p-2.5 rounded-md"
       >
         <span><%- icon({name: 'Share2'}) %></span>
       </button>
@@ -104,7 +104,7 @@
         id="download-file-btn"
         title="Download"
         aria-label="Download the file"
-        class="bg-gray-200 dark:bg-gray-800 p-2.5 rounded-md"
+        class="bg-zinc-200 dark:bg-zinc-800 p-2.5 rounded-md"
       >
         <span><%- icon({name: 'Download'}) %></span>
       </button>

@@ -5,7 +5,7 @@
 >
   <!-- file icon -->
   <div
-    class="w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800 hover:border-sky-200 dark:hover:border-sky-800 hover:bg-sky-50 dark:hover:bg-sky-950 transition-colors"
+    class="w-full flex-grow flex items-center justify-center border rounded-md border-zinc-200 dark:border-zinc-800 hover:border-sky-200 dark:hover:border-sky-800 hover:bg-sky-50 dark:hover:bg-sky-950 transition-colors"
   >
     <span aria-hidden="true" class="item-icon block size-14 text-sky-400">
       <% if (file.mimeType.startsWith('image')) { %>
@@ -29,6 +29,6 @@
       </span>
       <span class="shrink-0">.<%= file.originalName.split('.')[1] %></span>
     </p>
-    <span class="shrink-0 text-gray-500"><%= file.fileSize %></span>
+    <span class="shrink-0 text-zinc-500"><%= file.fileSize %></span>
   </div>
 </a>

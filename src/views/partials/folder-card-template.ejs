@@ -7,11 +7,11 @@
 <template id="folder-card-template">
   <a
     href=""
-    class="group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 focus-visible:border-none focus-visible:outline-none dark:ring-offset-gray-900 rounded-md transition-colors"
+    class="group w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 focus-visible:border-none focus-visible:outline-none dark:ring-offset-zinc-900 rounded-md transition-colors"
   >
     <!-- folder icon -->
     <div
-      class="w-full flex-grow flex items-center justify-center border rounded-md border-gray-200 dark:border-gray-800 group-hover:bg-sky-50 group-hover:dark:bg-sky-950/25 group-hover:border-sky-300 group-hover:dark:border-sky-800 transition-colors"
+      class="w-full flex-grow flex items-center justify-center border rounded-md border-zinc-200 dark:border-zinc-800 group-hover:bg-sky-50 group-hover:dark:bg-sky-950/25 group-hover:border-sky-300 group-hover:dark:border-sky-800 transition-colors"
     >
       <span aria-hidden="true" class="block size-14 text-sky-400">
         <!-- prettier-ignore-start -->
@@ -32,7 +32,7 @@
         type="button"
         aria-expanded="false"
         data-breadcrumbs="<%= JSON.stringify(locals.breadcrumbs || null) %>"
-        class="folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-gray-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-gray-800 hover:bg-gray-100 focus-visible:opacity-100 focus-visible:p-0 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 focus-visible:outline-none focus-visible:border-none focus-visible:dark:ring-offset-gray-900 transition-all"
+        class="folder-details-modal-trigger item-info-btn absolute top-1/2 right-0 -translate-y-1/2 py-1 px-0.5 rounded-sm text-zinc-500 sm:opacity-0 opacity-100 group-hover:opacity-100 hover:dark:bg-zinc-800 hover:bg-zinc-100 focus-visible:opacity-100 focus-visible:p-0 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 focus-visible:outline-none focus-visible:border-none focus-visible:dark:ring-offset-zinc-900 transition-all"
       >
         <%- icon({name: 'EllipsisVertical'}) %>
       </button>

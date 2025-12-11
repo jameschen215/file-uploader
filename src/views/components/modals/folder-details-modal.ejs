@@ -4,10 +4,10 @@
   role="dialog"
   aria-modal="true"
   aria-label="Show folder details"
-  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-zinc-950/10 dark:bg-zinc-950/50 backdrop-blur z-[60] transition-transform duration-200"
 >
   <div
-    class="w-full max-w-sm mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl"
+    class="w-full max-w-sm mx-auto bg-zinc-50 dark:bg-zinc-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl"
   >
     <div class="flex flex-col flex-grow relative">
       <!-- Header with close button -->
@@ -17,7 +17,7 @@
         <button
           type="button"
           aria-label="Close folder details modal"
-          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <%- icon({ name: 'X' }) %>
         </button>
@@ -38,14 +38,14 @@
         <div class="flex flex-col gap-0.5">
           <span class="font-semibold">Name:</span>
           <span
-            class="folder-name text-gray-600 dark:text-gray-400 font-light"
+            class="folder-name text-zinc-600 dark:text-zinc-400 font-light"
           ></span>
         </div>
 
         <!-- Folder path -->
         <div class="flex flex-col gap-0.5">
           <span class="font-semibold">Path:</span>
-          <span class="folder-path text-gray-600 dark:text-gray-400 font-light">
+          <span class="folder-path text-zinc-600 dark:text-zinc-400 font-light">
             Cloud drive
           </span>
         </div>
@@ -54,7 +54,7 @@
         <div class="flex flex-col gap-0.5">
           <span class="font-semibold">Date created:</span>
           <span
-            class="folder-created-date text-gray-600 dark:text-gray-400 font-light"
+            class="folder-created-date text-zinc-600 dark:text-zinc-400 font-light"
           >
           </span>
         </div>
@@ -63,7 +63,7 @@
         <div class="flex flex-col gap-0.5">
           <span class="font-semibold">Date modified:</span>
           <span
-            class="folder-updated-date text-gray-600 dark:text-gray-400 font-light"
+            class="folder-updated-date text-zinc-600 dark:text-zinc-400 font-light"
           >
           </span>
         </div>
@@ -71,13 +71,13 @@
 
       <!-- Folder actions -->
       <div
-        class="h-20 p-5 flex items-center justify-between border-t border-gray-200 dark:border-gray-800"
+        class="h-20 p-5 flex items-center justify-between border-t border-zinc-200 dark:border-zinc-800"
       >
         <!-- Delete button -->
         <button
           title="Delete the folder"
           aria-label="Delete this folder"
-          class="delete-folder-btn p-2 rounded-md disabled:text-gray-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="delete-folder-btn p-2 rounded-md disabled:text-zinc-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <span><%- icon({name: 'Trash2', size: 20}) %></span>
         </button>
@@ -87,7 +87,7 @@
           title="Rename the folder"
           aria-label="Rename the folder"
           aria-expanded="false"
-          class="folder-form-modal-trigger p-2 rounded-md disabled:text-gray-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="folder-form-modal-trigger p-2 rounded-md disabled:text-zinc-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <span><%- icon({name: 'FolderPen', size: 20}) %></span>
         </button>
@@ -97,7 +97,7 @@
           title="Share this folder"
           aria-label="Share this folder"
           aria-expanded="false"
-          class="share-modal-trigger p-2 rounded-md disabled:text-gray-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="share-modal-trigger p-2 rounded-md disabled:text-zinc-500 disabled:pointer-events-none disabled:cursor-not-allowed hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <span><%- icon({name: 'Share2', size: 20}) %></span>
         </button>

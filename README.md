@@ -13,7 +13,7 @@ Implemented a dark mode toggle feature in an Express.js app using EJS templates 
 The issue was with **Tailwind CSS version compatibility and configuration**:
 
 1. **Version Mismatch**: Using Tailwind CSS v4 (alpha/beta) with `@tailwindcss/postcss` plugin but with v3-style configuration
-2. **Wrong Dark Mode Output**: v4 was generating media query-based dark mode (`@media (prefers-color-scheme: dark)`) instead of class-based dark mode (`.dark .dark:bg-gray-900`)
+2. **Wrong Dark Mode Output**: v4 was generating media query-based dark mode (`@media (prefers-color-scheme: dark)`) instead of class-based dark mode (`.dark .dark:bg-zinc-900`)
 3. **Incomplete v4 Documentation**: v4's dark mode configuration syntax is still evolving and not well-documented
 
 #### The Fix
@@ -88,7 +88,7 @@ function toggleTheme() {
 
 - `darkMode: 'class'` in config is **essential** for JavaScript-controlled dark mode
 - Without it, Tailwind generates media-query based styles that respond to system preferences, not JavaScript class toggles
-- The CSS should generate `.dark .dark:bg-gray-900` not `@media (prefers-color-scheme: dark)`
+- The CSS should generate `.dark .dark:bg-zinc-900` not `@media (prefers-color-scheme: dark)`
 
 ##### 3. **Version Compatibility Issues**
 
@@ -135,7 +135,7 @@ Implemented a dark mode toggle feature in an Express.js app using EJS templates 
 The issue was with **Tailwind CSS version compatibility and configuration**:
 
 1. **Version Mismatch**: Using Tailwind CSS v4 (alpha/beta) with `@tailwindcss/postcss` plugin but with v3-style configuration
-2. **Wrong Dark Mode Output**: v4 was generating media query-based dark mode (`@media (prefers-color-scheme: dark)`) instead of class-based dark mode (`.dark .dark:bg-gray-900`)
+2. **Wrong Dark Mode Output**: v4 was generating media query-based dark mode (`@media (prefers-color-scheme: dark)`) instead of class-based dark mode (`.dark .dark:bg-zinc-900`)
 3. **Incomplete v4 Documentation**: v4's dark mode configuration syntax is still evolving and not well-documented
 
 ## The Fix
@@ -210,7 +210,7 @@ function toggleTheme() {
 
 - `darkMode: 'class'` in config is **essential** for JavaScript-controlled dark mode
 - Without it, Tailwind generates media-query based styles that respond to system preferences, not JavaScript class toggles
-- The CSS should generate `.dark .dark:bg-gray-900` not `@media (prefers-color-scheme: dark)`
+- The CSS should generate `.dark .dark:bg-zinc-900` not `@media (prefers-color-scheme: dark)`
 
 ### 3. **Version Compatibility Issues**
 

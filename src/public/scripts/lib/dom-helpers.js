@@ -46,7 +46,7 @@ export function loadImageWithSpinner(container, imageSrc, altText) {
 export function showSpinner(container) {
   container.innerHTML = `
     <div class="flex items-center justify-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 text-gray-400/50 dark:text-gray-500">
+      <div class="animate-spin rounded-full h-12 w-12 text-zinc-400/50 dark:text-zinc-500">
         ${icon({ name: 'LoaderCircle', strokeWidth: 1, className: 'w-full h-auto' })}
       </div>
     </div>
@@ -61,7 +61,7 @@ export function showSpinner(container) {
 
 export function showError(container, message = 'An error occurred') {
   container.innerHTML = `
-    <div class="flex items-center justify-center text-gray-400 dark:text-gray-500 w-full aspect-video border border-gray-200 dark:border-gray-800 p-12 rounded-sm">
+    <div class="flex items-center justify-center text-zinc-400 dark:text-zinc-500 w-full aspect-video border border-zinc-200 dark:border-zinc-800 p-12 rounded-sm">
       <p>${message}</p>
     </div>
   `;

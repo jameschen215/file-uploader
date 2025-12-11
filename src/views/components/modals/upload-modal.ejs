@@ -4,10 +4,10 @@
   tabindex="-1"
   aria-modal="true"
   aria-label="Upload files"
-  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-zinc-950/10 dark:bg-zinc-950/50 backdrop-blur z-[60] transition-transform duration-200"
 >
   <div
-    class="w-full max-w-sm mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-xl sm:rounded-xl px-5 py-5"
+    class="w-full max-w-sm mx-auto bg-zinc-50 dark:bg-zinc-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-xl sm:rounded-xl px-5 py-5"
   >
     <div class="flex flex-col flex-grow relative">
       <!-- Header with close button -->
@@ -17,7 +17,7 @@
         <button
           type="button"
           aria-label="Close upload modal"
-          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <%- icon({ name: 'X' }) %>
         </button>
@@ -37,18 +37,18 @@
           id="drop-zone"
           tabindex="0"
           disabled
-          class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-5 text-center transition-all hover:border-sky-400 hover:bg-sky-50 dark:hover:border-sky-600 dark:hover:bg-sky-950 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+          class="relative border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-lg p-5 text-center transition-all hover:border-sky-400 hover:bg-sky-50 dark:hover:border-sky-600 dark:hover:bg-sky-950 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
         >
           <div class="flex flex-col items-center gap-2">
             <!-- prettier-ignore-start -->
-            <%- icon({ name: 'CloudUpload', size: 48, className: 'text-gray-400', strokeWidth: 1.5 }) %>
+            <%- icon({ name: 'CloudUpload', size: 48, className: 'text-zinc-400', strokeWidth: 1.5 }) %>
             <!-- prettier-ignore-end -->
 
             <div>
-              <p class="text-sm font-medium text-gray-900 dark:text-gray-50">
+              <p class="text-sm font-medium text-zinc-900 dark:text-zinc-50">
                 Drag and drop your files here
               </p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                 or click to select files
               </p>
             </div>
@@ -69,14 +69,14 @@
         <div id="file-list" class="hidden">
           <div class="flex justify-between items-center mb-3">
             <label
-              class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+              class="text-sm font-semibold text-zinc-700 dark:text-zinc-300"
             >
               Files to upload (<span id="file-count">0</span>/3)
             </label>
             <button
               type="button"
               id="clear-files-btn"
-              class="text-xs px-1.5 py-1 text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 dark:text-red-300 dark:hover:text-red-50 dark:bg-red-900 transition-colors font-normal rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+              class="text-xs px-1.5 py-1 text-red-600 hover:text-red-700 bg-red-100 hover:bg-red-200 dark:text-red-300 dark:hover:text-red-50 dark:bg-red-900 transition-colors font-normal rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
             >
               Clear all
             </button>
@@ -84,13 +84,13 @@
 
           <div
             id="selected-files"
-            class="space-y-2 max-h-48 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+            class="space-y-2 max-h-48 overflow-y-auto bg-white dark:bg-zinc-800 rounded-lg p-3 border border-zinc-200 dark:border-zinc-700"
           ></div>
         </div>
 
         <!-- File size info -->
         <div
-          class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg"
+          class="flex items-start gap-2 text-xs text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 p-3 rounded-lg"
         >
           <%- icon({ name: 'MessageCircleWarning', size: 16 }) %>
 
@@ -117,7 +117,7 @@
         <!-- Submit button -->
         <button
           type="submit"
-          class="w-full bg-sky-600 hover:bg-sky-500 dark:bg-sky-600 dark:hover:bg-sky-700 py-2 outline-none text-gray-50 font-semibold rounded-md cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
+          class="w-full bg-sky-600 hover:bg-sky-500 dark:bg-sky-600 dark:hover:bg-sky-700 py-2 outline-none text-zinc-50 font-semibold rounded-md cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
         >
           Upload
         </button>
@@ -125,18 +125,18 @@
         <!-- Upload progress -->
         <div id="upload-progress" class="hidden">
           <div class="flex justify-between items-center mb-2">
-            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
               Uploading...
             </span>
             <span
               id="progress-percent"
-              class="text-sm text-gray-600 dark:text-gray-400"
+              class="text-sm text-zinc-600 dark:text-zinc-400"
             >
               0%
             </span>
           </div>
 
-          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div class="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2">
             <div
               id="progress-bar"
               class="bg-blue-600 h-2 rounded-full transition-all duration-300"

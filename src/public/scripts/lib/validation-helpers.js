@@ -104,7 +104,7 @@ export function removeErrorStylesAndMessages(field) {
     'dark:focus:ring-red-950',
   );
   field.classList.add(
-    'border-gray-300',
+    'border-zinc-300',
     'focus:border-lime-500',
     'focus:ring-lime-50',
     'dark:focus:border-lime-500',
@@ -128,7 +128,7 @@ export function showErrorStylesAndMessages(field, message) {
 
   // 2. Add new error style
   field.classList.remove(
-    'border-gray-200',
+    'border-zinc-200',
     'focus:border-lime-500',
     'focus:ring-lime-50',
     'dark:focus:border-lime-500',

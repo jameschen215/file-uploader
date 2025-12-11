@@ -4,15 +4,15 @@
   aria-modal="true"
   tabindex="-1"
   aria-label="Search for files on mobile"
-  class="translate-y-full fixed inset-0 bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[60] transition-transform duration-200"
+  class="translate-y-full fixed inset-0 bg-zinc-950/10 dark:bg-zinc-950/50 backdrop-blur z-[60] transition-transform duration-200"
 >
-  <div class="flex flex-col min-h-full h-full py-5 bg-gray-50 dark:bg-gray-900">
+  <div class="flex flex-col min-h-full h-full py-5 bg-zinc-50 dark:bg-zinc-900">
     <!-- Back button -->
     <div class="flex items-center gap-2 mb-2 px-5">
       <button
         type="button"
         aria-label="Close search modal"
-        class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+        class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
       >
         &#x2190;
       </button>
@@ -30,7 +30,7 @@
       >
         <div
           id="search-indicator-mobile"
-          class="size-5 absolute top-1/2 -translate-y-1/2 left-3 text-gray-500"
+          class="size-5 absolute top-1/2 -translate-y-1/2 left-3 text-zinc-500"
           aria-hidden="true"
         >
           <%- icon({ name: 'Search' }) %>
@@ -43,14 +43,14 @@
           aria-label="Search input"
           autocomplete="off"
           spellcheck="false"
-          class="w-full pl-12 h-12 pr-8 outline-none rounded-md placeholder:text-gray-500 placeholder:font-light border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 focus-visible:border-gray-300 dark:focus-visible:border-gray-600 transition-colors"
+          class="w-full pl-12 h-12 pr-8 outline-none rounded-md placeholder:text-zinc-500 placeholder:font-light border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus-visible:border-zinc-300 dark:focus-visible:border-zinc-600 transition-colors"
           placeholder="Search..."
         />
 
         <button
           type="button"
           aria-label="Clear search"
-          class="absolute top-1/2 right-3 -translate-y-1/2 size-6 text-gray-500 cursor-pointer p-0.5 rounded-full dark:hover:text-gray-100 hover:text-gray-900 transition-all focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-800"
+          class="absolute top-1/2 right-3 -translate-y-1/2 size-6 text-zinc-500 cursor-pointer p-0.5 rounded-full dark:hover:text-zinc-100 hover:text-zinc-900 transition-all focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-800"
         >
           <%- icon({ name: 'X' }) %>
         </button>
@@ -60,7 +60,7 @@
     <!-- Search results -->
     <div
       id="search-results-for-mobile"
-      class="grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800 scrollbar-track-transparent"
+      class="grid grid-cols-2 gap-5 p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent"
     ></div>
   </div>
 </div>

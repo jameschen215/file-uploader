@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.textContent = 'Signing up...';
       signInLink.classList.add(
         'pointer-events-none',
-        'text-gray-400',
+        'text-zinc-400',
         'cursor-default',
       );
 

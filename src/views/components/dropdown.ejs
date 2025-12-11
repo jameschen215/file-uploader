@@ -3,14 +3,14 @@
 <li class="">
   <button
     id="dropdown-toggle"
-    class="hidden sm:block size-8 cursor-pointer group rounded-full focus-visible:border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+    class="hidden sm:block size-8 cursor-pointer group rounded-full focus-visible:border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
     aria-label="Toggle dropdown menu"
     aria-expanded="false"
     aria-controls="dropdown-content"
     type="button"
   >
     <span
-      class="bg-teal-400 size-8 text-gray-50 text-xl flex items-center justify-center rounded-full group-hover:bg-teal-400/75 transition-colors"
+      class="bg-teal-400 size-8 text-zinc-50 text-xl flex items-center justify-center rounded-full group-hover:bg-teal-400/75 transition-colors"
     >
       <%= formatAvatar(currentUser) %>
     </span>
@@ -22,11 +22,11 @@
 <div
   id="dropdown-content"
   aria-hidden="true"
-  class="hidden absolute top-full right-5 w-72 translate-y-1 px-6 pt-8 bg-white dark:bg-gray-900 dark:border-gray-700 border rounded-lg z-[100] shadow-lg"
+  class="hidden absolute top-full right-5 w-72 translate-y-1 px-6 pt-8 bg-white dark:bg-zinc-900 dark:border-zinc-700 border rounded-lg z-[100] shadow-lg"
 >
   <div class="flex items-center gap-3">
     <span
-      class="flex-shrink-0 flex items-center justify-center size-10 text-2xl text-gray-50 bg-teal-400 rounded-full"
+      class="flex-shrink-0 flex items-center justify-center size-10 text-2xl text-zinc-50 bg-teal-400 rounded-full"
     >
       <%= formatAvatar(currentUser) %>
     </span>
@@ -35,7 +35,7 @@
       <span class="text-lg font-semibold -mb-1 capitalize truncate">
         <%= currentUser.name || currentUser.email.split('@')[0] %>
       </span>
-      <span class="text-gray-400 dark:text-gray-600 truncate">
+      <span class="text-zinc-400 dark:text-zinc-600 truncate">
         <%= currentUser.email %>
       </span>
     </div>
@@ -45,18 +45,18 @@
     <!-- <li>
       <a
         href="/"
-        class="flex items-center gap-3 w-full text-start py-5 border-t border-gray-200 dark:border-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-gray-400"
+        class="flex items-center gap-3 w-full text-start py-5 border-t border-zinc-200 dark:border-zinc-800 font-medium focus:outline-none focus:ring-2 focus:ring-zinc-400"
       >
         <span aria-hidden="true"><%- icon({name: 'Settings'}) %></span>
         <span> Settings </span>
       </a>
     </li> -->
-    <li class="py-5 border-t border-gray-200 dark:border-gray-800">
+    <li class="py-5 border-t border-zinc-200 dark:border-zinc-800">
       <form action="/auth/sign-out" method="post">
         <button
           type="submit"
           role="menuitem"
-          class="w-full flex items-center gap-3 p-1 rounded-sm text-start dark:border-gray-800 font-medium focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+          class="w-full flex items-center gap-3 p-1 rounded-sm text-start dark:border-zinc-800 font-medium focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
         >
           <span aria-hidden="true"><%- icon({ name: 'LogOut' }) %></span>
           <span>Sign out</span>

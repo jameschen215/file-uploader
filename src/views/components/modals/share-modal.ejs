@@ -4,10 +4,10 @@
   tabindex="-1"
   aria-modal="true"
   aria-label="Generate and show share link"
-  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-gray-950/10 dark:bg-gray-950/50 backdrop-blur z-[80] transition-transform duration-200"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-zinc-950/10 dark:bg-zinc-950/50 backdrop-blur z-[80] transition-transform duration-200"
 >
   <div
-    class="w-full max-w-lg mx-auto bg-gray-50 dark:bg-gray-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl px-5 py-5"
+    class="w-full max-w-lg mx-auto bg-zinc-50 dark:bg-zinc-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl px-5 py-5"
   >
     <div class="flex flex-col flex-grow relative">
       <!-- Header with close button -->
@@ -17,7 +17,7 @@
         <button
           type="button"
           aria-label="Close share modal"
-          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-gray-400"
+          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <%- icon({ name: 'X' }) %>
         </button>
@@ -29,7 +29,7 @@
         <div>
           <span
             id="share-name"
-            class="text-gray-700 dark:text-gray-300 truncate"
+            class="text-zinc-700 dark:text-zinc-300 truncate"
           >
             <!-- File name here -->
             File name
@@ -44,12 +44,12 @@
             tabindex="-1"
             readonly
             value="Generating share link..."
-            class="w-full border border-gray-300 text-gray-600 dark:text-gray-400 dark:border-gray-700 dark:bg-gray-800 px-3 py-2 outline-none rounded-sm transition-colors truncate"
+            class="w-full border border-zinc-300 text-zinc-600 dark:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 px-3 py-2 outline-none rounded-sm transition-colors truncate"
           />
         </div>
 
         <div>
-          <p class="text-gray-400 dark:text-gray-500 text-sm">
+          <p class="text-zinc-400 dark:text-zinc-500 text-sm">
             Anyone with this link can view and download.
           </p>
         </div>
@@ -62,7 +62,7 @@
           <button
             id="copy-link-btn"
             type="button"
-            class="w-full sm:w-fit px-6 bg-gray-800 text-gray-100 dark:text-gray-900 dark:bg-gray-200 hover:bg-gray-800 dark:hover:bg-gray-300 py-2 outline-none font-medium rounded-sm cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:focus-visible:ring-offset-gray-900"
+            class="w-full sm:w-fit px-6 bg-zinc-800 text-zinc-100 dark:text-zinc-900 dark:bg-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-300 py-2 outline-none font-medium rounded-md cursor-pointer transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
           >
             Copy link
           </button>
