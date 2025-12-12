@@ -7,7 +7,7 @@ import {
   CustomInternalError,
   CustomNotFoundError,
   CustomUnauthorizedError,
-} from './index.js';
+} from '../errors/index.js';
 
 export function errorsHandler(
   error: any,

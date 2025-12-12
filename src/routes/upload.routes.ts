@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { isAuthenticated } from '../auth/middlewares.js';
-import { configureMulter } from '../config/multer.js';
+import { configureMulter } from '../config/multer.config.js';
 import { MAX_FILE_SIZE, MAX_FILES } from '../lib/constants.js';
 import { handleUploadFiles } from '../controllers/upload.controller.js';
 

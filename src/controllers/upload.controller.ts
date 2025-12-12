@@ -2,12 +2,10 @@ import path from 'path';
 import sharp from 'sharp';
 
 import prisma from '../lib/prisma.js';
-import { asyncHandler } from '../lib/async-handler.js';
 import { ALLOWED_FILE_TYPES } from '../lib/constants.js';
-import { configureSupabase } from '../config/supabase.js';
+import { configureSupabase } from '../config/supabase.config.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
 import { generateVideoThumbnail, getVideoMetadata } from '../lib/utils.js';
-import { CustomBadRequestError, CustomNotFoundError } from '../errors/index.js';
 import { RequestHandler } from 'express';
 
 const supabase = configureSupabase();

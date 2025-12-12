@@ -7,7 +7,7 @@ import {
 } from '../errors/index.js';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../lib/async-handler.js';
-import { configureSupabase } from '../config/supabase.js';
+import { configureSupabase } from '../config/supabase.config.js';
 import { throwSupabaseError } from '../lib/supabase-helpers.js';
 
 const supabase = configureSupabase();
