@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const html = document.documentElement;
   const themeTextEls = document.querySelectorAll('.theme-text');
   const themeIconEls = document.querySelectorAll('.theme-icon');
-  // const themeIconDesktop = document.querySelector('#theme-icon-desktop');
-  // const themeTextDesktop = document.querySelector('#theme-text-desktop');
 
   // Load theme
   loadTheme();

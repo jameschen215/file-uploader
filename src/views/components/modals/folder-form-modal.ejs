@@ -15,7 +15,7 @@
         <button
           type="button"
           aria-label="Close folder form modal"
-          class="close-modal-btn p-1 sm:opacity-50 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+          class="close-modal-btn p-1 sm:opacity-75 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
         >
           <%- icon({name: 'X'}) %>
         </button>
@@ -44,19 +44,19 @@
             aria-describedby="name-error"
             aria-invalid="false"
             value="<%= locals.oldInput?.name || '' %>"
-            class="w-full px-5 py-2 outline-none rounded-sm border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:border-sky-500 focus:ring-sky-50 dark:focus:border-sky-500 dark:focus:ring-sky-900"
+            class="w-full px-4 py-2 outline-none rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:border-lime-500 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-900"
           />
 
           <div
             id="name-error"
             aria-live="polite"
-            class="hidden text-sm text-red-600 mt-1"
+            class="hidden text-sm text-red-600 py-2"
           ></div>
         </div>
 
         <button
           type="submit"
-          class="w-full bg-sky-600 hover:bg-sky-700 py-2 outline-none text-zinc-50 font-medium rounded-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+          class="w-full bg-lime-600 hover:bg-lime-700 py-2 outline-none text-zinc-50 font-medium rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
         >
           Create
         </button>

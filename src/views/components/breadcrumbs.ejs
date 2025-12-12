@@ -5,14 +5,14 @@
   <button
     id="breadcrumb-back-btn"
     type="button"
-    class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %> rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+    class="sm:hidden <%= locals.currentPath === '/' ? 'hidden' : '' %> rounded-md focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
   >
     <span><%- icon({name: 'ArrowLeft', size: 20 }) %></span>
   </button>
 
   <a
     href="/"
-    class="text-lg <%= locals.currentPath !== '/' ? 'hidden' : 'font-medium' %> sm:block rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+    class="text-lg <%= locals.currentPath !== '/' ? 'hidden' : 'font-medium' %> sm:block rounded-md focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
   >
     Cloud drive
   </a>
@@ -27,7 +27,7 @@
   <% } else { %>
   <a
     href="/folders/<%= bc.id %>"
-    class="hidden sm:block rounded-sm focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+    class="hidden sm:block rounded-md focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible: ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
     ><%= bc.name %></a
   >
   <% } %>

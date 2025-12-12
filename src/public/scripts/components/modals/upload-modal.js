@@ -54,10 +54,14 @@ const submitButton = document.querySelector('#upload-form button[type=submit]');
   clearFilesBtn.addEventListener('click', () => {
     selectedFiles = [];
     fileInput.value = '';
-    errorDiv.innerHTML = '';
-    errorDiv.classList.add('hidden');
 
+    hideError();
     updateFilesDisplay();
+  });
+
+  document.addEventListener('upload-modal-hidden', () => {
+    updateFilesDisplay();
+    hideError();
   });
 
   uploadForm.addEventListener('submit', handleSubmitWithRealProgressBar);
@@ -150,7 +154,7 @@ const submitButton = document.querySelector('#upload-form button[type=submit]');
   }
 
   function handleFiles(files) {
-    errorDiv.classList.add('hidden');
+    hideError();
     selectedFiles = [];
 
     for (const file of files) {
@@ -218,6 +222,12 @@ const submitButton = document.querySelector('#upload-form button[type=submit]');
     errorDiv.classList.remove('hidden');
   }
 
+  function hideError() {
+    const errorP = errorDiv.querySelector('p');
+    errorP.textContent = '';
+    errorDiv.classList.add('hidden');
+  }
+
   function setupSubmittingState() {
     // Disable drop zone
     dropzone.classList.add(
@@ -236,7 +246,7 @@ const submitButton = document.querySelector('#upload-form button[type=submit]');
     uploadProgress.classList.remove('hidden');
 
     // Hide error message
-    errorDiv.classList.add('hidden');
+    hideError();
 
     // Update submit button
     submitButton.textContent = 'Uploading...';

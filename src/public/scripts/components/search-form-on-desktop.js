@@ -161,6 +161,7 @@ function handleBrowserNavigation(ev) {
       container.className = ev.state.containerClass;
 
       desktopSearchInput.value = ev.state.query;
+
       updateSearchInfo({
         spinner,
         container,
@@ -173,4 +174,6 @@ function handleBrowserNavigation(ev) {
     // No state - reload page
     window.location.reload();
   }
+
+  updateClearButtonVisibility(desktopSearchInput, clearButton);
 }

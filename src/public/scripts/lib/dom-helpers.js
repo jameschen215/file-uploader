@@ -61,7 +61,7 @@ export function showSpinner(container) {
 
 export function showError(container, message = 'An error occurred') {
   container.innerHTML = `
-    <div class="flex items-center justify-center text-zinc-400 dark:text-zinc-500 w-full aspect-video border border-zinc-200 dark:border-zinc-800 p-12 rounded-sm">
+    <div class="flex items-center justify-center text-zinc-400 dark:text-zinc-500 w-full aspect-video border border-zinc-200 dark:border-zinc-800 p-12 rounded-md">
       <p>${message}</p>
     </div>
   `;
