@@ -4,6 +4,7 @@ import { isAuthenticated } from '../auth/middlewares.js';
 import { configureMulter } from '../config/multer.config.js';
 import { MAX_FILE_SIZE, MAX_FILES } from '../lib/constants.js';
 import { handleUploadFiles } from '../controllers/upload.controller.js';
+import { checkStorageLimit } from '../middlewares/check-storage-limit.js';
 
 const router = Router();
 const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
@@ -11,9 +12,9 @@ const upload = configureMulter('files', MAX_FILE_SIZE, MAX_FILES);
 router.use(isAuthenticated);
 
 // Upload to root
-router.post('/', upload, handleUploadFiles);
+router.post('/', upload, checkStorageLimit, handleUploadFiles);
 
 // Upload to specific folder
-router.post('/:folderId', upload, handleUploadFiles);
+router.post('/:folderId', upload, checkStorageLimit, handleUploadFiles);
 
 export default router;
