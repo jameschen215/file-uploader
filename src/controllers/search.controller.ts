@@ -50,7 +50,6 @@ export const handleSearch: RequestHandler = async (req, res) => {
     };
 
     //  Check if request wants JSON or HTML
-
     if (req.xhr || req.headers.accept?.includes('application/json')) {
       // AJAX request - return JSON
       return res.json(results);

@@ -1,7 +1,7 @@
 /** --- lib/dom-helpers.js --- */
 
 import { icon } from './get-icon.js';
-import { getFileItem } from '../partials/template.js';
+import { getFileItem } from '../partials/layout-item-file-template.js';
 
 /**
  * Loads an image with a spinner and handles error

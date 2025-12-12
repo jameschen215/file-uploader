@@ -1,10 +1,7 @@
-import {
-  hideClearButton,
-  showClearButton,
-  showModal,
-} from './modal-helpers.js';
+import { showModal } from './modal-helpers.js';
 import { icon } from './get-icon.js';
-import { getFileItem, getFolderItem } from '../partials/template.js';
+import { getFileItem } from '../partials/layout-item-file-template.js';
+import { getFolderItem } from '../partials/layout-item-folder-template.js';
 
 export function handleActionsOnSearchedItems(ev) {
   const fileDetailsModal = document.querySelector('#file-details-modal');
@@ -148,16 +145,12 @@ function getResultsCount(results) {
   return `${count} ${count === 1 ? 'result' : 'results'}`;
 }
 
-// function getIcon(type) {
-//   if (type.startsWith('image')) {
-//     return icon({
-//       name: 'Image',
-//       strokeWidth: 1,
-//       className: 'w-full h-auto',
-//     });
-//   } else if (type.startsWith('video')) {
-//     return icon({ name: 'Film', strokeWidth: 1, className: 'w-full h-auto' });
-//   }
+function showClearButton(button) {
+  button.classList.remove('hidden');
+  button.classList.remove('pointer-events-none');
+}
 
-//   return icon({ name: 'File', strokeWidth: 1, className: 'w-full h-auto' });
-// }
+function hideClearButton(button) {
+  button.classList.add('hidden');
+  button.classList.add('pointer-events-none');
+}

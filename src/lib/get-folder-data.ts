@@ -39,25 +39,11 @@ export async function getFolderData(
     orderBy: { [sortField.folder]: sortOrder },
   });
 
-  console.log({ folders });
-
   // Get files in current folder
   const files = await prisma.file.findMany({
     where: { folderId: folderId || null, userId },
     orderBy: { [sortField.file]: sortOrder },
   });
-
-  // const formattedFiles = files.map((file) => ({
-  //   ...file,
-  //   formattedFileSize: formatFileSize(file.fileSize),
-  //   formattedUploadedAt: format(file.uploadedAt, 'yyyy-MM-dd, hh:mm:ss'),
-  // }));
-
-  // const formattedFolders = folders.map((folder) => ({
-  //   ...folder,
-  //   formattedCreatedAt: format(folder.createdAt, 'yyyy-MM-dd, hh:mm:ss'),
-  //   formattedUpdatedAt: format(folder.updatedAt, 'yyyy-MM-dd, hh:mm:ss'),
-  // }));
 
   return {
     currentFolder,

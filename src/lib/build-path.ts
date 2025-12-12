@@ -1,5 +1,5 @@
 import prisma from './prisma.js';
-import { BreadcrumbFolderType } from '../types/path.js';
+import { BreadcrumbFolderType } from '../types/index.js';
 
 export async function buildPath(
   userId: string,

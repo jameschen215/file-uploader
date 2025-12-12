@@ -23,6 +23,4 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
     sortBy,
     direction,
   });
-
-  // res.json({ ...data, errors: null, oldInput: null, sortBy, direction });
 });

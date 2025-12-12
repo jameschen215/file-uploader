@@ -21,11 +21,7 @@ const downloadButton = document.querySelector('#download-file-btn');
 let currentDownloadHandler = null;
 let currentDeleteHandler = null;
 
-console.log('file details modal');
-
 document.addEventListener('file-details-modal-open', (ev) => {
-  console.log('Handling details display...');
-
   const { file, breadcrumbs } = ev.detail;
 
   if (!(file && breadcrumbs)) return;
@@ -152,7 +148,6 @@ function addFileActions() {
   // Create new handlers with the current file data
   currentDeleteHandler = async () => {
     const file = JSON.parse(deleteButton.dataset.file);
-    console.log('Delete file: ', file.originalName, file.id);
 
     const confirmed = await confirmDeletion({ file });
 

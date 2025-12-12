@@ -1,7 +1,7 @@
 // file.routes.ts
 
 import { Router } from 'express';
-import { isAuthenticated } from '../auth/middlewares.js';
+
 import {
   handleDeleteFile,
   handleDownloadFile,
@@ -9,6 +9,7 @@ import {
   handleGetFilePreview,
   handleGetThumbnail,
 } from '../controllers/file.controller.js';
+import { isAuthenticated } from '../auth/middlewares.js';
 
 const router = Router();
 

@@ -1,14 +1,13 @@
-import { MAX_FOLDER_NAME } from '../../lib/constants.js';
-import { hideModal, showModal } from '../../lib/modal-helpers.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   showErrorStylesAndMessages,
 } from '../../lib/validation-helpers.js';
 import { showToast } from '../toast.js';
-
-import { getFolderItem } from '../../partials/template.js';
 import { formateDate } from '../../lib/utils.js';
+import { MAX_FOLDER_NAME } from '../../lib/constants.js';
+import { getFolderItem } from '../../partials/layout-item-folder-template.js';
+import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
 (function handleAddModalVisibility() {
   const createTriggers = document.querySelectorAll(
@@ -55,7 +54,6 @@ import { formateDate } from '../../lib/utils.js';
 
   document.addEventListener('folder-form-modal-open', (ev) => {
     if (ev.detail.folder) {
-      console.log('Has folder');
       isCreate = false;
       folder = ev.detail.folder;
       formTitle.textContent = 'Rename folder';
@@ -63,7 +61,6 @@ import { formateDate } from '../../lib/utils.js';
       parentFolderIdInput.value = folder.parentFolderId || '';
       nameInput.value = folder.name;
     } else {
-      console.log('No folder');
       isCreate = true;
       folder = null;
       formTitle.textContent = 'Create folder';
@@ -145,10 +142,8 @@ import { formateDate } from '../../lib/utils.js';
       // 5. SUCCESS - NO RELOADING
       if (isCreate) {
         addFolderItemToUI(data.folder);
-        console.log('New folder added: ', data.folder.id, data.folder.name);
       } else {
         updateFolderUI(data.folder);
-        console.log('Folder updated:', data.folder.id);
       }
 
       hideModal({ modal });
@@ -208,8 +203,6 @@ function updateFolderUI(folder) {
     const button = item.querySelector('button.folder-details-modal-trigger');
     if (button) {
       button.dataset.folder = JSON.stringify(folder);
-    } else {
-      console.log('No button');
     }
   }
 

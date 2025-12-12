@@ -29,9 +29,4 @@ router.use('/folders', shareRoutes); // POST /folders/:type/:id/share
 // Public share access
 router.use('/share', shareRoutes); // /share/:token (public)
 
-// Toast test
-router.get('/toast', (_req, res) => {
-  res.render('toast-test');
-});
-
 export default router;
