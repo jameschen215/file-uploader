@@ -65,7 +65,7 @@ import { hideModal, showModal } from '../../lib/modal-helpers.js';
       folder = null;
       formTitle.textContent = 'Create folder';
       submitButton.textContent = 'Create';
-      parentFolderIdInput.value = '';
+      // parentFolderIdInput.value = '';
       nameInput.value = '';
     }
 
@@ -98,6 +98,7 @@ import { hideModal, showModal } from '../../lib/modal-helpers.js';
     }
 
     const formData = new FormData(form);
+
     const payload = {
       name: formData.get('name'),
       parentFolderId: formData.get('parentFolderId'),

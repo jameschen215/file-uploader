@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import { isAuthenticated } from '../auth/middlewares.js';
 import {
-  createShareLink,
+  createFileShare,
+  createFolderShare,
   downloadFileFromSharedFolder,
   downloadSharedFile,
+  previewFileFromSharedFolder,
   previewSharedFile,
+  viewFileFromSharedFolder,
   viewSharedFile,
   viewSharedFolder,
 } from '../controllers/share.controller.js';
@@ -12,18 +15,26 @@ import {
 const router = Router();
 
 // Single route to get/create share link (authenticated)
-router.post('/:type/:id/share', isAuthenticated, createShareLink);
+router.post('/files/:fileId', isAuthenticated, createFileShare);
+router.post('/folders/:folderId', isAuthenticated, createFolderShare);
 
-// Public routes to access shared content - no auth
-router.get('/file/:token', viewSharedFile);
-router.get('/file/:token/download', downloadSharedFile);
-router.get('/folder/:token', viewSharedFolder);
+// Public file access
+router.get('/file/:fileToken', viewSharedFile); // Get file
+router.get('/file/:fileToken/preview', previewSharedFile); // Get image
+router.get('/file/:fileToken/download', downloadSharedFile);
+
+// Public folder access
+router.get('/folder/:folderToken', viewSharedFolder);
+router.get('/folder/:folderToken/file/:fileId', viewFileFromSharedFolder); // Get file
 router.get(
-  '/folder/:token/file/:fileId/download',
+  '/folder/:folderToken/file/:fileId/preview',
+  previewFileFromSharedFolder,
+); // Get image
+router.get(
+  '/folder/:folderToken/file/:fileId/download',
   downloadFileFromSharedFolder,
 );
 
 // Public file preview
-router.get('/file/:token/preview', previewSharedFile);
 
 export default router;

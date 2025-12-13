@@ -80,10 +80,6 @@ export const signOutUser: RequestHandler = async (req, res, next) => {
   });
 };
 
-export const getLandingPage: RequestHandler = (_req, res) => {
-  res.render('landing-page');
-};
-
 // sign up page
 export const getSignUpPage: RequestHandler = (_req, res) => {
   res.render('sign-up', { oldInput: null, errors: null });

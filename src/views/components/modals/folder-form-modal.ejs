@@ -34,8 +34,9 @@
           <input
             type="hidden"
             name="parentFolderId"
-            value="<%= currentFolder?.id || '' %>"
+            value="<%= locals.currentFolderId || '' %>"
           />
+
           <input
             type="text"
             name="name"

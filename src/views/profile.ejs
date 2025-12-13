@@ -1,0 +1,320 @@
+<div
+  class="flex-1 min-h-0 bg-zinc-50 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent"
+>
+  <div class="max-w-4xl mx-auto p-4 sm:p-6">
+    <!-- Header -->
+    <header class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-3xl font-bold text-zinc-900">Profile Page</h1>
+      <p class="textsm sm:text-base text-zinc-600 mt-1">
+        Manage your account settings and storage
+      </p>
+    </header>
+
+    <!-- Profile card -->
+    <section
+      aria-labelledby="profile-heading"
+      class="bg-white rounded-lg shadow-sm border border-zinc-200 mb-6"
+    >
+      <div class="p-4 sm:p-6">
+        <div
+          class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+        >
+          <!-- Avatar -->
+          <div class="relative flex-shrink-0">
+            <div
+              role="img"
+              aria-label="User avatar with initials A"
+              class="size-20 sm:size-24 rounded-full bg-gradient-to-br from-teal-300 to-emerald-500 flex items-center justify-center text-zinc-50 text-2xl sm:text-3xl font-bold"
+            >
+              A
+            </div>
+            <button
+              type="button"
+              aria-label="Change profile picture"
+              class="absolute bottom-0 right-0 size-7 sm:size-8 bg-white rounded-full shadow-md flex items-center justify-center border-2 border-zinc-100 hover:bg-zinc-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+            >
+              <span
+                class="h-full w-full flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <%- icon({name: 'Pencil', size:16, strokeWidth: 1}) %>
+              </span>
+            </button>
+          </div>
+
+          <!-- User info -->
+          <div class="flex-1 text-center sm:text-start">
+            <h2
+              id="profile-heading"
+              class="text-xl sm:text-2xl font-semibold text-zinc-900"
+            >
+              John Doe
+            </h2>
+            <p class="text-sm sm:text-base text-zinc-600">
+              john.doe@example.com
+            </p>
+            <p class="text-sm sm:text-base text-zinc-500 mt-1">
+              Member since December 2024
+            </p>
+          </div>
+
+          <!-- Edit button -->
+          <button
+            type="button"
+            class="w-full sm:w-auto px-4 py-2 border border-zinc-300 rounded-lg hover:bg-zinc-50 text-zinc-700 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+          >
+            Edit Profile
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Storage card -->
+    <section
+      aria-labelledby="storage-heading"
+      class="bg-white rounded-lg shadow-sm border border-zinc-200 mb-6"
+    >
+      <div class="p-4 sm:p-6">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4"
+        >
+          <h3
+            id="storage-heading"
+            class="text-base sm:text-lg font-semibold text-zinc-900"
+          >
+            Storage Usage
+          </h3>
+          <p class="text-xs sm:text-sm text-zinc-600">
+            <span class="font-medium">65.3 MB</span> of
+            <span class="font-medium">100 MB</span> used
+          </p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div
+          class="w-full bg-zinc-200 rounded-full h-3 mb-4"
+          role="progressbar"
+          aria-valuenow="65.3"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="Storage usage: 65.3% of 100 MB used"
+        >
+          <div
+            class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
+            style="width: 65.3%"
+          ></div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <span class="text-zinc-600">34.7 MB remaining</span>
+          <span class="text-purple-600 font-medium">65.3% used</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section
+      aria-label="Account statistics"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6"
+    >
+      <!-- Total Files -->
+      <div
+        class="bg-white rounded-lg shadow-sm border border-zinc-200 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <svg
+              class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl sm:text-2xl font-bold text-zinc-900">142</p>
+            <p class="text-xs sm:text-sm text-zinc-600">Total Files</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Folders -->
+      <div
+        class="bg-white rounded-lg shadow-sm border border-zinc-200 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <svg
+              class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl sm:text-2xl font-bold text-zinc-900">28</p>
+            <p class="text-xs sm:text-sm text-zinc-600">Total Folders</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last Upload -->
+      <div
+        class="bg-white rounded-lg shadow-sm border border-zinc-200 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <svg
+              class="w-5 h-5 sm:w-6 sm:h-6 text-green-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-xl sm:text-2xl font-bold text-zinc-900">Today</p>
+            <p class="text-xs sm:text-sm text-zinc-600">Last Upload</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section
+      aria-labelledby="settings-heading"
+      class="bg-white rounded-lg shadow-sm border border-zinc-200"
+    >
+      <div class="p-4 sm:p-6">
+        <h3
+          id="settings-heading"
+          class="text-base sm:text-lg font-semibold text-zinc-900 mb-4"
+        >
+          Account Settings
+        </h3>
+
+        <div class="space-y-4">
+          <!-- Email Notifications -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 border-b border-zinc-100"
+          >
+            <div class="flex-1">
+              <p class="font-medium text-zinc-900 text-sm sm:text-base">
+                Email Notifications
+              </p>
+              <p class="text-xs sm:text-sm text-zinc-600">
+                Receive updates about your files
+              </p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked
+                class="sr-only peer"
+                aria-label="Toggle email notifications"
+              />
+              <div
+                class="w-11 h-6 bg-zinc-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"
+              ></div>
+              <span class="ml-3 text-sm font-medium text-zinc-900 sm:sr-only">
+                Email notifications enabled
+              </span>
+            </label>
+          </div>
+
+          <!-- Two-Factor Authentication -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 border-b border-zinc-100"
+          >
+            <div class="flex-1">
+              <p class="font-medium text-zinc-900 text-sm sm:text-base">
+                Two-Factor Authentication
+              </p>
+              <p class="text-xs sm:text-sm text-zinc-600">
+                Add an extra layer of security
+              </p>
+            </div>
+            <button
+              type="button"
+              class="w-full sm:w-auto px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition"
+            >
+              Enable
+            </button>
+          </div>
+
+          <!-- Change Password -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 border-b border-zinc-100"
+          >
+            <div class="flex-1">
+              <p class="font-medium text-zinc-900 text-sm sm:text-base">
+                Password
+              </p>
+              <p class="text-xs sm:text-sm text-zinc-600">
+                Last changed 2 months ago
+              </p>
+            </div>
+            <button
+              type="button"
+              class="w-full sm:w-auto px-4 py-2 text-sm border border-zinc-300 rounded-lg hover:bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition text-zinc-700"
+            >
+              Change
+            </button>
+          </div>
+
+          <!-- Delete Account -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3"
+          >
+            <div class="flex-1">
+              <p class="font-medium text-red-600 text-sm sm:text-base">
+                Delete Account
+              </p>
+              <p class="text-xs sm:text-sm text-zinc-600">
+                Permanently delete your account and data
+              </p>
+            </div>
+            <button
+              type="button"
+              aria-describedby="delete-warning"
+              class="w-full sm:w-auto px-4 py-2 text-sm border border-red-300 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition text-red-600"
+            >
+              Delete
+            </button>
+            <span id="delete-warning" class="sr-only"
+              >Warning: This action cannot be undone</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

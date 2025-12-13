@@ -383,3 +383,11 @@ By switching to event delegation, I learned that:
 5. `preventDefault()` and `stopPropagation()` must run **only** when the click originates from the trigger—otherwise normal navigation breaks.
 
 This pattern gives me a stable, predictable solution without removing or reattaching listeners, even as the UI updates dynamically.
+
+### How to view a file from a previous git commit
+
+Use `git show <commit-hash>:path/to/file`
+
+```commandline
+git show git show a1b2c3d4:.vscode/settings.json
+```

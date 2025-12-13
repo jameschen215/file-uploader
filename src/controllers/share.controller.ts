@@ -13,66 +13,70 @@ import { throwSupabaseError } from '../lib/supabase-helpers.js';
 
 const supabase = configureSupabase();
 
-// Authenticated
-export const createShareLink: RequestHandler = async (req, res) => {
+export const createFileShare: RequestHandler = async (req, res) => {
   try {
-    const { type, id } = req.params;
+    const { fileId } = req.params;
     const userId = res.locals.currentUser!.id;
 
-    if (type === 'file') {
-      // Handle file sharing
-      let file = await prisma.file.findFirst({
-        where: { id, userId },
-      });
+    const file = await prisma.file.findFirst({
+      where: { id: fileId, userId },
+    });
 
-      if (!file) {
-        return res.status(404).json({ error: 'File not found' });
-      }
-
-      // If file already has share, use existing
-      if (file.shareToken) {
-        const shareUrl = `${req.protocol}://${req.get('host')}/share/file/${file.shareToken}`;
-        return res.json({ success: true, shareUrl });
-      }
-
-      // Create new share
-      const shareToken = crypto.randomBytes(16).toString('hex');
-      await prisma.file.update({
-        where: { id },
-        data: { shareToken },
-      });
-
-      const shareUrl = `${req.protocol}://${req.get('host')}/share/file/${shareToken}`;
-      res.json({ success: true, shareUrl });
-    } else if (type === 'folder') {
-      // Handle folder sharing
-
-      let folder = await prisma.folder.findFirst({
-        where: { id, userId },
-      });
-
-      if (!folder) {
-        return res.status(404).json({ error: 'Folder not found' });
-      }
-
-      // If folder already has token, return it
-      if (folder.shareToken) {
-        const shareUrl = `${req.protocol}://${req.get('host')}/share/folder/${folder.shareToken}`;
-        return res.json({ success: true, shareUrl });
-      }
-
-      // Create share token
-      const shareToken = crypto.randomBytes(16).toString('hex');
-      await prisma.folder.update({
-        where: { id },
-        data: { shareToken },
-      });
-
-      const shareUrl = `${req.protocol}://${req.get('host')}/share/folder/${shareToken}`;
-      return res.json({ success: true, shareUrl });
-    } else {
-      res.status(404).json({ error: 'Invalid type' });
+    if (!file) {
+      return res.status(404).json({ error: 'File not found' });
     }
+
+    // If file already has share, use existing
+    if (file.shareToken) {
+      const shareUrl = `${req.protocol}://${req.get('host')}/shares/file/${file.shareToken}`;
+      return res.json({ success: true, shareUrl });
+    }
+
+    // Create new share
+    const shareToken = crypto.randomBytes(16).toString('hex');
+    await prisma.file.update({
+      where: { id: fileId },
+      data: { shareToken },
+    });
+
+    const shareUrl = `${req.protocol}://${req.get('host')}/shares/file/${shareToken}`;
+
+    res.json({ success: true, shareUrl });
+  } catch (error) {
+    console.error('Share error: ', error);
+    res.status(500).json({ error: 'Failed to generate share link' });
+  }
+};
+
+export const createFolderShare: RequestHandler = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+    const userId = res.locals.currentUser!.id;
+
+    const folder = await prisma.folder.findFirst({
+      where: { id: folderId, userId },
+    });
+
+    if (!folder) {
+      return res.status(404).json({ error: 'Folder not found' });
+    }
+
+    // If folder already has token, return it
+    if (folder.shareToken) {
+      const shareUrl = `${req.protocol}://${req.get('host')}/shares/folder/${folder.shareToken}`;
+      return res.json({ success: true, shareUrl });
+    }
+
+    // Create share token
+    const shareToken = crypto.randomBytes(16).toString('hex');
+    await prisma.folder.update({
+      where: { id: folderId },
+      data: { shareToken },
+    });
+
+    const shareUrl = `${req.protocol}://${req.get('host')}/shares/folder/${shareToken}`;
+
+    return res.json({ success: true, shareUrl });
   } catch (error) {
     console.error('Share error: ', error);
     res.status(500).json({ error: 'Failed to generate share link' });
@@ -81,10 +85,10 @@ export const createShareLink: RequestHandler = async (req, res) => {
 
 export const viewSharedFile: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { fileToken } = req.params;
 
     const file = await prisma.file.findUnique({
-      where: { shareToken: token },
+      where: { shareToken: fileToken },
       include: { user: { select: { email: true } } },
     });
 
@@ -92,7 +96,7 @@ export const viewSharedFile: RequestHandler = async (req, res) => {
       throw new CustomNotFoundError('Shared file not found');
     }
 
-    res.render('shared-file', { file, shareToken: token });
+    res.render('shared-file', { file, fileToken, folderToken: null });
   } catch (error) {
     console.error('View shared file error: ', error);
     throw new CustomInternalError('Failed to access shared file');
@@ -101,10 +105,10 @@ export const viewSharedFile: RequestHandler = async (req, res) => {
 
 export const downloadSharedFile: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { fileToken } = req.params;
 
     const file = await prisma.file.findUnique({
-      where: { shareToken: token },
+      where: { shareToken: fileToken },
     });
 
     if (!file) {
@@ -136,10 +140,10 @@ export const downloadSharedFile: RequestHandler = async (req, res) => {
 
 export const viewSharedFolder: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { folderToken } = req.params;
 
     const folder = await prisma.folder.findUnique({
-      where: { shareToken: token },
+      where: { shareToken: folderToken },
       include: { user: { select: { email: true } } },
     });
 
@@ -166,7 +170,7 @@ export const viewSharedFolder: RequestHandler = async (req, res) => {
       folder,
       subfolders,
       files,
-      shareToken: token,
+      folderToken,
     });
   } catch (error) {
     console.error('View shared folder error: ', error);
@@ -179,11 +183,11 @@ export const downloadFileFromSharedFolder: RequestHandler = async (
   res,
 ) => {
   try {
-    const { token, fileId } = req.params;
+    const { folderToken, fileId } = req.params;
 
     // Verify folder is shared
     const folder = await prisma.folder.findUnique({
-      where: { shareToken: token },
+      where: { shareToken: folderToken },
     });
 
     if (!folder) {
@@ -222,12 +226,90 @@ export const downloadFileFromSharedFolder: RequestHandler = async (
   }
 };
 
+export const viewFileFromSharedFolder: RequestHandler = async (req, res) => {
+  try {
+    const { folderToken, fileId } = req.params;
+
+    // Verify folder is shared
+    const folder = await prisma.folder.findUnique({
+      where: { shareToken: folderToken },
+    });
+
+    if (!folder) {
+      throw new CustomNotFoundError('Shared folder not found');
+    }
+
+    // Get file and verify it belongs to this folder
+    const file = await prisma.file.findFirst({
+      where: { id: fileId, folderId: folder.id },
+    });
+
+    if (!file) {
+      throw new CustomNotFoundError('File not found in shared folder');
+    }
+    res.render('shared-file', { file, folderToken, fileToken: null });
+  } catch (error) {
+    console.error('Download from shared folder error:', error);
+    throw new CustomInternalError('Download failed');
+  }
+};
+
 export const previewSharedFile: RequestHandler = async (req, res) => {
   try {
-    const { token } = req.params;
+    const { fileToken } = req.params;
 
     const file = await prisma.file.findUnique({
-      where: { shareToken: token },
+      where: { shareToken: fileToken },
+    });
+
+    if (!file) {
+      throw new CustomNotFoundError('Shared file not found');
+    }
+
+    // Only allow preview for images and videos
+    if (
+      !file.mimeType.startsWith('image/') &&
+      !file.mimeType.startsWith('video/')
+    ) {
+      throw new CustomBadRequestError(
+        'Preview not available for this file type',
+      );
+    }
+
+    // Supabase storage
+    const { data, error } = await supabase.storage
+      .from('files')
+      .download(file.filePath);
+
+    if (error) {
+      throwSupabaseError(error, 'Download file');
+    }
+
+    const buffer = Buffer.from(await data.arrayBuffer());
+
+    res.setHeader('Content-Type', file.mimeType);
+    res.send(buffer);
+  } catch (error) {
+    console.error('Preview error:', error);
+    throw new CustomInternalError('Preview failed');
+  }
+};
+
+export const previewFileFromSharedFolder: RequestHandler = async (req, res) => {
+  try {
+    const { folderToken, fileId } = req.params;
+
+    // Verify folder is shared
+    const folder = await prisma.folder.findUnique({
+      where: { shareToken: folderToken },
+    });
+
+    if (!folder) {
+      throw new CustomNotFoundError('Shared folder not found');
+    }
+
+    const file = await prisma.file.findUnique({
+      where: { id: fileId },
     });
 
     if (!file) {

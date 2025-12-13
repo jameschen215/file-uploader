@@ -14,7 +14,6 @@ import { formatAvatar } from './middlewares/format-avatar.js';
 import { setCurrentUser } from './middlewares/set-current-user.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 import { setCurrentPath } from './middlewares/set-current-path.js';
-import { setCurrentFolder } from './middlewares/set-current-folder.js';
 
 const app = express();
 
@@ -34,7 +33,6 @@ app.use(getLucideIcons);
 app.use(formatAvatar);
 app.use(setCurrentPath);
 app.use(setCurrentUser);
-app.use(setCurrentFolder);
 
 // Routes & Error handling
 configureRoutes(app);

@@ -1,9 +1,12 @@
-// export { handleGetFolderContent } from './folder.controller.js';
-
+import { RequestHandler } from 'express';
 import { asyncHandler } from '../lib/async-handler.js';
 import { getFolderData } from '../lib/get-folder-data.js';
 
-export const handleGetFolderContent = asyncHandler(async (req, res) => {
+export const getLandingPage: RequestHandler = (_req, res) => {
+  res.render('landing-page');
+};
+
+export const getDashboard = asyncHandler(async (req, res) => {
   const query = req.query;
   const sortBy = typeof query.sortBy === 'string' ? query.sortBy : 'name';
   const direction =
@@ -11,7 +14,7 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
 
   const data = await getFolderData(
     res.locals.currentUser!.id,
-    req.params.folderId || null,
+    null,
     sortBy,
     direction,
   );
@@ -22,5 +25,6 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
     oldInput: null,
     sortBy,
     direction,
+    currentFolderId: req.params.folderId || null,
   });
 });

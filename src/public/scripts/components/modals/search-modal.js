@@ -27,9 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   attackClearButtonListeners(input, clearButton);
 
   /** --- 2. Handle search modal show / hide --- */
-  searchModalTrigger.addEventListener('click', () => {
-    showModal({ modal: searchModal });
-  });
+  if (searchModalTrigger) {
+    searchModalTrigger.addEventListener('click', () => {
+      showModal({ modal: searchModal });
+    });
+  }
 
   closeButton.addEventListener('click', () => {
     hideModal({ modal: searchModal });

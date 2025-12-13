@@ -26,7 +26,7 @@
       <!-- Form -->
       <form
         id="upload-form"
-        action="/upload<%= locals.currentFolder ? '/' + currentFolder.id : '' %>"
+        action="<%= locals.currentFolderId ? `/folders/${currentFolderId}/files` : `/files` %>"
         method="post"
         enctype="multipart/form-data"
         class="w-full flex flex-col gap-5"

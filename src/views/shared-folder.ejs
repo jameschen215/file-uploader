@@ -15,7 +15,7 @@
       <% if (locals.subfolders && subfolders.length > 0) { %>
       <!-- loop folders -->
       <% subfolders.forEach(folder => { %>
-      <%- include('partials/shared-folder-item', { folder }) %>
+      <%- include('components/shared-folder-item', { folder, folderToken }) %>
       <% }) %>
       <% } %>
 
@@ -23,7 +23,7 @@
       <% if (locals.files && files.length > 0) { %>
       <!-- loop files -->
       <% files.forEach(file => { %>
-      <%- include('partials/shared-file-item', { file }) %>
+      <%- include('components/shared-file-item', { file, folderToken }) %>
       <% }) %>
       <% } %>
 

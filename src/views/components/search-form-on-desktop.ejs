@@ -1,4 +1,4 @@
-<% if (locals.currentUser) { %>
+<% if (locals.currentUser && !locals.currentPath.includes('/profile/')) { %>
 <form
   id="search-form-on-desktop"
   method="get"
