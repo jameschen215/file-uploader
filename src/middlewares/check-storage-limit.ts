@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 
 import prisma from '../lib/prisma.js';
-import { formatFileSize } from '../lib/utils.js';
+import { formatByteSize } from '../lib/utils.js';
 import { CustomUnauthorizedError } from '../errors/index.js';
 
 export const checkStorageLimit: RequestHandler = async (req, res, next) => {
@@ -21,7 +21,7 @@ export const checkStorageLimit: RequestHandler = async (req, res, next) => {
   // Calculate total size of files being uploaded
   const uploadedSize = req.files.reduce((sum, file) => sum + file.size, 0);
 
-  console.log(`Uploading ${formatFileSize(uploadedSize)}...`);
+  console.log(`Uploading ${formatByteSize(uploadedSize)}...`);
 
   // Check storage limit
   const user = await prisma.user.findUnique({
@@ -39,13 +39,13 @@ export const checkStorageLimit: RequestHandler = async (req, res, next) => {
     const remaining = user.storageLimit - user.storageUsed;
 
     console.log(
-      `Storage limit exceeded. You have ${formatFileSize(remaining)} remaining.`,
+      `Storage limit exceeded. You have ${formatByteSize(remaining)} remaining.`,
     );
 
     // 413 - content too large
     return res.status(413).json({
       success: false,
-      message: `Storage limit exceeded. You have ${formatFileSize(remaining)} remaining.`,
+      message: `Storage limit exceeded. You have ${formatByteSize(remaining)} remaining.`,
       data: null,
     });
   }

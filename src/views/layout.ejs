@@ -1,3 +1,5 @@
+<% const isOnDrivePage = locals.currentUser && (locals.currentPath.startsWith('/folders') || locals.currentPath.startsWith('/dashboard')) %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,13 +36,13 @@
       <!-- page content -->
       <main
         id="main-content"
-        class="w-full max-w-7xl mx-auto flex-grow min-h-0 flex flex-col <%= locals.currentUser && !locals.currentPath.includes('/share/') && !locals.currentPath.includes('/profile/') ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
+        class="w-full max-w-7xl mx-auto flex-grow min-h-0 flex flex-col <%= isOnDrivePage ? 'mt-[112px] sm:mt-[176px]' : 'mt-16' %>"
       >
         <%- body %>
       </main>
 
       <!-- Add button -->
-      <% if (locals.currentUser && locals.currentPath === '/') { %>
+      <% if (isOnDrivePage) { %>
       <button
         id="add-btn-for-mobile"
         type="button"

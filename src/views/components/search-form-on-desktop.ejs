@@ -1,4 +1,6 @@
-<% if (locals.currentUser && !locals.currentPath.includes('/profile/')) { %>
+<% const isOnDrivePage = locals.currentUser && (locals.currentPath.startsWith('/folders') || locals.currentPath.startsWith('/dashboard')) %>
+
+<% if (isOnDrivePage) { %>
 <form
   id="search-form-on-desktop"
   method="get"

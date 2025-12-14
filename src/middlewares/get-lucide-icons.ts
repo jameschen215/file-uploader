@@ -28,6 +28,7 @@ import {
   Info,
   EllipsisVertical,
   Pencil,
+  UserPen,
 } from 'lucide-static';
 
 interface IconParams {
@@ -68,6 +69,7 @@ export const getLucideIcons: RequestHandler = (_req, res, next) => {
     Info,
     EllipsisVertical,
     Pencil,
+    UserPen,
   };
 
   // Helper function to modify svg string
