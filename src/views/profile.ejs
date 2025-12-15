@@ -37,7 +37,7 @@
             <button
               type="button"
               aria-label="Change profile picture"
-              class="absolute bottom-0 right-0 size-7 sm:size-8 bg-white text-zinc-700 rounded-full shadow-md flex items-center justify-center border-2 border-zinc-100 hover:bg-zinc-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+              class="upload-avatar-btn absolute bottom-0 right-0 size-7 sm:size-8 bg-white text-zinc-700 rounded-full shadow-md flex items-center justify-center border-2 border-zinc-100 hover:bg-zinc-50 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
             >
               <span
                 class="h-full w-full flex items-center justify-center"
@@ -67,7 +67,8 @@
           <!-- Edit button -->
           <button
             type="button"
-            class="w-full sm:w-auto px-4 py-2 bg-white dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/25 text-zinc-700 dark:text-zinc-300 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+            data-user="<%= JSON.stringify(user || null) %>"
+            class="edit-profile-btn w-full sm:w-auto px-4 py-2 bg-white dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/25 text-zinc-700 dark:text-zinc-300 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
           >
             Edit Profile
           </button>
@@ -247,7 +248,7 @@
             </div>
             <button
               type="button"
-              class="w-full sm:w-auto px-4 py-2 bg-white dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/25 text-zinc-700 dark:text-zinc-300 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+              class="change-psw-btn w-full sm:w-auto px-4 py-2 bg-white dark:bg-zinc-800/50 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700/25 text-zinc-700 dark:text-zinc-300 font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
             >
               Change
             </button>
@@ -270,7 +271,7 @@
             <button
               type="button"
               aria-describedby="delete-warning"
-              class="w-full sm:w-auto px-4 py-2 text-sm text-red-600 dark:text-red-500 border border-red-300 dark:border-red-900/90 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:ring-offset-zinc-800 transition"
+              class="delete-user-btn w-full sm:w-auto px-4 py-2 text-sm text-red-600 dark:text-red-500 border border-red-300 dark:border-red-900/90 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:ring-offset-zinc-800 transition"
             >
               Delete
             </button>
@@ -283,3 +284,5 @@
     </section>
   </div>
 </div>
+
+<script type="module" src="/scripts/profile.js"></script>

@@ -29,25 +29,18 @@
   class="hidden fixed top-16 left-0 -translate-x-full w-full h-[calc(100vh-64px)] bg-white text-zinc-950 dark:bg-zinc-900 dark:text-zinc-50 transition-transform duration-200 z-[100]"
 >
   <% if (locals.currentUser) { %>
-  <div class="flex items-center gap-3 p-5">
-    <span
-      class="flex-shrink-0 flex items-center justify-center size-10 text-2xl text-zinc-50 bg-teal-400 rounded-full"
-    >
-      <%= formatAvatar(currentUser) %>
-    </span>
 
-    <div class="flex flex-col flex-grow">
-      <span class="text-lg font-semibold -mb-1 capitalize truncate">
-        <%= currentUser.name || currentUser.email.split('@')[0] %>
-      </span>
-      <span class="text-zinc-400 dark:text-zinc-600 truncate">
-        <%= currentUser.email %>
-      </span>
-    </div>
-  </div>
-
-  <ul class="w-full flex flex-col font-medium p-5">
-    <li class="py-5 border-y border-zinc-200 dark:border-zinc-800">
+  <ul class="w-full flex flex-col font-medium px-5">
+    <li class="py-5 border-b border-zinc-200 dark:border-zinc-800">
+      <a
+        href="/users/profile"
+        class="w-full flex items-center gap-3 p-1 rounded-md text-start dark:border-zinc-800 font-medium focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+      >
+        <span aria-hidden="true"><%- icon({name: 'Settings'}) %></span>
+        <span>Settings</span>
+      </a>
+    </li>
+    <li class="py-5 border-b border-zinc-200 dark:border-zinc-800">
       <form action="/auth/sign-out" method="post">
         <button
           type="submit"

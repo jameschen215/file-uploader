@@ -3,6 +3,7 @@ export function showModal({
   modal,
   file = null,
   folder = null,
+  user = null,
   breadcrumbs = [],
 }) {
   if (folder) {
@@ -49,7 +50,7 @@ export function showModal({
   // 6. Dispatch modal open event
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {
-      detail: { file, folder, breadcrumbs },
+      detail: { file, folder, user, breadcrumbs },
     }),
   );
 

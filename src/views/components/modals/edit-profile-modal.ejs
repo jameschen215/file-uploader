@@ -1,0 +1,66 @@
+<div
+  id="edit-profile-modal"
+  role="dialog"
+  tabindex="-1"
+  aria-modal="true"
+  aria-label="Edit user profile"
+  class="translate-y-full fixed bottom-0 left-0 min-h-screen w-full flex flex-col justify-end sm:justify-center bg-zinc-950/10 dark:bg-zinc-950/50 backdrop-blur z-[80] transition-transform duration-200"
+>
+  <div
+    class="w-full max-w-sm mx-auto bg-zinc-50 dark:bg-zinc-900 shadow-[0_-5px_15px_rgba(0,0,0,0.1)] rounded-t-2xl sm:rounded-2xl px-5 pt-5 pb-10"
+  >
+    <div class="flex flex-col flex-grow relative">
+      <!-- Back button -->
+      <div class="absolute top-0 right-0">
+        <button
+          type="button"
+          aria-label="Close folder form modal"
+          class="close-modal-btn p-1 sm:opacity-75 sm:hover:opacity-100 transition-all rounded-full focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-zinc-400"
+        >
+          <%- icon({name: 'X'}) %>
+        </button>
+      </div>
+
+      <!-- Folder form -->
+      <form
+        action=""
+        method="post"
+        class="edit-profile-form w-full flex flex-col items-center gap-8"
+        novalidate
+      >
+        <h2 class="text-xl font-semibold">Edit username</h2>
+
+        <div class="w-full">
+          <input
+            type="text"
+            name="username"
+            autocomplete="off"
+            spellcheck="false"
+            aria-describedby="username-error"
+            aria-invalid="false"
+            value=""
+            class="w-full px-4 py-2 outline-none rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 focus:border-lime-500 focus:ring-lime-50 dark:focus:border-lime-500 dark:focus:ring-lime-900"
+          />
+
+          <div
+            id="username-error"
+            aria-live="polite"
+            class="hidden text-sm text-red-600 mt-2"
+          ></div>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-lime-600 hover:bg-lime-700 py-2 outline-none text-zinc-50 font-medium rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+        >
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script
+  type="module"
+  src="/scripts/components/modals/edit-profile-modal.js"
+></script>

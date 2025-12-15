@@ -105,3 +105,69 @@ export const signInSchema = checkSchema({
     },
   },
 });
+
+export const renameSchema = checkSchema({
+  name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: {
+      options: { max: 20 },
+      errorMessage: 'Name must be at most 20 characters long.',
+    },
+    custom: {
+      options: (value) => {
+        if (value && !/^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/.test(value)) {
+          throw new Error('Invalid name');
+        }
+
+        return true;
+      },
+    },
+  },
+});
+
+export const updatePasswordSchema = checkSchema({
+  old_password: {
+    custom: {
+      options: async (value) => {
+        const user = await prisma.user.findUnique({ where: { email: value } });
+        if (user) {
+          throw new Error('An account with this email already exists');
+        }
+
+        return true;
+      },
+    },
+  },
+  // validate password
+  password: {
+    in: ['body'],
+    isString: true,
+    notEmpty: {
+      errorMessage: 'Password is required',
+    },
+    isLength: {
+      options: { min: 6 },
+      errorMessage: 'Password must be at least 6 characters long',
+    },
+  },
+
+  // validate confirm_password
+  confirm_password: {
+    in: ['body'],
+    isString: true,
+    notEmpty: {
+      errorMessage: 'Confirm password is required',
+    },
+    custom: {
+      options: (value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords do not match');
+        }
+
+        return true;
+      },
+    },
+  },
+});

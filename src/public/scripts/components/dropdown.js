@@ -1,19 +1,22 @@
 import { icon } from '../lib/get-icon.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const iconWrapper = document.querySelector('#menu-toggle span');
+  const iconWrapper = document.querySelector('#dropdown-toggle .icon-wrapper');
 
   const trigger = document.querySelector('#dropdown-toggle');
   const content = document.querySelector('#dropdown-content');
 
+  console.log({ iconWrapper, trigger, content });
+
   if (!trigger || !content || !iconWrapper) return;
 
   const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');
-  const avatar = isLoggedIn ? iconWrapper.textContent : '';
+  const avatar = isLoggedIn ? iconWrapper.innerHTML : '';
   let isOpen = false;
 
   // 1. Toggle content hide/show when clicking on trigger
   trigger.addEventListener('click', () => {
+    console.log('clicked');
     if (isOpen) {
       isOpen = closeDropdown();
     } else {
@@ -37,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function openDropdown() {
-    trigger.querySelector('span').innerHTML = icon({ name: 'X', size: 20 });
+    console.log('open it');
+    trigger.querySelector('.icon-wrapper').innerHTML = icon({
+      name: 'X',
+      size: 20,
+    });
     trigger.setAttribute('aria-expanded', 'true');
 
     content.classList.remove('hidden');
@@ -47,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeDropdown() {
-    trigger.querySelector('span').innerHTML = avatar;
+    trigger.querySelector('.icon-wrapper').innerHTML = avatar;
     trigger.setAttribute('aria-expanded', 'false');
 
     content.classList.add('hidden');

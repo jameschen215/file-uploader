@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { isAuthenticated, requireRole } from '../auth/middlewares.js';
 import {
+  editOwnProfile,
   getAllUsers,
   getOwnProfile,
   getUserProfile,
@@ -10,6 +11,8 @@ const router = Router();
 
 // Current user views their own profile
 router.get('/profile', isAuthenticated, getOwnProfile);
+router.put('/edit-profile', isAuthenticated, editOwnProfile);
+router.put('/edit-password', isAuthenticated, editOwnPassword);
 
 // Admin-only routes
 router.get('/', isAuthenticated, requireRole(['admin']), getAllUsers);
