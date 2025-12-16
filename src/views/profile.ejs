@@ -192,7 +192,8 @@
             <p
               class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-50"
             >
-              <%= formatDate(user.files.sort((a,b) => a.uploadedAt -
+              <%= user.files.length === 0 ? '0' :
+              formatDate(user.files.sort((a,b) => a.uploadedAt -
               b.uploadedAt)[0].uploadedAt, 'd LLL') %>
             </p>
 
