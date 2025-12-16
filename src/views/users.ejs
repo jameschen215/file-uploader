@@ -127,7 +127,7 @@
               <td class="px-6 py-4 text-right">
                 <a
                   href="/users/<%= user.id %>"
-                  class="text-lime-600 hover:text-lime-500 text-sm font-medium mr-3"
+                  class="text-lime-600 hover:text-lime-500 text-sm font-medium mr-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
                 >
                   View
                 </a>
@@ -197,16 +197,12 @@
             </div>
           </div>
           <div class="flex gap-2">
-            <button
-              class="flex-1 px-3 py-2 text-sm font-medium text-lime-600 dark:text-lime-500 bg-lime-100 dark:bg-lime-950/50 border border-lime-200 dark:border-lime-900/25 rounded-lg hover:bg-lime-200 dark:hover:bg-lime-900/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
+            <a
+              href="/users/<%= user.id %>"
+              class="flex-1 text-center px-3 py-2 text-sm font-medium text-lime-600 dark:text-lime-500 bg-lime-100 dark:bg-lime-950/50 border border-lime-200 dark:border-lime-900/25 rounded-lg hover:bg-lime-200 dark:hover:bg-lime-900/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
             >
-              <a
-                href="/users/<%= user.id %>"
-                class="text-lime-600 hover:text-lime-500 text-sm font-medium mr-3"
-              >
-                View Profile
-              </a>
-            </button>
+              View Profile
+            </a>
           </div>
         </div>
         <% }) %>

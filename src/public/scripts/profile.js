@@ -4,11 +4,15 @@ import { showModal } from './lib/modal-helpers.js';
 document.addEventListener('DOMContentLoaded', () => {
   const editProfileButton = document.querySelector('.edit-profile-btn');
   const changePswButton = document.querySelector('.change-psw-btn');
-  // const deleteUserButton = document.querySelector('.delete-user-btn');
+  const deleteUserButton = document.querySelector('.delete-user-btn');
 
-  editProfileButton.addEventListener('click', handleEditProfile);
+  if (editProfileButton) {
+    editProfileButton.addEventListener('click', handleEditProfile);
+  }
 
-  changePswButton.addEventListener('click', handleUpdatePassword);
+  if (changePswButton) {
+    changePswButton.addEventListener('click', handleUpdatePassword);
+  }
 
   // deleteUserButton.addEventListener('click', handleDeleteUser);
 

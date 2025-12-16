@@ -16,11 +16,10 @@ export const getOwnProfile = asyncHandler(async (req, res) => {
       email: true,
       name: true,
       role: true,
-      folders: true,
-      files: true,
       storageUsed: true,
       storageLimit: true,
       createdAt: true,
+      _count: { select: { files: true, folders: true } },
     },
   });
 
@@ -28,7 +27,22 @@ export const getOwnProfile = asyncHandler(async (req, res) => {
     throw new CustomNotFoundError('User not found');
   }
 
-  res.render('profile', { user });
+  const lastUpload = await prisma.file.findFirst({
+    where: { userId },
+    orderBy: { uploadedAt: 'desc' },
+    select: { uploadedAt: true },
+  });
+  const lastUploadDate = lastUpload?.uploadedAt || null;
+
+  const formattedUser = {
+    ...user,
+    lastUploadDate,
+    storagePercentage: ((user.storageUsed / user.storageLimit) * 100).toFixed(
+      1,
+    ),
+  };
+
+  res.render('own-profile', { user: formattedUser });
 });
 
 export const editOwnProfile = asyncHandler(async (req, res) => {
@@ -164,7 +178,36 @@ export const getUserProfileById = asyncHandler(async (req, res) => {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      storageUsed: true,
+      storageLimit: true,
+      createdAt: true,
+      _count: { select: { files: true, folders: true } },
+    },
   });
 
-  res.send(`User profile by ID: ${userId}`);
+  if (!user) {
+    throw new CustomNotFoundError('User not found');
+  }
+
+  const lastUpload = await prisma.file.findFirst({
+    where: { userId },
+    orderBy: { uploadedAt: 'desc' },
+    select: { uploadedAt: true },
+  });
+  const lastUploadDate = lastUpload?.uploadedAt || null;
+
+  const formattedUser = {
+    ...user,
+    lastUploadDate,
+    storagePercentage: ((user.storageUsed / user.storageLimit) * 100).toFixed(
+      1,
+    ),
+  };
+
+  res.render('user-profile', { user: formattedUser });
 });
