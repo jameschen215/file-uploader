@@ -35,6 +35,15 @@
       </a>
     </li>
     <li class="py-4 border-t border-zinc-200 dark:border-zinc-800">
+      <a
+        href="/users"
+        class="w-full flex items-center gap-3 p-1 rounded-md text-start dark:border-zinc-800 font-medium focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-zinc-900"
+      >
+        <span aria-hidden="true"><%- icon({name: 'Users'}) %></span>
+        <span>Users</span>
+      </a>
+    </li>
+    <li class="py-4 border-t border-zinc-200 dark:border-zinc-800">
       <form action="/auth/sign-out" method="post">
         <button
           type="submit"

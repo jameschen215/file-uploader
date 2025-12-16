@@ -1,5 +1,6 @@
 import { RequestHandler } from 'express';
 import { UserType } from '../types/user.js';
+import { CustomForbiddenError } from '../errors/index.js';
 
 export const isAuthenticated: RequestHandler = (req, res, next) => {
   if (req.isAuthenticated()) return next();
@@ -24,7 +25,8 @@ export const requireRole = (roles: string[]) => {
 
     if (roles.includes(userRole)) return next();
 
-    res.status(403).json({ message: 'Insufficient permissions' });
+    // res.status(403).json({ message: 'Insufficient permissions' });
+    throw new CustomForbiddenError('Insufficient permissions');
   };
 
   return func;

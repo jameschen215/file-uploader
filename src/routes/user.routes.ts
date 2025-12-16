@@ -25,7 +25,7 @@ router.put(
 );
 
 // Admin-only routes
-router.get('/', isAuthenticated, requireRole(['admin']), getAllUsers);
+router.get('/', isAuthenticated, requireRole(['ADMIN']), getAllUsers);
 router.get('/:userId', isAuthenticated, requireRole(['admin']), getUserProfile);
 
 export default router;
