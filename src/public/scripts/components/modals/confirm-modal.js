@@ -1,6 +1,6 @@
 import { hideModal, showModal } from '../../lib/modal-helpers.js';
 
-export function confirmDeletion({ file = null, folder = null }) {
+export function confirmDeletion({ file = null, folder = null, user = null }) {
   // Return a new Promise. This is the key to making it asynchronous.
   return new Promise((resolve) => {
     const modal = document.querySelector('#confirm-modal');
@@ -15,7 +15,7 @@ export function confirmDeletion({ file = null, folder = null }) {
     }
 
     // Show the modal
-    showModal({ modal, file, folder });
+    showModal({ modal, file, folder, user });
 
     positiveBtn.addEventListener(
       'click',
@@ -36,3 +36,20 @@ export function confirmDeletion({ file = null, folder = null }) {
     );
   });
 }
+
+document.addEventListener('confirm-modal-open', (ev) => {
+  const { file, folder, user } = ev.detail;
+  const msgEl = document.querySelector('.confirm-message');
+
+  if (file) {
+    msgEl.textContent = `Are you sure to delete the file?`;
+  }
+
+  if (folder) {
+    msgEl.textContent = `Are you sure to delete the folder?`;
+  }
+
+  if (user) {
+    msgEl.textContent = `Are you sure to delete the account?`;
+  }
+});

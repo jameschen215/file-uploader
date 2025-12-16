@@ -12,7 +12,6 @@ const updatePswModal = document.querySelector('#update-password-modal');
 const form = updatePswModal.querySelector('form');
 const inputs = form.querySelectorAll('input');
 const pswToggles = updatePswModal.querySelectorAll('.toggle-psw');
-
 const submitBtn = form.querySelector('button[type="submit"]');
 
 let isSubmitting = false;
@@ -40,9 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePswModal.querySelector('input').focus();
   });
 
-  // 5. Reset form after modal hidden
+  // 5. Reset form and remove error info after modal hidden
   document.addEventListener('update-password-modal-hidden', () => {
     form.reset();
+
+    inputs.forEach((input) => {
+      removeErrorStylesAndMessages(input);
+    });
   });
 
   // 6. Handle form submit
