@@ -16,14 +16,16 @@
         class="flex-1 bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 p-4"
       >
         <p class="text-sm text-zinc-500">Total Users</p>
-        <p class="text-2xl font-bold mt-1">248</p>
+        <p class="text-2xl font-bold mt-1"><%= users.length || 0 %></p>
       </div>
 
       <div
         class="flex-1 bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 p-4"
       >
         <p class="text-sm text-zinc-500">Total Storage Used</p>
-        <p class="text-2xl font-bold mt-1">18.2 GB</p>
+        <p class="text-2xl font-bold mt-1">
+          <%= formatFileSize(users.reduce((a, c)=> a + c.storageUsed, 0)) %>
+        </p>
       </div>
     </div>
 
@@ -71,7 +73,8 @@
           <tbody
             class="divide-y divide-zinc-200 dark:divide-zinc-800 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent"
           >
-            <!-- User Row 1 -->
+            <% users.map(user => { %>
+            <!-- User Row -->
             <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/25">
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
@@ -81,48 +84,56 @@
                       aria-label="User avatar with initials A"
                       class="size-10 rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-zinc-50 text-xl font-medium"
                     >
-                      J
+                      <%= formatAvatar(user) %>
                     </div>
                   </div>
                   <div>
-                    <p class="font-medium">John Doe</p>
-                    <p class="text-sm text-zinc-500">john.doe@example.com</p>
+                    <p class="font-medium">
+                      <%= user.name || user.email.split('@')[0] %>
+                    </p>
+                    <p class="text-sm text-zinc-500"><%= user.email %></p>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4">
                 <div>
-                  <p class="text-sm font-medium">40MB/50MB</p>
+                  <p class="text-sm font-medium">
+                    <span><%= formatFileSize(user.storageUsed) %></span> / 50 MB
+                  </p>
                   <div
                     class="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-1 mt-2 mb-4"
                     role="progressbar"
-                    aria-valuenow="80%"
+                    aria-valuenow="<%= user.storagePercentage %>%"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    aria-label="Storage usage: 80% of 50 used"
+                    aria-label="Storage usage: <%= user.storagePercentage %>% of 50 used"
                   >
                     <div
                       class="bg-gradient-to-r from-sky-400 to-purple-700 h-1 rounded-full transition-all duration-500"
-                      style="width: 80%"
+                      style="width: <%= user.storagePercentage %>%"
                     ></div>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4">
-                <p class="text-sm">142</p>
+                <p class="text-sm"><%= user._count.files %></p>
               </td>
               <td class="px-6 py-4">
-                <p class="text-sm">Dec 2024</p>
+                <p class="text-sm">
+                  <%= formatDate(user.createdAt, 'LLL yyyy') %>
+                </p>
               </td>
 
               <td class="px-6 py-4 text-right">
-                <button
+                <a
+                  href="/users/<%= user.id %>"
                   class="text-lime-600 hover:text-lime-500 text-sm font-medium mr-3"
                 >
                   View
-                </button>
+                </a>
               </td>
             </tr>
+            <% }) %>
           </tbody>
         </table>
       </div>
@@ -130,6 +141,7 @@
       <!-- Mobile Cards -->
       <div class="md:hidden divide-y divide-zinc-200">
         <!-- User Card 1 -->
+        <% users.map(user => { %>
         <div class="p-4">
           <!-- Avatar -->
           <div class="flex items-start justify-between mb-3">
@@ -137,11 +149,13 @@
               <div
                 class="w-12 h-12 text-xl rounded-full bg-gradient-to-br from-teal-400 to-emerald-600 flex items-center justify-center text-white font-semibold"
               >
-                J
+                <%= formatAvatar(user) %>
               </div>
               <div>
-                <p class="font-medium">John Doe</p>
-                <p class="text-sm text-zinc-500">john.doe@example.com</p>
+                <p class="font-medium">
+                  <%= user.name || user.email.split('@')[0] %>
+                </p>
+                <p class="text-sm text-zinc-500"><%= user.email %></p>
               </div>
             </div>
           </div>
@@ -150,7 +164,9 @@
           <div class="space-y-2 mb-3">
             <div>
               <p class="text-xs text-zinc-500">Storage</p>
-              <p class="text-sm font-medium">40MB / 50MB</p>
+              <p class="text-sm font-medium">
+                <span><%= formatFileSize(user.storageUsed) %></span> / 50 MB
+              </p>
               <div
                 class="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-1 mt-2 mb-4"
                 role="progressbar"
@@ -170,11 +186,13 @@
             <div class="flex justify-between">
               <div>
                 <p class="text-xs text-zinc-500">Files</p>
-                <p class="text-sm font-medium">142</p>
+                <p class="text-sm font-medium"><%= user._count.files %></p>
               </div>
               <div>
                 <p class="text-xs text-zinc-500">Joined</p>
-                <p class="text-sm font-medium">Dec 2024</p>
+                <p class="text-sm font-medium">
+                  <%= formatDate(user.createdAt, 'LLL yyyy') %>
+                </p>
               </div>
             </div>
           </div>
@@ -182,10 +200,16 @@
             <button
               class="flex-1 px-3 py-2 text-sm font-medium text-lime-600 dark:text-lime-500 bg-lime-100 dark:bg-lime-950/50 border border-lime-200 dark:border-lime-900/25 rounded-lg hover:bg-lime-200 dark:hover:bg-lime-900/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-zinc-900"
             >
-              View Profile
+              <a
+                href="/users/<%= user.id %>"
+                class="text-lime-600 hover:text-lime-500 text-sm font-medium mr-3"
+              >
+                View Profile
+              </a>
             </button>
           </div>
         </div>
+        <% }) %>
       </div>
 
       <!-- footer -->
@@ -195,7 +219,7 @@
         <div class="flex items-center justify-center">
           <p class="text-sm text-zinc-400 dark:text-zinc-600">
             Total
-            <span class="font-medium">248</span> users
+            <span class="font-medium"><%= users.length || 0 %></span> users
           </p>
         </div>
       </div>

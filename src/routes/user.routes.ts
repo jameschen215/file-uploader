@@ -5,8 +5,8 @@ import {
   editOwnProfile,
   getAllUsers,
   getOwnProfile,
-  getUserProfile,
   getUpdatePasswordPage,
+  getUserProfileById,
 } from '../controllers/user.controller.js';
 import { renameSchema, updatePasswordSchema } from '../validators/user.js';
 
@@ -26,6 +26,11 @@ router.put(
 
 // Admin-only routes
 router.get('/', isAuthenticated, requireRole(['ADMIN']), getAllUsers);
-router.get('/:userId', isAuthenticated, requireRole(['admin']), getUserProfile);
+router.get(
+  '/:userId',
+  isAuthenticated,
+  requireRole(['ADMIN']),
+  getUserProfileById,
+);
 
 export default router;

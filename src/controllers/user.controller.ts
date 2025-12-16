@@ -135,10 +135,36 @@ export const updateOwnPassword = asyncHandler(async (req, res) => {
   }
 });
 
-export const getAllUsers = asyncHandler(async (req, res) => {
-  res.render('users');
+export const getAllUsers = asyncHandler(async (_req, res) => {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      storageUsed: true,
+      storageLimit: true,
+      _count: { select: { files: true } },
+    },
+  });
+
+  const formattedUser = users.map((user) => ({
+    ...user,
+    storagePercentage: ((user.storageUsed / user.storageLimit) * 100).toFixed(
+      1,
+    ),
+  }));
+
+  res.render('users', { users: formattedUser });
 });
 
-export const getUserProfile = asyncHandler(async (req, res) => {
-  res.render('profile');
+export const getUserProfileById = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  res.send(`User profile by ID: ${userId}`);
 });
