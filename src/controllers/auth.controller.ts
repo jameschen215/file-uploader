@@ -22,9 +22,15 @@ export const signUpNewUser = asyncHandler(async (req, res, next) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUND);
+    const isAdmin = process.env.ADMIN_EMAIL === email;
 
     await prisma.user.create({
-      data: { name: name || null, email, password: hashedPassword },
+      data: {
+        name: name || null,
+        email,
+        password: hashedPassword,
+        role: isAdmin ? 'ADMIN' : 'USER',
+      },
     });
 
     res.status(201).redirect('/auth/sign-in');
