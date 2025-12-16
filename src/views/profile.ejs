@@ -30,14 +30,16 @@
             <div
               role="img"
               aria-label="User avatar with initials A"
-              class="size-20 sm:size-24 rounded-full bg-gradient-to-br from-teal-300 to-emerald-500 flex items-center justify-center text-zinc-50 text-2xl sm:text-3xl font-bold"
+              class="size-16 sm:size-20 rounded-full bg-gradient-to-br from-teal-300 to-emerald-500 flex items-center justify-center text-zinc-50 text-3xl sm:text-5xl font-medium"
             >
               <%= formatAvatar(locals.user) %>
             </div>
           </div>
 
           <!-- User info -->
-          <div class="flex-1 text-center sm:text-start">
+          <div
+            class="flex-1 text-center sm:text-start flex flex-col justify-center"
+          >
             <h2
               id="profile-heading"
               class="text-xl sm:text-2xl font-semibold text-zinc-900 dark:text-zinc-50"
@@ -45,7 +47,16 @@
               <%= locals.user.name || '' %>
             </h2>
             <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
-              <%= locals.user.email || '' %>
+              <span>
+                <%= locals.user.email || '' %>
+              </span>
+              <% if (user.role === 'ADMIN') { %>
+              <span
+                class="text-lime-600 dark:text-lime-500 text-xs font-semibold ml-1 px-2 py-1 border border-lime-300 dark:border-lime-800 bg-lime-100 dark:bg-lime-900/50 rounded-md"
+              >
+                Admin
+              </span>
+              <% } %>
             </p>
             <p class="text-sm sm:text-base text-zinc-500 mt-1">
               Member since <%= formatDate(locals.user.createdAt, 'LLLL yyyy') %>
