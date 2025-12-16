@@ -136,7 +136,7 @@ export const updateOwnPassword = asyncHandler(async (req, res) => {
 });
 
 export const getAllUsers = asyncHandler(async (req, res) => {
-  res.send('All Users');
+  res.render('users');
 });
 
 export const getUserProfile = asyncHandler(async (req, res) => {
