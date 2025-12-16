@@ -1,10 +1,10 @@
-import { icon } from './lib/get-icon.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   validateAuthField,
   validateAuthFromServer,
 } from './lib/validation-helpers.js';
+import { handlePasswordTogglesDisplayAndAction } from './lib/dom-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#sign-in-form');
@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtn = form.querySelector('button[type="submit"]');
   const firstInput = form.querySelector('input');
   const signUpLink = form.querySelector('p a');
-  const pswInput = form.querySelector('#password');
+  // const pswInput = form.querySelector('#password');
   const pswToggle = form.querySelector('.toggle-psw');
   let isSubmitting = false;
 
-  // 1. show show/hide password toggle icon
-  pswToggle.innerHTML = icon({ name: 'Eye', size: 20 });
+  // 1. handle password show/hide button appearance and action
+  handlePasswordTogglesDisplayAndAction([pswToggle]);
 
   // 2. focus on the first input
   firstInput.focus();
@@ -63,24 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. remove error info while user typing
   form.querySelectorAll('input').forEach((field) => {
     field.addEventListener('input', () => removeErrorStylesAndMessages(field));
-  });
-
-  // 6. handle show/hide password toggle click
-  pswToggle.addEventListener('click', (ev) => {
-    ev.preventDefault();
-
-    const type =
-      pswInput.getAttribute('type') === 'password' ? 'text' : 'password';
-
-    pswInput.setAttribute('type', type);
-
-    if (type === 'password') {
-      pswToggle.innerHTML = icon({ name: 'Eye', size: 20 });
-      pswToggle.setAttribute('aria-label', 'Show password.');
-    } else {
-      pswToggle.innerHTML = icon({ name: 'EyeClosed', size: 20 });
-      pswToggle.setAttribute('aria-label', 'Hide password.');
-    }
   });
 
   function updateUIOnSubmit() {

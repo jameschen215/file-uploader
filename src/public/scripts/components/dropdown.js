@@ -6,8 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const trigger = document.querySelector('#dropdown-toggle');
   const content = document.querySelector('#dropdown-content');
 
-  console.log({ iconWrapper, trigger, content });
-
   if (!trigger || !content || !iconWrapper) return;
 
   const isLoggedIn = !iconWrapper.innerHTML.includes('<svg');

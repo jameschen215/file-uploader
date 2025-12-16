@@ -129,41 +129,32 @@ export const renameSchema = checkSchema({
 
 export const updatePasswordSchema = checkSchema({
   old_password: {
-    custom: {
-      options: async (value) => {
-        const user = await prisma.user.findUnique({ where: { email: value } });
-        if (user) {
-          throw new Error('An account with this email already exists');
-        }
-
-        return true;
-      },
-    },
-  },
-  // validate password
-  password: {
     in: ['body'],
     isString: true,
     notEmpty: {
-      errorMessage: 'Password is required',
+      errorMessage: 'Current password is required.',
+    },
+
+    // Validate correctness in controller
+  },
+  new_password: {
+    in: ['body'],
+    isString: true,
+    notEmpty: {
+      errorMessage: 'New password is required',
     },
     isLength: {
       options: { min: 6 },
       errorMessage: 'Password must be at least 6 characters long',
     },
   },
-
-  // validate confirm_password
-  confirm_password: {
+  confirm_new_password: {
     in: ['body'],
     isString: true,
-    notEmpty: {
-      errorMessage: 'Confirm password is required',
-    },
     custom: {
       options: (value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error('Passwords do not match');
+        if (value !== req.body.new_password) {
+          throw new Error('New passwords do not match');
         }
 
         return true;

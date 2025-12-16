@@ -87,6 +87,7 @@ export function focusOnFirstErrorField(form) {
   const firstErrorField = form.querySelector('.border-red-500');
 
   if (firstErrorField) {
+    firstErrorField.disabled = false;
     firstErrorField.focus();
     firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
@@ -128,7 +129,7 @@ export function showErrorStylesAndMessages(field, message) {
 
   // 2. Add new error style
   field.classList.remove(
-    'border-zinc-200',
+    'border-zinc-300',
     'focus:border-lime-500',
     'focus:ring-lime-50',
     'dark:focus:border-lime-500',

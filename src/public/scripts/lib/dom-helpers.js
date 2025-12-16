@@ -126,3 +126,43 @@ export function removeElementFromDOM(id) {
     el.remove();
   }
 }
+
+/**
+ * 1. Display icon as toggle's content
+ * 2. Attach event listener to change the content icon
+ * 3. Toggle the related input type between 'password' and 'text'
+ * @param {HTMLElement[]} toggles
+ */
+
+export function handlePasswordTogglesDisplayAndAction(toggles) {
+  toggles.forEach((btn) => {
+    btn.innerHTML = icon({ name: 'Eye' });
+  });
+
+  toggles.forEach((btn) => {
+    btn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+
+      // Get password input
+      const pswInput = btn.closest('div.relative').querySelector('input');
+
+      if (pswInput) {
+        // Get the current type of the input
+        const type =
+          pswInput.getAttribute('type') === 'password' ? 'text' : 'password';
+
+        // Toggle the type attribute
+        pswInput.setAttribute('type', type);
+
+        // Update the button's icon
+        if (type === 'password') {
+          btn.innerHTML = icon({ name: 'Eye', size: 20 });
+          btn.setAttribute('aria-label', 'Show password.');
+        } else {
+          btn.innerHTML = icon({ name: 'EyeClosed', size: 20 });
+          btn.setAttribute('aria-label', 'Hide password.');
+        }
+      }
+    });
+  });
+}

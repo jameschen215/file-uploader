@@ -29,7 +29,7 @@ export function showModal({
   modal.classList.remove('translate-y-full');
 
   // 3. Prevent scrolling on pages below
-  document.body.classList.add('overflow-hidden');
+  // document.body.classList.add('overflow-hidden');
 
   // 4. Prevent events on pages below
   document.querySelector('#site-container').setAttribute('inert', '');
@@ -81,7 +81,7 @@ export function hideModal({ modal }) {
 
   if (openModals.length === 0) {
     // 3. Enable scrolling on pages
-    document.body.classList.remove('overflow-hidden');
+    // document.body.classList.remove('overflow-hidden');
 
     // 4. Enable events on pages below
     document.querySelector('#site-container').removeAttribute('inert');

@@ -15,7 +15,7 @@ const usernameEl = document.querySelector('#profile-heading');
 
 let isSubmitting = false;
 
-function handleModalOpen(ev) {
+function handleModalOpen() {
   input.value = usernameEl.textContent;
 
   input.focus();
