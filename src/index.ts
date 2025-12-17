@@ -10,11 +10,12 @@ import { configureRoutes } from './config/routes.config.js';
 import { configureSession } from './config/session.config.js';
 import { configureMiddleware } from './config/middleware.config.js';
 
+import { formatDate } from './middlewares/format-date.js';
 import { formatAvatar } from './middlewares/format-avatar.js';
+import { formatFileSize } from './middlewares/format-file-size.js';
 import { setCurrentUser } from './middlewares/set-current-user.js';
 import { getLucideIcons } from './middlewares/get-lucide-icons.js';
 import { setCurrentPath } from './middlewares/set-current-path.js';
-import { setCurrentFolder } from './middlewares/set-current-folder.js';
 
 const app = express();
 
@@ -30,11 +31,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Custom middlewares
-app.use(getLucideIcons);
+app.use(formatDate);
 app.use(formatAvatar);
+app.use(formatFileSize);
+app.use(getLucideIcons);
 app.use(setCurrentPath);
 app.use(setCurrentUser);
-app.use(setCurrentFolder);
 
 // Routes & Error handling
 configureRoutes(app);

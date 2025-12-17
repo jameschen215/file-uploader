@@ -28,6 +28,10 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  // Track storage used
+  storageUsed  Int @default(0) @map("storage_used") //byte
+  storageLimit Int @default(52428800) @map("storage_limit") // 50MB
+
   // Relations
   folders Folder[]
   files   File[]

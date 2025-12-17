@@ -1,3 +1,5 @@
+<% const isOnDrivePage = locals.currentUser && (locals.currentPath.startsWith('/folders') || locals.currentPath.startsWith('/dashboard')) %>
+
 <header class="fixed top-0 left-0 w-full bg-zinc-50 dark:bg-zinc-900 z-40">
   <!-- 1. Main Navbar -->
 
@@ -22,7 +24,7 @@
 
   <!-- Sub-header -->
 
-  <% if (locals.currentUser && !locals.currentPath.includes('/share/')) { %>
+  <% if (isOnDrivePage) { %>
 
   <div id="sub-header" class="h-16 w-full max-w-7xl mx-auto px-5">
     <!-- UP -->

@@ -1,5 +1,5 @@
 <a
-  href="/share/folder/<%= shareToken %>/file/<%= file.id %>/download"
+  href="/shares/folder/<%= folderToken %>/file/<%= file.id %>"
   title="Click to download"
   class="w-full h-40 flex flex-col items-center justify-center gap-2 cursor-pointer"
 >
@@ -21,14 +21,10 @@
     </span>
   </div>
 
-  <!-- file info -->
-  <div class="flex items-center gap-2 sm:min-w-0 text-sm">
-    <p class="flex items-center min-w-0 w-full">
-      <span class="min-w-0 truncate">
-        <%= file.originalName.split('.')[0] %>
-      </span>
-      <span class="shrink-0">.<%= file.originalName.split('.')[1] %></span>
-    </p>
-    <span class="shrink-0 text-zinc-500"><%= file.fileSize %></span>
+  <!-- file name -->
+  <div class="item-info relative w-full text-center">
+    <span class="text-sm inline-block w-[calc(100%-24px)] mx-auto truncate">
+      <%= file.originalName %>
+    </span>
   </div>
 </a>

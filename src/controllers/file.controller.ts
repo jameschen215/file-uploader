@@ -179,6 +179,32 @@ export const handleDeleteFile: RequestHandler = async (req, res) => {
       where: { id: fileId },
     });
 
+    // Update user's storage used - decrease size of deleted file
+    // a. Get current storage and only decrement if it won't go negative
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { storageUsed: true },
+    });
+
+    if (user && user.storageUsed >= file.fileSize) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          storageUsed: {
+            decrement: file.fileSize,
+          },
+        },
+      });
+    } else {
+      // If storage is already less than file size, just set to 0
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          storageUsed: 0,
+        },
+      });
+    }
+
     res.json({
       success: true,
       message: 'File deleted successfully.',

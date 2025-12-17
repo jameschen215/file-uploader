@@ -32,7 +32,6 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
       });
 
       if (!folder) {
-        // throw new CustomNotFoundError('Folder not found.');
         return res.status(404).json({
           success: false,
           message: 'Folder not found.',
@@ -41,29 +40,7 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
       }
     }
 
-    // Ensure files exist
-    if (!req.files) {
-      // throw new CustomBadRequestError('No files provided.');
-      return res.status(400).json({
-        success: false,
-        message: 'No files provided.',
-        data: null,
-      });
-    }
-
-    // Normalize req.files to an array (it can be File[] or { [fieldname: string]: File[] })
-    const filesArray = Array.isArray(req.files)
-      ? req.files
-      : Object.values(req.files).flat();
-
-    if (!filesArray || filesArray.length === 0) {
-      // throw new CustomBadRequestError('No files provided.');
-      return res.status(400).json({
-        success: false,
-        message: 'No files provided.',
-        data: null,
-      });
-    }
+    const filesArray = req.files as Express.Multer.File[];
 
     // Validate file types
     const invalidTypes = filesArray
@@ -74,9 +51,6 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
       .map((file) => path.extname(file.originalname));
 
     if (invalidTypes.length > 0) {
-      // throw new CustomBadRequestError(
-      //   'Invalid file type. Allowed formats: images, videos, PDFs, Word documents, and Excel spreadsheets.',
-      // );
       return res.status(400).json({
         success: false,
         message: 'Invalid file type(s).',
@@ -219,6 +193,18 @@ export const handleUploadFiles: RequestHandler = async (req, res) => {
     }
 
     // All files succeeded
+    // a. update user's storage used
+    const newTotal = uploadedFiles.reduce((s, f) => s + f.fileSize, 0);
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        storageUsed: {
+          increment: newTotal,
+        },
+      },
+    });
+
+    // b. send success response
     res.json({
       success: true,
       message: `${uploadedFiles.length} file(s) uploaded successfully.`,

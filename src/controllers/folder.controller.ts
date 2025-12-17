@@ -19,6 +19,8 @@ export const handleCreateFolder = asyncHandler(async (req, res) => {
 
   const { name, parentFolderId } = req.body;
 
+  console.log({ name, parentFolderId });
+
   // Validate parent folder exists and belongs to user (if specified)
   if (parentFolderId) {
     const parentFolder = await prisma.folder.findFirst({
@@ -68,6 +70,7 @@ export const handleGetFolderContent = asyncHandler(async (req, res) => {
     oldInput: null,
     sortBy,
     direction,
+    currentFolderId: req.params.folderId || null,
   });
 });
 

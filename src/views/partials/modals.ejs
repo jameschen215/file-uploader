@@ -1,5 +1,6 @@
 <!-- MODALS -->
 <% if (locals.currentUser) { %>
+
 <!-- Search modal -->
 <%- include('../components/modals/search-modal') %>
 
@@ -10,7 +11,7 @@
 <%- include('../components/modals/add-modal') %>
 
 <!-- folder modal -->
-<%- include('../components/modals/folder-form-modal', {currentFolder: locals.currentFolder || null}) %>
+<%- include('../components/modals/folder-form-modal') %>
 
 <!-- upload modal -->
 <%- include('../components/modals/upload-modal') %>
@@ -26,5 +27,11 @@
 
 <!-- confirm modal -->
 <%- include('../components/modals/confirm-modal') %>
+
+<!-- edit profile modal -->
+<%- include('../components/modals/edit-profile-modal') %>
+
+<!-- update password modal -->
+<%- include('../components/modals/update-password-modal') %>
 
 <% } %>

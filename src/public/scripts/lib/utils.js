@@ -26,11 +26,11 @@ export function formatTime(timeInSeconds) {
 }
 
 export function formatFileSize(size) {
-  if (size < 2 ** 20) {
-    return Math.ceil(size / 1024).toFixed(1) + 'KB';
-  }
+  if (size < 1024) return size + 'B';
+  if (size < 1024 * 1024) return (size / 1024).toFixed(2) + 'KB';
+  if (size < 1024 * 1024 * 1024) return (size / 1024 / 1024).toFixed(2) + 'MB';
 
-  return (size / 1024 / 1024).toFixed(2) + 'MB';
+  return (size / 1024 / 1024 / 1024).toFixed(2) + 'GB';
 }
 
 export function formateDate(date) {

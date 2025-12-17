@@ -105,3 +105,60 @@ export const signInSchema = checkSchema({
     },
   },
 });
+
+export const renameSchema = checkSchema({
+  name: {
+    in: ['body'],
+    isString: true,
+    trim: true,
+    isLength: {
+      options: { max: 20 },
+      errorMessage: 'Name must be at most 20 characters long.',
+    },
+    custom: {
+      options: (value) => {
+        if (value && !/^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/.test(value)) {
+          throw new Error('Invalid name');
+        }
+
+        return true;
+      },
+    },
+  },
+});
+
+export const updatePasswordSchema = checkSchema({
+  old_password: {
+    in: ['body'],
+    isString: true,
+    notEmpty: {
+      errorMessage: 'Current password is required.',
+    },
+
+    // Validate correctness in controller
+  },
+  new_password: {
+    in: ['body'],
+    isString: true,
+    notEmpty: {
+      errorMessage: 'New password is required',
+    },
+    isLength: {
+      options: { min: 6 },
+      errorMessage: 'Password must be at least 6 characters long',
+    },
+  },
+  confirm_new_password: {
+    in: ['body'],
+    isString: true,
+    custom: {
+      options: (value, { req }) => {
+        if (value !== req.body.new_password) {
+          throw new Error('New passwords do not match');
+        }
+
+        return true;
+      },
+    },
+  },
+});

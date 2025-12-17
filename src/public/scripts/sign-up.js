@@ -1,10 +1,10 @@
-import { icon } from './lib/get-icon.js';
 import {
   focusOnFirstErrorField,
   removeErrorStylesAndMessages,
   validateAuthField,
   validateAuthFromServer,
 } from './lib/validation-helpers.js';
+import { handlePasswordTogglesDisplayAndAction } from './lib/dom-helpers.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('#sign-up-form');
@@ -18,10 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let isSubmitting = false;
 
-  // 1. Show toggle password icons
-  passwordToggles.forEach((btn) => {
-    btn.innerHTML = icon({ name: 'Eye', size: 20 });
-  });
+  // 1. handle password show/hide button appearance and action
+  handlePasswordTogglesDisplayAndAction(passwordToggles);
 
   // 2. Focus on the first input
   firstInput.focus();
@@ -73,33 +71,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Remove error info when user is typing
   form.querySelectorAll('input').forEach((field) => {
     field.addEventListener('input', () => removeErrorStylesAndMessages(field));
-  });
-
-  // 6. handle password buttons clicked
-  passwordToggles.forEach((btn) => {
-    btn.addEventListener('click', (ev) => {
-      ev.preventDefault();
-
-      // Get password input
-      const pswInput = btn.closest('div.relative').querySelector('input');
-
-      if (pswInput) {
-        // Get the current type of the input
-        const type =
-          pswInput.getAttribute('type') === 'password' ? 'text' : 'password';
-
-        // Toggle the type attribute
-        pswInput.setAttribute('type', type);
-
-        // Update the button's icon
-        if (type === 'password') {
-          btn.innerHTML = icon({ name: 'Eye', size: 20 });
-          btn.setAttribute('aria-label', 'Show password.');
-        } else {
-          btn.innerHTML = icon({ name: 'EyeClosed', size: 20 });
-          btn.setAttribute('aria-label', 'Hide password.');
-        }
-      }
-    });
   });
 });

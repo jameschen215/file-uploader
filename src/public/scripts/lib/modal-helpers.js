@@ -3,6 +3,7 @@ export function showModal({
   modal,
   file = null,
   folder = null,
+  user = null,
   breadcrumbs = [],
 }) {
   if (folder) {
@@ -28,7 +29,7 @@ export function showModal({
   modal.classList.remove('translate-y-full');
 
   // 3. Prevent scrolling on pages below
-  document.body.classList.add('overflow-hidden');
+  // document.body.classList.add('overflow-hidden');
 
   // 4. Prevent events on pages below
   document.querySelector('#site-container').setAttribute('inert', '');
@@ -36,20 +37,10 @@ export function showModal({
   // 5. Focus on modal to be ready for user to press tab
   modal.focus({ preventScroll: true });
 
-  // 6. Handle confirm message on confirm modal
-  const msgEl = document.querySelector('.confirm-message');
-  if (msgEl) {
-    if (file) {
-      msgEl.innerHTML = `Are you sure to delete the file?`;
-    } else if (folder) {
-      msgEl.innerHTML = `Are you sure to delete the folder?`;
-    }
-  }
-
   // 6. Dispatch modal open event
   document.dispatchEvent(
     new CustomEvent(`${modalName}-open`, {
-      detail: { file, folder, breadcrumbs },
+      detail: { file, folder, user, breadcrumbs },
     }),
   );
 
@@ -80,7 +71,7 @@ export function hideModal({ modal }) {
 
   if (openModals.length === 0) {
     // 3. Enable scrolling on pages
-    document.body.classList.remove('overflow-hidden');
+    // document.body.classList.remove('overflow-hidden');
 
     // 4. Enable events on pages below
     document.querySelector('#site-container').removeAttribute('inert');

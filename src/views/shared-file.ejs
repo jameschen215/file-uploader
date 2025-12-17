@@ -1,7 +1,11 @@
+<% const imageUrl = locals.fileToken ? `/shares/file/${fileToken}/preview` : `/shares/folder/${locals.folderToken}/file/${file.id}/preview` %>
+<% const downloadUrl = locals.fileToken ? `/shares/file/${fileToken}/download` : `/shares/folder/${locals.folderToken}/file/${file.id}/download` %>
+
 <div class="flex-grow flex items-center justify-center p-5">
   <div
     class="w-full p-2 max-w-screen-lg h-[75vh] flex flex-col justify-center rounded-md gap-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800"
   >
+    <p>url: <%= imageUrl %></p>
     <!-- File Preview -->
     <div
       class="h-[calc(100%-48px)] flex items-center justify-center bg-zinc-950 p-2"
@@ -9,17 +13,14 @@
       <% if (file.mimeType.startsWith('image/')) { %>
 
       <img
-        src="/share/file/<%= shareToken %>/preview"
+        src="<%= imageUrl %>"
         alt="<%= file.originalName %>"
         class="w-full h-full object-contain"
       />
 
       <% } else if (file.mimeType.startsWith('video/')) { %>
       <video controls style="max-width: 100%; border-radius: 4px">
-        <source
-          src="/share/file/<%= shareToken %>/preview"
-          type="<%= file.mimeType %>"
-        />
+        <source src="<%= imageUrl %>" type="<%= file.mimeType %>" />
         You browser does't support video playback.
       </video>
       <% } else { %>
@@ -46,7 +47,7 @@
       <!-- Download Button -->
       <div class="mt-1">
         <a
-          href="/share/file/<%= shareToken %>/download"
+          href="<%= downloadUrl %>"
           class="flex items-center justify-center w-full px-8 bg-lime-600 hover:bg-lime-500 py-2 outline-none text-zinc-50 font-medium rounded-md cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:border-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-offset-900"
         >
           Download

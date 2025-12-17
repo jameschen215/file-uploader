@@ -22,6 +22,8 @@ let submitting = false;
 
 // 1. Save original state and register input actions on page loading
 document.addEventListener('DOMContentLoaded', () => {
+  if (!subHeader) return;
+
   handleOriginalState();
 
   attackClearButtonListeners(desktopSearchInput, clearButton);

@@ -89,12 +89,12 @@ async function getShareUrl(item) {
     let res = null;
 
     if (type === 'file') {
-      res = await fetch(`/files/file/${item.id}/share`, {
+      res = await fetch(`/shares/files/${item.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
     } else if (type === 'folder') {
-      res = await fetch(`/folders/folder/${item.id}/share`, {
+      res = await fetch(`/shares/folders/${item.id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

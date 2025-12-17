@@ -1,0 +1,254 @@
+<div
+  class="flex-1 min-h-0 bg-zinc-50 dark:bg-zinc-900 overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent"
+>
+  <div class="profile max-w-3xl mx-auto p-4 sm:p-6">
+    <!-- Header -->
+    <header class="mb-6 sm:mb-8">
+      <h1
+        class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-50"
+      >
+        Profile Page
+      </h1>
+      <p class="textsm sm:text-base text-zinc-600 dark:text-zinc-400 mt-1">
+        User's account and and storage information
+      </p>
+    </header>
+
+    <!-- Profile card -->
+    <section
+      aria-labelledby="profile-heading"
+      class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 mb-6"
+    >
+      <div class="p-4 sm:p-6">
+        <div
+          class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6"
+        >
+          <!-- Avatar -->
+          <div class="relative flex-shrink-0">
+            <div
+              role="img"
+              aria-label="User avatar with initials A"
+              class="size-16 sm:size-20 rounded-full bg-gradient-to-br from-teal-300 to-emerald-500 flex items-center justify-center text-zinc-50 text-3xl sm:text-5xl font-medium"
+            >
+              <%= formatAvatar(locals.user) %>
+            </div>
+          </div>
+
+          <!-- User info -->
+          <div
+            class="flex-1 text-center sm:text-start flex flex-col justify-center"
+          >
+            <h2
+              id="profile-heading"
+              class="text-xl sm:text-2xl font-semibold text-zinc-900 dark:text-zinc-50"
+            >
+              <%= locals.user.name || '' %>
+            </h2>
+            <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400">
+              <span>
+                <%= locals.user.email || '' %>
+              </span>
+              <% if (user.role === 'ADMIN') { %>
+              <span
+                class="text-lime-600 dark:text-lime-500 text-xs font-semibold ml-1 px-2 py-1 border border-lime-300 dark:border-lime-800 bg-lime-100 dark:bg-lime-900/50 rounded-md"
+              >
+                Admin
+              </span>
+              <% } %>
+            </p>
+            <p class="text-sm sm:text-base text-zinc-500 mt-1">
+              Member since <%= formatDate(locals.user.createdAt, 'LLLL yyyy') %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Storage card -->
+    <section
+      aria-labelledby="storage-heading"
+      class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 mb-6"
+    >
+      <div class="p-4 sm:p-6">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4"
+        >
+          <h3
+            id="storage-heading"
+            class="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-50"
+          >
+            Storage Usage
+          </h3>
+          <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
+            <span class="font-medium">
+              <%= formatFileSize(user.storageUsed) %>
+            </span>
+            of
+            <span class="font-medium">
+              <%= formatFileSize(user.storageLimit) %>
+            </span>
+            used
+          </p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div
+          class="w-full bg-zinc-200 dark:bg-zinc-800 rounded-full h-3 mb-4"
+          role="progressbar"
+          aria-valuenow="<%= user.storagePercentage %>"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-label="Storage usage: <%= user.storagePercentage %>% of <%= formatFileSize(user.storageLimit) %> used"
+        >
+          <!-- eslint-disable -->
+          <div
+            class="bg-gradient-to-r from-sky-400 to-purple-700 h-3 rounded-full transition-all duration-500"
+            style="width: <%= user.storagePercentage %>%"
+          ></div>
+          <!-- eslint-enable -->
+        </div>
+
+        <div class="flex items-center justify-between text-xs sm:text-sm">
+          <span class="text-zinc-600 dark:text-zinc-400">
+            <%= formatFileSize(user.storageLimit - user.storageUsed) %>
+            remaining
+          </span>
+          <span class="text-purple-600 dark:text-purple-500 font-medium">
+            <%= user.storagePercentage %>% used
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section
+      aria-label="Account statistics"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6"
+    >
+      <!-- Total Files -->
+      <div
+        class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-blue-100 dark:bg-blue-950/75 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <%- icon({ name: 'File', className: 'text-blue-600 dark:text-blue-400' }) %>
+          </div>
+          <div>
+            <p
+              class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-50"
+            >
+              <%= user._count.files %>
+            </p>
+            <p
+              class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 dark:font-light"
+            >
+              Total Files
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Folders -->
+      <div
+        class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-purple-100 dark:bg-purple-950/75 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <%- icon({ name: 'Folder', className: 'text-purple-600 dark:text-purple-400' }) %>
+          </div>
+          <div>
+            <p
+              class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-50"
+            >
+              <%= user._count.folders %>
+            </p>
+            <p
+              class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 dark:font-light"
+            >
+              Total Folders
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last Upload -->
+      <div
+        class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800 p-4 sm:p-6"
+      >
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-green-100 dark:bg-green-950/75 flex items-center justify-center flex-shrink-0"
+            aria-hidden="true"
+          >
+            <%- icon({ name: 'CloudUpload', className: 'text-green-600 dark:text-green-400' }) %>
+          </div>
+          <div>
+            <p
+              class="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-50"
+            >
+              <%= user.lastUploadDate ? formatDate(user.lastUploadDate, 'LLL d') : '—' %>
+            </p>
+
+            <p
+              class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 dark:font-light"
+            >
+              Last Upload
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section
+      aria-labelledby="settings-heading"
+      class="bg-white dark:bg-zinc-800/50 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-800"
+    >
+      <div class="p-4 sm:p-6">
+        <h3
+          id="settings-heading"
+          class="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4"
+        >
+          Account Settings
+        </h3>
+
+        <div class="space-y-4">
+          <!-- Delete Account -->
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3"
+          >
+            <div class="flex-1">
+              <p
+                class="font-medium text-red-600 dark:text-red-500 text-sm sm:text-base"
+              >
+                Delete Account
+              </p>
+              <p class="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
+                Permanently delete the account and data
+              </p>
+            </div>
+            <button
+              type="button"
+              aria-describedby="delete-warning"
+              data-user="<%= JSON.stringify(user || null) %>"
+              class="delete-user-btn w-full sm:w-auto px-4 py-2 text-sm text-red-600 dark:text-red-500 border border-red-300 dark:border-red-900/90 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 dark:ring-offset-zinc-800 transition"
+            >
+              Delete
+            </button>
+            <span id="delete-warning" class="sr-only">
+              Warning: This action cannot be undone
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script type="module" src="/scripts/profile.js"></script>

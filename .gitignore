@@ -3,6 +3,9 @@ dist/
 *.env
 /generated/prisma
 uploads/
+
 .vscode
 
 src/public/styles/build.css
+
+
