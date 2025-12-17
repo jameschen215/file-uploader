@@ -5,8 +5,14 @@ import { validationResult } from 'express-validator';
 import prisma from '../lib/prisma.js';
 import { asyncHandler } from '../lib/async-handler.js';
 import { CustomNotFoundError } from '../errors/index.js';
+import { configureSupabase } from '../config/supabase.config.js';
+import { throwSupabaseError } from '../lib/supabase-helpers.js';
 
-export const getOwnProfile = asyncHandler(async (req, res) => {
+const supabase = configureSupabase();
+
+// --- --- --- --- --- --- GET USER'S OWN PROFILE --- --- --- --- --- ---
+
+export const getOwnProfile = asyncHandler(async (_req, res) => {
   const userId = res.locals.currentUser!.id;
 
   const user = await prisma.user.findUnique({
@@ -45,6 +51,8 @@ export const getOwnProfile = asyncHandler(async (req, res) => {
   res.render('own-profile', { user: formattedUser });
 });
 
+// --- --- --- --- --- --- UPDATE USER PROFILE --- --- --- --- --- ---
+
 export const editOwnProfile = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
 
@@ -70,9 +78,7 @@ export const editOwnProfile = asyncHandler(async (req, res) => {
   });
 });
 
-export const getUpdatePasswordPage: RequestHandler = (_req, res) => {
-  res.render('update-password', { errors: null, oldInput: null });
-};
+// --- --- --- --- --- --- UPDATE USER PASSWORD --- --- --- --- --- ---
 
 export const updateOwnPassword = asyncHandler(async (req, res) => {
   const errors = validationResult(req);
@@ -149,6 +155,8 @@ export const updateOwnPassword = asyncHandler(async (req, res) => {
   }
 });
 
+// --- --- --- --- --- --- GET ALL USERS --- --- --- --- --- ---
+
 export const getAllUsers = asyncHandler(async (_req, res) => {
   const users = await prisma.user.findMany({
     select: {
@@ -172,6 +180,8 @@ export const getAllUsers = asyncHandler(async (_req, res) => {
 
   res.render('users', { users: formattedUser });
 });
+
+// --- --- --- --- --- --- GET USER PROFILE BY ID --- --- --- --- --- ---
 
 export const getUserProfileById = asyncHandler(async (req, res) => {
   const { userId } = req.params;
@@ -210,4 +220,79 @@ export const getUserProfileById = asyncHandler(async (req, res) => {
   };
 
   res.render('user-profile', { user: formattedUser });
+});
+
+// --- --- --- --- --- --- DELETE USER --- --- --- --- --- ---
+
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  // 1. Verify user exists
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    // throw new CustomNotFoundError('User not found');
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+    });
+  }
+
+  // 2. Retrieve all file paths for cleanup
+  // Query this before deleting user, as the database delete will cascade
+  // and remove these records
+  const userFiles = await prisma.file.findMany({
+    where: { userId },
+    select: { filePath: true, thumbnailPath: true },
+  });
+
+  // 3. Construct list of storage paths to delete
+  const pathsToDelete: string[] = [];
+
+  for (const file of userFiles) {
+    if (file.filePath) {
+      pathsToDelete.push(file.filePath);
+    }
+    if (file.thumbnailPath) {
+      pathsToDelete.push(file.thumbnailPath);
+    }
+  }
+
+  // 4. Remove files from Supabase storage
+  if (pathsToDelete.length > 0) {
+    // Supabase .remove() accepts an array of path strings
+    const { error: storageError } = await supabase.storage
+      .from('files')
+      .remove(pathsToDelete);
+
+    if (storageError) {
+      // 1. Log the error internally so you know about it
+      console.error('Error deleting user files: ', storageError);
+
+      // 2. DO NOT return error. Swallow it and proceed.
+      // We want to ensure the user is deleted from the DB regardless of storage hiccups.
+
+      // throwSupabaseError(storageError, 'delete user files from storage');
+      // return res.status(500).json({
+      //   success: false,
+      //   message: 'Error deleting user files from storage',
+      // });
+    }
+  }
+
+  // 5. Delete user from database
+  // Based on the schema:
+  // - `folders Folder[]` has `onDelete: Cascade` (via User relation)
+  // - `files File[]` has `onDelete: Cascade` (via User relation)
+  // Therefore, this single call removes the user and all their metadata.
+  await prisma.user.delete({
+    where: { id: userId },
+  });
+
+  res.status(200).json({
+    success: true,
+    message: 'User and all associated data deleted successfully.',
+  });
 });

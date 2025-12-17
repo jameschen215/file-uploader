@@ -5,32 +5,24 @@ import {
   editOwnProfile,
   getAllUsers,
   getOwnProfile,
-  getUpdatePasswordPage,
   getUserProfileById,
+  deleteUser,
 } from '../controllers/user.controller.js';
 import { renameSchema, updatePasswordSchema } from '../validators/user.js';
 
 const router = Router();
 
+router.use(isAuthenticated);
+
 // Current user views their own profile
-router.get('/profile', isAuthenticated, getOwnProfile);
-router.put('/edit-profile', isAuthenticated, renameSchema, editOwnProfile);
+router.get('/profile', getOwnProfile);
+router.put('/edit-profile', renameSchema, editOwnProfile);
 
-router.get('/update-password', isAuthenticated, getUpdatePasswordPage);
-router.put(
-  '/update-password',
-  isAuthenticated,
-  updatePasswordSchema,
-  updateOwnPassword,
-);
+router.put('/update-password', updatePasswordSchema, updateOwnPassword);
 
-// Admin-only routes
-router.get('/', isAuthenticated, requireRole(['ADMIN']), getAllUsers);
-router.get(
-  '/:userId',
-  isAuthenticated,
-  requireRole(['ADMIN']),
-  getUserProfileById,
-);
+// Admin only
+router.get('/', requireRole(['ADMIN']), getAllUsers);
+router.get('/:userId', requireRole(['ADMIN']), getUserProfileById);
+router.delete('/:userId', requireRole(['ADMIN']), deleteUser);
 
 export default router;
