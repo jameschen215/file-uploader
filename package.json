@@ -26,7 +26,6 @@
   "description": "An assignment project from The Odin Project to build a stripped down version of Google Drive.",
   "dependencies": {
     "@prisma/client": "^6.16.2",
-    "@prisma/extension-accelerate": "^2.0.2",
     "@quixo3/prisma-session-store": "^3.1.13",
     "@supabase/supabase-js": "^2.75.0",
     "bcrypt": "^6.0.0",
