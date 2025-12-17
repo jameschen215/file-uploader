@@ -2255,6 +2255,10 @@ video {
   border-color: rgb(39 39 42 / var(--tw-border-opacity, 1));
 }
 
+.dark\:border-zinc-700\/50:is(.dark *) {
+  border-color: rgb(63 63 70 / 0.5);
+}
+
 .dark\:bg-blue-950:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(23 37 84 / var(--tw-bg-opacity, 1));
@@ -2351,6 +2355,10 @@ video {
 
 .dark\:bg-zinc-950\/50:is(.dark *) {
   background-color: rgb(9 9 11 / 0.5);
+}
+
+.dark\:bg-zinc-800\/25:is(.dark *) {
+  background-color: rgb(39 39 42 / 0.25);
 }
 
 .dark\:font-light:is(.dark *) {
