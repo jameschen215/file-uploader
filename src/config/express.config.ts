@@ -13,18 +13,23 @@ export function configureViewEngine(app: Express) {
   app.set('layout', 'layout');
   app.set('view options', {
     rmWhitespace: true,
-    cache: process.env.NODE_ENV === 'production',
+    cache: true,
   });
+  app.set('view cache', true);
 
-  if (process.env.NODE_ENV === 'production') {
-    app.set('view cache', true);
-  }
+  // app.set('view options', {
+  //   rmWhitespace: true,
+  //   cache: process.env.NODE_ENV === 'production',
+  // });
+  // if (process.env.NODE_ENV === 'production') {
+  //   app.set('view cache', true);
+  // }
 }
 
 export function configureStaticFiles(app: Express) {
   app.use(express.static(path.join(__dirname, '../public')));
 
-  if (process.env.NODE_ENV === 'development') {
-    app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  // }
 }
